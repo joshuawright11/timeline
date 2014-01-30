@@ -3,8 +3,6 @@
  */
 package backend;
 
-import java.sql.SQLException;
-
 /**
  * @author Josh Wright
  * Created: Jan 28, 2014

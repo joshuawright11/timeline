@@ -3,8 +3,6 @@
  */
 package backend;
 
-import java.sql.Date;
-
 /**
  * @author Josh Wright
  * Created: Jan 29, 2014
