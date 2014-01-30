@@ -4,6 +4,7 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Josh Wright
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  *
  */
 public class Timeline implements TimelineAPI{
-	ArrayList<TLEvent> events;
+	private ArrayList<TLEvent> events;
 	private String name;
 	private boolean dirty;
 	
@@ -20,6 +21,10 @@ public class Timeline implements TimelineAPI{
 		this.name = name;
 		events = new ArrayList<TLEvent>();
 		setDirty(true);
+	}
+	Timeline(String name, TLEvent[] events){
+		this.name = name;
+		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
 	}
 	/* (non-Javadoc)
 	 * @see backend.TimelineAPI#addEvent(backend.TLEvent)
