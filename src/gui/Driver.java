@@ -2,9 +2,8 @@
  * 
  */
 package gui;
-
 /**
- * @author josh
+ * @author Josh Wright
  *
  */
 public class Driver {
