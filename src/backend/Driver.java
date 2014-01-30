@@ -4,7 +4,9 @@
 package backend;
 
 /**
- * @author josh
+ * @author Josh Wright
+ * Created: Jan 28, 2014
+ * Package: backend
  *
  */
 public class Driver {
