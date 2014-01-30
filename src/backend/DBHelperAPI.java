@@ -21,6 +21,11 @@ public interface DBHelperAPI {
 	 */
 	public boolean removeTimeline(Timeline timeline);
 	/**
+	 * @param timeline
+	 * @return
+	 */
+	public Timeline changeTimeline(Timeline oldTimeline, Timeline newTimeline);
+	/**
 	 * @return
 	 */
 	public Timeline[] getTimelines();

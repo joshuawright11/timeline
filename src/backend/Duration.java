@@ -41,4 +41,11 @@ public class Duration extends TLEvent {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	/* (non-Javadoc)
+	 * @see backend.TLEvent#typeName()
+	 */
+	@Override
+	public String typeName() {
+		return "duration";
+	}
 }

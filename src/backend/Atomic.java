@@ -27,4 +27,11 @@ public class Atomic extends TLEvent {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	/* (non-Javadoc)
+	 * @see backend.TLEvent#typeName()
+	 */
+	@Override
+	public String typeName() {
+		return "atomic";
+	}
 }

@@ -29,4 +29,8 @@ public abstract class TLEvent {
 	public void setName(String name) {
 		this.name = name;
 	}
+	/**
+	 * @return
+	 */
+	public abstract String typeName();
 }
