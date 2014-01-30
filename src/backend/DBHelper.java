@@ -34,7 +34,7 @@ public class DBHelper {
 	}
 	private void connectToDB(String dbName) throws SQLException, ClassNotFoundException{
 		Class.forName("org.sqlite.JDBC");
-		connection = DriverManager.getConnection("jdbc:sqlite:"+this.dbName+"");
+		connection = DriverManager.getConnection("jdbc:sqlite:databases/"+this.dbName+"");
 		statement = connection.createStatement();
 	}
 	public ResultSet doSomthing(String query) throws SQLException{
