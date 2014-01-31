@@ -33,21 +33,23 @@ public class EditWindow extends javax.swing.JFrame {
         toolbarLabel = new javax.swing.JLabel();
         toolbarSeparator1 = new javax.swing.JSeparator();
         eventsEditLabel = new javax.swing.JLabel();
-        addEvent = new javax.swing.JButton();
+        addEventButton = new javax.swing.JButton();
         deleteEventButton = new javax.swing.JButton();
-        editEvent = new javax.swing.JButton();
+        editEventButton = new javax.swing.JButton();
         toolbarSeparator2 = new javax.swing.JSeparator();
-        timelineEditLabel = new javax.swing.JLabel();
-        timeLinePropertiesButton = new javax.swing.JButton();
+        timelinesEditLabel = new javax.swing.JLabel();
+        timelinesPane = new javax.swing.JScrollPane();
+        timelines = new javax.swing.JList();
+        addTimelineButton = new javax.swing.JButton();
+        deleteTimelineButton = new javax.swing.JButton();
+        editTimelineButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         newTimelineMenuItem = new javax.swing.JMenuItem();
         fileMenuSeparator1 = new javax.swing.JPopupMenu.Separator();
-        openTimelineMenuItem = new javax.swing.JMenuItem();
-        fileMenuSeparator2 = new javax.swing.JPopupMenu.Separator();
         saveTimelineMenuItem = new javax.swing.JMenuItem();
-        fileMenuSeparator3 = new javax.swing.JPopupMenu.Separator();
+        fileMenuSeparator2 = new javax.swing.JPopupMenu.Separator();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         undoMenuItem = new javax.swing.JMenuItem();
@@ -70,7 +72,7 @@ public class EditWindow extends javax.swing.JFrame {
 
         eventsEditLabel.setText("Events");
 
-        addEvent.setText("Add Event");
+        addEventButton.setText("Add Event");
 
         deleteEventButton.setText("Delete Event");
         deleteEventButton.addActionListener(new java.awt.event.ActionListener() {
@@ -79,19 +81,25 @@ public class EditWindow extends javax.swing.JFrame {
             }
         });
 
-        editEvent.setText("Edit Event");
-        editEvent.addActionListener(new java.awt.event.ActionListener() {
+        editEventButton.setText("Edit Event");
+        editEventButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editEventActionPerformed(evt);
+                editEventButtonActionPerformed(evt);
             }
         });
 
-        timelineEditLabel.setText("Timeline");
+        timelinesEditLabel.setText("Timelines");
 
-        timeLinePropertiesButton.setText("Properties");
-        timeLinePropertiesButton.addActionListener(new java.awt.event.ActionListener() {
+        timelinesPane.setViewportView(timelines);
+
+        addTimelineButton.setText("Add Timeline");
+
+        deleteTimelineButton.setText("Delete Timeline");
+
+        editTimelineButton.setText("Edit Timeline");
+        editTimelineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                timeLinePropertiesButtonActionPerformed(evt);
+                editTimelineButtonActionPerformed(evt);
             }
         });
 
@@ -102,12 +110,18 @@ public class EditWindow extends javax.swing.JFrame {
             .addComponent(toolbarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(toolbarSeparator1)
             .addComponent(eventsEditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(addEvent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(addEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(deleteEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-            .addComponent(editEvent, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+            .addComponent(editEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(toolbarSeparator2)
-            .addComponent(timelineEditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(timeLinePropertiesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+            .addComponent(timelinesEditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(toolbarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(timelinesPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(editTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(addTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(deleteTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         toolbarLayout.setVerticalGroup(
             toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,18 +132,23 @@ public class EditWindow extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(eventsEditLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addEvent)
+                .addComponent(addEventButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(deleteEventButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editEvent)
+                .addComponent(editEventButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(toolbarSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timelineEditLabel)
+                .addComponent(timelinesEditLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timeLinePropertiesButton)
-                .addGap(0, 274, Short.MAX_VALUE))
+                .addComponent(timelinesPane, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addTimelineButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(deleteTimelineButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editTimelineButton))
         );
 
         mainSplitPane.setLeftComponent(toolbar);
@@ -150,16 +169,6 @@ public class EditWindow extends javax.swing.JFrame {
         fileMenu.add(newTimelineMenuItem);
         fileMenu.add(fileMenuSeparator1);
 
-        openTimelineMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        openTimelineMenuItem.setText("Open");
-        openTimelineMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openTimelineMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(openTimelineMenuItem);
-        fileMenu.add(fileMenuSeparator2);
-
         saveTimelineMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveTimelineMenuItem.setText("Save");
         saveTimelineMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -168,7 +177,7 @@ public class EditWindow extends javax.swing.JFrame {
             }
         });
         fileMenu.add(saveTimelineMenuItem);
-        fileMenu.add(fileMenuSeparator3);
+        fileMenu.add(fileMenuSeparator2);
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         exitMenuItem.setText("Exit");
@@ -248,10 +257,6 @@ public class EditWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_newTimelineMenuItemActionPerformed
 
-    private void openTimelineMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTimelineMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_openTimelineMenuItemActionPerformed
-
     private void saveTimelineMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveTimelineMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveTimelineMenuItemActionPerformed
@@ -272,13 +277,13 @@ public class EditWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteEventButtonActionPerformed
 
-    private void editEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEventActionPerformed
+    private void editEventButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editEventButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_editEventActionPerformed
+    }//GEN-LAST:event_editEventButtonActionPerformed
 
-    private void timeLinePropertiesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeLinePropertiesButtonActionPerformed
+    private void editTimelineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTimelineButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_timeLinePropertiesButtonActionPerformed
+    }//GEN-LAST:event_editTimelineButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,31 +321,33 @@ public class EditWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addEvent;
+    private javax.swing.JButton addEventButton;
+    private javax.swing.JButton addTimelineButton;
     private javax.swing.JButton deleteEventButton;
     private javax.swing.JMenuItem deleteMenuItem;
-    private javax.swing.JButton editEvent;
+    private javax.swing.JButton deleteTimelineButton;
+    private javax.swing.JButton editEventButton;
     private javax.swing.JMenu editMenu;
     private javax.swing.JPopupMenu.Separator editMenuSeparator1;
+    private javax.swing.JButton editTimelineButton;
     private javax.swing.JMenuItem editViewMenuItem;
     private javax.swing.JLabel eventsEditLabel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JPopupMenu.Separator fileMenuSeparator1;
     private javax.swing.JPopupMenu.Separator fileMenuSeparator2;
-    private javax.swing.JPopupMenu.Separator fileMenuSeparator3;
     private javax.swing.JMenu insertMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newEventMenuItem;
     private javax.swing.JMenuItem newTimelineMenuItem;
-    private javax.swing.JMenuItem openTimelineMenuItem;
     private javax.swing.JMenuItem previewMenuItem;
     private javax.swing.JMenuItem redoMenuItem;
     private javax.swing.JMenuItem saveTimelineMenuItem;
-    private javax.swing.JButton timeLinePropertiesButton;
-    private javax.swing.JLabel timelineEditLabel;
+    private javax.swing.JList timelines;
+    private javax.swing.JLabel timelinesEditLabel;
+    private javax.swing.JScrollPane timelinesPane;
     private javax.swing.JPanel toolbar;
     private javax.swing.JLabel toolbarLabel;
     private javax.swing.JSeparator toolbarSeparator1;
