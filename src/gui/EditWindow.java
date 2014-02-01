@@ -37,7 +37,7 @@ public class EditWindow extends JFrame {
     private JPopupMenu.Separator fileMenuSeparator1;
     private JPopupMenu.Separator fileMenuSeparator2;
     private JMenu insertMenu;
-    private JScrollPane jScrollPane1;
+    private DisplayPane displayPane;
     private JSplitPane mainSplitPane;
     private JMenuBar menuBar;
     private JMenuItem multiViewMenuItem;
@@ -83,7 +83,7 @@ public class EditWindow extends JFrame {
         addTimelineButton = new JButton();
         deleteTimelineButton = new JButton();
         editTimelineButton = new JButton();
-        jScrollPane1 = new JScrollPane();
+        displayPane = new DisplayPane();
         menuBar = new JMenuBar();
         fileMenu = new JMenu();
         newTimelineMenuItem = new JMenuItem();
@@ -188,9 +188,7 @@ public class EditWindow extends JFrame {
 
         mainSplitPane.setLeftComponent(toolbar);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        mainSplitPane.setRightComponent(jScrollPane1);
+        mainSplitPane.setRightComponent(displayPane);
 
         fileMenu.setText("File");
         
