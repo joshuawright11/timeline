@@ -19,18 +19,20 @@ public class Timeline implements TimelineAPI{
 	
 	Timeline(String name){
 		this.name = name;
-		events = new ArrayList<TLEvent>();
+		this.events = new ArrayList<TLEvent>();
 		setDirty(true);
 	}
 	Timeline(String name, TLEvent[] events){
 		this.name = name;
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
+		setDirty(true);
 	}
 	/* (non-Javadoc)
 	 * @see backend.TimelineAPI#addEvent(backend.TLEvent)
 	 */
 	@Override
 	public void addEvent(TLEvent event) {
+		setDirty(true);
 		events.add(event);
 	}
 
@@ -41,6 +43,7 @@ public class Timeline implements TimelineAPI{
 	public boolean removeEvent(TLEvent event) {
 		if(events.contains(event)){
 			events.remove(event);
+			setDirty(true);
 			return true;
 		}else{
 			return false;
@@ -55,6 +58,7 @@ public class Timeline implements TimelineAPI{
 		if(events.contains(oldEvent)){
 			events.remove(oldEvent);
 			events.add(newEvent);
+			setDirty(true);
 			return true;
 		}else{
 			return false;

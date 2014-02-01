@@ -13,13 +13,13 @@ public interface OptionsDispatchAPI {
 	/**
 	 * @return
 	 */
-	public boolean addTimeline();
+	public boolean addTimeline(Timeline timeline);
 	/**
 	 * @return
 	 */
-	public boolean removeTimeline();
+	public boolean removeTimeline(Timeline timeline);
 	/**
 	 * 
 	 */
-	public void selectTimeline();
+	public void selectTimeline(Timeline timeline);
 }

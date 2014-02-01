@@ -28,6 +28,8 @@ public class Driver {
 		helper.removeTimeline(test2);
 		helper.writeTimeline(test1);
 		helper.writeTimeline(test2);
+		helper.removeTimeline(test1);
+		helper.changeTimeline(test2, test1);
 		helper.getTimelines();
 		System.out.println("Finished!");
 	}
