@@ -211,6 +211,11 @@ public class EditWindow extends JFrame {
         fileMenu.add(fileMenuSeparator2);
 
         exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
+        exitMenuItem.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		System.exit(0);
+        	}
+        });
         exitMenuItem.setText("Exit");
         fileMenu.add(exitMenuItem);
 
