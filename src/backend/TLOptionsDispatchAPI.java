@@ -14,17 +14,17 @@ public interface TLOptionsDispatchAPI {
 	 * @param event
 	 * @return
 	 */
-	public boolean addEvent(TLEvent event);
+	public void addEvent(TLEvent event);
 	/**
 	 * @param event
 	 * @return
 	 */
-	public boolean removeEvent(TLEvent event);
+	public void removeEvent(TLEvent event);
 	/**
 	 * @param event
 	 * @return
 	 */
-	public boolean editEvent(TLEvent event);
+	public void editEvent(TLEvent oldEvent, TLEvent newEvent);
 	/**
 	 * 
 	 */
