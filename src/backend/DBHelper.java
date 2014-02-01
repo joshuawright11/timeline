@@ -4,6 +4,7 @@
 package backend;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,9 +43,8 @@ public class DBHelper implements DBHelperAPI{
 	}
 	private void close(){
 		try {
-			connection.close();
 			statement.close();
-			resultSet.close();
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -69,6 +69,10 @@ public class DBHelper implements DBHelperAPI{
 			statement.executeUpdate("CREATE TABLE "+tlName
 					+" ("+ID+",eventName TEXT, type TEXT, startDate DATETIME, endDate DATETIME);");
 		} catch (SQLException e) {
+			if(e.getMessage().contains("already exists")) {
+				System.out.println("A timeline with that name already exists!");
+				return null;
+			}
 			e.printStackTrace();
 		}
 		for(TLEvent event : timeline.getEvents()){
@@ -88,15 +92,15 @@ public class DBHelper implements DBHelperAPI{
 	private void writeEvent(Atomic event, String tlName) throws SQLException{
 		statement.executeUpdate("INSERT INTO "+tlName
 				+" (eventName,type,startDate,endDate)" + " VALUES "
-				+"'"+event.getName()+"',"+"'"+event.typeName()+"','"
+				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
 				+event.getDate().toString()+"', NULL)"
 				+";");
 	}
 	private void writeEvent(Duration event, String tlName) throws SQLException{
 		statement.executeUpdate("INSERT INTO "+tlName
 				+" (eventName,type,startDate,endDate)" + " VALUES "
-				+"'"+event.getName()+"',"+"'"+event.typeName()+"','"
-				+event.getStartDate().toString()+"','"+event.getEndDate().toString()+"'+)"
+				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
+				+event.getStartDate().toString()+"','"+event.getEndDate().toString()+"')"
 				+";");
 	}
 	/* (non-Javadoc)
@@ -106,7 +110,7 @@ public class DBHelper implements DBHelperAPI{
 	public boolean removeTimeline(Timeline timeline) {
 		open();
 		try {
-			statement.executeUpdate("DROP TABLE IF EXISTS'"+timeline.getName()+"'");
+			statement.executeUpdate("DROP TABLE IF EXISTS'"+timeline.getName()+"';");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -119,7 +123,43 @@ public class DBHelper implements DBHelperAPI{
 	@Override
 	public Timeline[] getTimelines() {
 		open();
-		//TODO WRITE THIS
+		try {
+			resultSet = statement.executeQuery("select name from sqlite_master where type = \"table\" "
+					+ "and name != \"sqlite_sequence\";");
+			int numTimelines = resultSet.getFetchSize();
+			String[] timelineNames = new String[numTimelines];
+			for(int i = 0; i<numTimelines;i++){ // Get all timeline names
+				resultSet.next();
+				timelineNames[i] = resultSet.getString(i);
+			}
+			Timeline[] timelines = new Timeline[numTimelines];
+			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays
+				resultSet = statement.executeQuery("select * from "+timelineNames[j]+";");
+				int numEvents = resultSet.getFetchSize();
+				TLEvent[] events = new TLEvent[numEvents];
+				for(int k = 0;k < numEvents;k++){ // Get all events for the event
+					String name = resultSet.getString("eventName");
+					String type = resultSet.getString("type");
+					TLEvent event = null;
+					if(type.equals("atomic")){
+						Date startDate = resultSet.getDate("startDate");
+						event = new Atomic(name, startDate);
+					}else if(type.equals("duration")){
+						Date startDate = resultSet.getDate("startDate");
+						Date endDate = resultSet.getDate("endDate");
+						event = new Duration(name,startDate,endDate);
+					}else{
+						System.out.println("YOU DONE MESSED UP.");
+					}
+					events[k] = event;
+				}
+				Timeline timeline = new Timeline(timelineNames[j], events);
+				timelines[j] = timeline;
+			}
+			return timelines;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		close();
 		return null;
 	}
