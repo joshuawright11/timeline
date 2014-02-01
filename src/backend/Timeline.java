@@ -65,7 +65,7 @@ public class Timeline implements TimelineAPI{
 	 */
 	@Override
 	public TLEvent[] getEvents() {
-		return (TLEvent[])events.toArray();
+		return (TLEvent[])events.toArray(new TLEvent[events.size()]);
 	}
 	/* (non-Javadoc)
 	 * @see backend.TimelineAPI#isDirty()
