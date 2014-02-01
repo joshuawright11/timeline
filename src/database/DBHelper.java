@@ -1,7 +1,7 @@
 /**
  * 
  */
-package backend;
+package database;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,6 +9,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import entities.Atomic;
+import entities.Duration;
+import entities.TLEvent;
+import entities.Timeline;
 
 /**
  * @author Josh Wright
@@ -22,7 +27,7 @@ public class DBHelper implements DBHelperAPI{
     private Statement statement = null; 
 	private String dbName;
 	public static final String ID = "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE";
-	DBHelper(String dbName){
+	public DBHelper(String dbName){
 		this.dbName = dbName;
 	}
 	private void open(){
@@ -62,7 +67,7 @@ public class DBHelper implements DBHelperAPI{
 	 * @see backend.DBHelperAPI#writeTimeline(backend.Timeline)
 	 */
 	@Override
-	public Timeline writeTimeline(Timeline timeline) {
+	public boolean writeTimeline(Timeline timeline) {
 		String tlName = timeline.getName(); 
 		open();
 		try {
@@ -71,7 +76,7 @@ public class DBHelper implements DBHelperAPI{
 		} catch (SQLException e) {
 			if(e.getMessage().contains("already exists")) {
 				System.out.println("A timeline with that name already exists!");
-				return null;
+				return false;
 			}
 			e.printStackTrace();
 		}
@@ -87,7 +92,7 @@ public class DBHelper implements DBHelperAPI{
 			}
 		}
 		close();
-		return timeline;
+		return true;
 	}
 	private void writeEvent(Atomic event, String tlName) throws SQLException{
 		statement.executeUpdate("INSERT INTO "+tlName

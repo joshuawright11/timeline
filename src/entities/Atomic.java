@@ -1,7 +1,7 @@
 /**
  * 
  */
-package backend;
+package entities;
 import java.sql.Date;
 /**
  * @author Josh Wright
@@ -11,7 +11,7 @@ import java.sql.Date;
  */
 public class Atomic extends TLEvent {
 	private Date date;
-	Atomic(String name, Date date){
+	public Atomic(String name, Date date){
 		super(name);
 		this.setDate(date);
 	}

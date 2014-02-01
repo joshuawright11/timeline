@@ -1,7 +1,7 @@
 /**
  * 
  */
-package backend;
+package entities;
 import java.sql.Date;
 /**
  * @author Josh Wright
@@ -12,7 +12,7 @@ import java.sql.Date;
 public class Duration extends TLEvent {
 	private Date startDate;
 	private Date endDate;
-	Duration(String name, Date startDate, Date endDate){
+	public Duration(String name, Date startDate, Date endDate){
 		super(name);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);

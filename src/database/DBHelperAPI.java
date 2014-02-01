@@ -1,7 +1,9 @@
 /**
  * 
  */
-package backend;
+package database;
+
+import entities.Timeline;
 
 /**
  * @author Josh Wright
@@ -14,7 +16,7 @@ public interface DBHelperAPI {
 	 * @param timeline
 	 * @return
 	 */
-	public Timeline writeTimeline(Timeline timeline);
+	public boolean writeTimeline(Timeline timeline);
 	/**
 	 * @param timeline
 	 * @return

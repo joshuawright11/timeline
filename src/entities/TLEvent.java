@@ -1,7 +1,7 @@
 /**
  * 
  */
-package backend;
+package entities;
 
 /**
  * @author Josh Wright

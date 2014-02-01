@@ -1,7 +1,7 @@
 /**
  * 
  */
-package backend;
+package entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,12 +17,12 @@ public class Timeline implements TimelineAPI{
 	private String name;
 	private boolean dirty;
 	
-	Timeline(String name){
+	public Timeline(String name){
 		this.name = name;
 		this.events = new ArrayList<TLEvent>();
 		setDirty(true);
 	}
-	Timeline(String name, TLEvent[] events){
+	public Timeline(String name, TLEvent[] events){
 		this.name = name;
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
 		setDirty(true);
