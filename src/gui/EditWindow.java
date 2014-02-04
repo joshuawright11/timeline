@@ -1,9 +1,12 @@
 package gui;
 
+import model.*;
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 
 /**
@@ -16,6 +19,11 @@ public class EditWindow extends JFrame {
 	 * Default serial version ID.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * TimelineMaker model for this window.
+	 */
+	private TimelineMaker model;
 	
 	/**
 	 * Window components.
@@ -57,7 +65,8 @@ public class EditWindow extends JFrame {
 	/**
      * Creates new edit window.
      */
-    public EditWindow() {
+    public EditWindow(TimelineMaker model) {
+    	this.model = model;
         initComponents();
         loadTimelines();
     }
@@ -282,8 +291,16 @@ public class EditWindow extends JFrame {
         pack();
     }
     
+    /**
+     * Load timelines from TimelineMaker model into GUI window.
+     * Get a list of timeline titles from model. Then populate a default list model for the JList of timelines with those titles.
+     */
     private void loadTimelines() {
-    	// TODO Load timelines.
+    	DefaultListModel<String> listModel = new DefaultListModel<String>();
+    	ArrayList<String> temp = model.getTimelineTitles();
+    	for (String t : temp)
+    		listModel.addElement(t);
+    	timelines.setModel(listModel);
     }
     
     private static class AddEditTimelineButtonListener implements ActionListener {

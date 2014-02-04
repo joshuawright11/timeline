@@ -27,6 +27,12 @@ public class TimelineMaker implements Runnable {
 	
 
 	public TimelineMaker() {
+		timelines = new ArrayList<Timeline>();
+		currentTimeline = new Timeline("Test1");
+		timelines.add(currentTimeline);
+		
+		// TODO Load timelines from database. Store in ArrayList<Timeline> timelines.
+		
 		initGUI();
 	}
 	
@@ -51,7 +57,7 @@ public class TimelineMaker implements Runnable {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gui = new EditWindow();
+				gui = new EditWindow(TimelineMaker.this);
 				gui.setVisible(true);
 			}
 		});
@@ -61,7 +67,33 @@ public class TimelineMaker implements Runnable {
 		
 	}
 
-	public void createEvent(){
-		//timelineOptions.addEvent(event);
+	/**
+	 * Retrieve the currently in-focus timeline.
+	 * @return currentTimeline
+	 */
+	public Timeline currentTimeline() { return currentTimeline; }
+	
+	/**
+	 * Retrieve a list of the names of all the timelines.
+	 * @return
+	 */
+	public ArrayList<String> getTimelineTitles() {
+		ArrayList<String> toReturn = new ArrayList<String>();
+		for (Timeline t: timelines)
+			toReturn.add(t.getName());
+		return toReturn;
 	}
+	
+	/**
+	 * Retrieve the timeline with the parameterized name.
+	 * @param name The name of the timeline to be found
+	 * @return The timeline with the correct name; null otherwise.
+	 */
+	public Timeline getTimeline(String name) { 
+		for (Timeline t : timelines)
+			if (t.getName().equals(name))
+				return t;
+		return null;
+	}
+	
 }
