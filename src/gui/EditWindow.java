@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.logging.*;
 
 
 /**
@@ -202,7 +201,7 @@ public class EditWindow extends JFrame {
         saveTimelineMenuItem.setText("Save");
         saveTimelineMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                saveTimelineMenuItemActionPerformed(e);
+            	// TODO Add action for the save button.
             }
         });
         fileMenu.add(saveTimelineMenuItem);
@@ -225,7 +224,7 @@ public class EditWindow extends JFrame {
         undoMenuItem.setText("Undo");
         undoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                undoMenuItemActionPerformed(e);
+            	// TODO Add action for the undo button.
             }
         });
         editMenu.add(undoMenuItem);
@@ -234,7 +233,7 @@ public class EditWindow extends JFrame {
         redoMenuItem.setText("Redo");
         redoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                redoMenuItemActionPerformed(e);
+            	// TODO Add action for the redo button.
             }
         });
         editMenu.add(redoMenuItem);
@@ -296,6 +295,7 @@ public class EditWindow extends JFrame {
 			new TimelinePropertiesWindow().setVisible(true);
 		}
     }
+    
     private static class AddEditEventButtonListener implements ActionListener {
 		static AddEditEventButtonListener instance = new AddEditEventButtonListener();
     	
@@ -304,56 +304,5 @@ public class EditWindow extends JFrame {
     	public void actionPerformed(ActionEvent e) {
 			new EventPropertiesWindow().setVisible(true);
 		}
-    }
-
-    private void saveTimelineMenuItemActionPerformed(ActionEvent e) {
-        // TODO Save the selected timeline(s).
-    	System.out.println("Saved!");
-    }
-
-    private void undoMenuItemActionPerformed(ActionEvent e) {//GEN-FIRST:event_undoMenuItemActionPerformed
-        // TODO add your handling code here:
-    	System.out.println("Undo.");
-    }
-
-    private void redoMenuItemActionPerformed(ActionEvent e) {//GEN-FIRST:event_redoMenuItemActionPerformed
-        // TODO add your handling code here:
-    	System.out.println("Redo.");
-    }
-
-    /**
-     * Start the window.
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditWindow().setVisible(true);
-            }
-        });
     }
 }
