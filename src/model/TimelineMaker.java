@@ -4,9 +4,12 @@
 package model;
 
 import gui.*;
+import database.*;
 import entities.*;
 
 import javax.swing.*;
+
+import java.sql.Date;
 import java.util.*;
 import java.util.logging.*;
 
@@ -24,14 +27,20 @@ public class TimelineMaker implements Runnable {
 	
 	private EditWindow gui;
 	
+	private DBHelper database;
+	
 	
 
 	public TimelineMaker() {
+		database = new DBHelper("timeline.db");
+		
 		timelines = new ArrayList<Timeline>();
 		currentTimeline = new Timeline("Test1");
 		timelines.add(currentTimeline);
 		
 		// TODO Load timelines from database. Store in ArrayList<Timeline> timelines.
+		for (Timeline t : database.getTimelines())
+			timelines.add(t);
 		
 		initGUI();
 	}
