@@ -143,9 +143,11 @@ public class DBHelper implements DBHelperAPI{
 			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays
 				System.out.println("Getting timeline.");
 				resultSet = statement.executeQuery("select * from "+timelineNames.get(j)+";");
-				int numEvents = resultSet.getFetchSize();
-				TLEvent[] events = new TLEvent[numEvents];
-				for(int k = 0;k < numEvents;k++){ // Get all events for the event
+				//int numEvents = resultSet.getFetchSize(); //doesn't work
+				ArrayList<TLEvent> events = new ArrayList<TLEvent>();
+				int numEvents = 0;
+				while(resultSet.next()){ // Get all events for the event
+					numEvents++;
 					String name = resultSet.getString("eventName");
 					String type = resultSet.getString("type");
 					TLEvent event = null;
@@ -159,9 +161,9 @@ public class DBHelper implements DBHelperAPI{
 					}else{
 						System.out.println("YOU DONE MESSED UP.");
 					}
-					events[k] = event;
+					events.add(event);
 				}
-				Timeline timeline = new Timeline(timelineNames.get(j), events);
+				Timeline timeline = new Timeline(timelineNames.get(j), events.toArray(new TLEvent[numEvents]));
 				timelines[j] = timeline;
 			}
 			return timelines;
