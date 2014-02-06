@@ -24,10 +24,10 @@ public class TimelineMaker implements Runnable {
 	private TLOptionsDispatch timelineOptions;
 	private TimelineGraphics timelineGraphics;
 	private OptionsDispatch options;
+	private DBHelper database;
 	
 	private EditWindow gui;
 	
-	private DBHelper database;
 	
 	
 
