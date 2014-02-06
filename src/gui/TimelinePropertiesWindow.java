@@ -131,6 +131,16 @@ public class TimelinePropertiesWindow extends JFrame {
         else
         	okButton.addActionListener(new ActionListener() {
         		public void actionPerformed(ActionEvent e) {
+        			final String titleString = title.getText();
+        			// TODO Parse other timeline properties here.
+        			new Thread(new Runnable() {
+        				public void run() {
+        					model.removeTimeline(timeline);
+        					model.addTimeline(new Timeline(titleString));
+        				}
+        			}).start();
+        			window.loadTimelines();
+        			dispose();
         			dispose();
         		}
         	});

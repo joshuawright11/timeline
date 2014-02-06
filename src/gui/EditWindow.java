@@ -6,7 +6,8 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -110,12 +111,6 @@ public class EditWindow extends JFrame {
 		insertMenu = new JMenu();
 		newEventMenuItem = new JMenuItem();
 
-		ActionListener addEditTimelineListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
-			}
-		};
-
 		ActionListener addEditEventListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new EventPropertiesWindow().setVisible(true);
@@ -151,12 +146,32 @@ public class EditWindow extends JFrame {
 		timelinesPane.setViewportView(timelines);
 
 		addTimelineButton.setText("Add Timeline");
-		addTimelineButton.addActionListener(addEditTimelineListener);
+		addTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
 
 		deleteTimelineButton.setText("Delete Timeline");
+		deleteTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final List<String> toRemove = timelines.getSelectedValuesList();
+				new Thread(new Runnable() {
+					public void run() {
+						for (String s : toRemove)
+							model.removeTimeline(model.getTimeline(s));
+					}
+				});
+				EditWindow.this.loadTimelines();					
+			}
+		});
 
 		editTimelineButton.setText("Edit Timeline");
-		editTimelineButton.addActionListener(addEditTimelineListener);
+		editTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, model.getTimeline(timelines.getSelectedValue())).setVisible(true);
+			}
+		});
 
 		GroupLayout toolbarLayout = new GroupLayout(toolbar);
 		toolbar.setLayout(toolbarLayout);
@@ -214,7 +229,11 @@ public class EditWindow extends JFrame {
 
 		newTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newTimelineMenuItem.setText("New");
-		newTimelineMenuItem.addActionListener(addEditTimelineListener);
+		newTimelineMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
 		fileMenu.add(newTimelineMenuItem);
 		fileMenu.add(fileMenuSeparator1);
 

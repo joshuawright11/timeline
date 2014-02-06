@@ -110,4 +110,9 @@ public class TimelineMaker implements Runnable {
 		// TODO Add database pushing code here.
 	}
 	
+	public void removeTimeline(Timeline t) {
+		timelines.remove(t);
+		// TODO Add database pushing code here.
+	}
+	
 }
