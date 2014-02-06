@@ -1,6 +1,9 @@
 package gui;
 
+import model.*;
+
 import javax.swing.*;
+import entities.*;
 
 import java.awt.event.*;
 
@@ -14,6 +17,10 @@ public class TimelinePropertiesWindow extends JFrame {
 	 * Default serial version ID.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private TimelineMaker model;
+	private EditWindow window;
+	private Timeline timeline;
 	
 	/**
 	 * Window components.
@@ -40,8 +47,11 @@ public class TimelinePropertiesWindow extends JFrame {
 	/**
      * Creates new timeline properties window.
      */
-    public TimelinePropertiesWindow() {
-        initComponents();
+    public TimelinePropertiesWindow(TimelineMaker model, EditWindow window, Timeline timeline) {
+        this.model = model;
+        this.window = window;
+        this.timeline = timeline;
+    	initComponents();
     }
 
     /**
@@ -84,11 +94,6 @@ public class TimelinePropertiesWindow extends JFrame {
         toLabel.setText("to");
 
         startDate.setText("");
-        startDate.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                startDateActionPerformed(e);
-            }
-        });
 
         appearanceSectionLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         appearanceSectionLabel.setText("Appearance:");
@@ -109,12 +114,27 @@ public class TimelinePropertiesWindow extends JFrame {
         font.setText("Tahoma");
 
         okButton.setText("Ok");
-        okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Create or modify the timeline.
-				dispose();
-			}
-        });
+        if (timeline == null)
+        	okButton.addActionListener(new ActionListener() {
+        		public void actionPerformed(ActionEvent e) {
+        			final String titleString = title.getText();
+        			// TODO Parse other timeline properties here.
+        			new Thread(new Runnable() {
+        				public void run() {
+        					model.addTimeline(new Timeline(titleString));
+        				}
+        			}).start();
+        			window.loadTimelines();
+        			dispose();
+        		}
+        	});
+        else
+        	okButton.addActionListener(new ActionListener() {
+        		public void actionPerformed(ActionEvent e) {
+        			dispose();
+        		}
+        	});
+        	
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new ActionListener() {
@@ -209,9 +229,5 @@ public class TimelinePropertiesWindow extends JFrame {
         );
 
         pack();
-    }
-
-    private void startDateActionPerformed(ActionEvent e) {//GEN-FIRST:event_startDateActionPerformed
-        // TODO add your handling code here:
     }
 }
