@@ -39,8 +39,8 @@ public class TimelineMaker implements Runnable {
 		timelines.add(currentTimeline);
 		
 		// TODO Load timelines from database. Store in ArrayList<Timeline> timelines.
-//		for (Timeline t : database.getTimelines())
-//			timelines.add(t);
+		for (Timeline t : database.getTimelines())
+			timelines.add(t);
 		
 		initGUI();
 	}

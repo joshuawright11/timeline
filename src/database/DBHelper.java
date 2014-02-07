@@ -6,6 +6,7 @@ package database;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -98,18 +99,33 @@ public class DBHelper implements DBHelperAPI{
 		return true;
 	}
 	private void writeEvent(Atomic event, String tlName) throws SQLException{
-		statement.executeUpdate("INSERT INTO "+tlName
-				+" (eventName,type,startDate,endDate)" + " VALUES "
-				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
-				+event.getDate().toString()+"', NULL)"
-				+";");
+		String INSERT_ATOMIC = "INSERT INTO "+tlName
+				+" (eventName,type,startDate,endDate) VALUES "
+				+"(?,?,?,NULL);";
+		PreparedStatement pstmt = connection.prepareStatement(INSERT_ATOMIC);
+		pstmt.setString(1, event.getName());
+		pstmt.setString(2, event.typeName());
+		pstmt.setDate(3, event.getDate());
+//		statement.executeUpdate("INSERT INTO "+tlName
+//				+" (eventName,type,startDate,endDate)" + " VALUES "
+//				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
+//				+event.getDate().toString()+"', NULL)"
+//				+";");
 	}
 	private void writeEvent(Duration event, String tlName) throws SQLException{
-		statement.executeUpdate("INSERT INTO "+tlName
-				+" (eventName,type,startDate,endDate)" + " VALUES "
-				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
-				+event.getStartDate().toString()+"','"+event.getEndDate().toString()+"')"
-				+";");
+		String INSERT_DURATION = "INSERT INTO "+tlName
+				+" (eventName,type,startDate,endDate) VALUES "
+				+"(?,?,?,?);";
+		PreparedStatement pstmt = connection.prepareStatement(INSERT_DURATION);
+		pstmt.setString(1, event.getName());
+		pstmt.setString(2, event.typeName());
+		pstmt.setDate(3, event.getStartDate());
+		pstmt.setDate(4, event.getEndDate());
+//		statement.executeUpdate("INSERT INTO "+tlName
+//				+" (eventName,type,startDate,endDate)" + " VALUES "
+//				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
+//				+event.getStartDate().toString()+"','"+event.getEndDate().toString()+"')"
+//				+";");
 	}
 	/* (non-Javadoc)
 	 * @see backend.DBHelperAPI#removeTimeline(backend.Timeline)
@@ -141,7 +157,6 @@ public class DBHelper implements DBHelperAPI{
 				timelineNames.add(resultSet.getString(numTimelines));
 			}
 			Timeline[] timelines = new Timeline[numTimelines];
-			System.out.println("About to get timelines. There are "+numTimelines);
 			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays
 				System.out.println("Getting timeline.");
 				resultSet = statement.executeQuery("select * from "+timelineNames.get(j)+";");
@@ -149,11 +164,13 @@ public class DBHelper implements DBHelperAPI{
 				ArrayList<TLEvent> events = new ArrayList<TLEvent>();
 				int numEvents = 0;
 				while(resultSet.next()){ // Get all events for the event
+					System.out.println("In event loop.");
 					numEvents++;
 					String name = resultSet.getString("eventName");
 					String type = resultSet.getString("type");
 					TLEvent event = null;
 					if(type.equals("atomic")){
+						System.out.println(resultSet.getString("startDate"));
 						Date startDate = resultSet.getDate("startDate");
 						event = new Atomic(name, startDate);
 					}else if(type.equals("duration")){
