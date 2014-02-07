@@ -141,7 +141,6 @@ public class TimelinePropertiesWindow extends JFrame {
         			}).start();
         			window.loadTimelines();
         			dispose();
-        			dispose();
         		}
         	});
         	

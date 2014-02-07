@@ -1,5 +1,8 @@
 package gui;
 
+import model.*;
+import entities.*;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -14,6 +17,8 @@ public class EventPropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private TimelineMaker model;
+	
 	/**
 	 * Window components.
 	 */
@@ -34,8 +39,9 @@ public class EventPropertiesWindow extends JFrame {
 	/**
 	 * Creates new event properties window.
 	 */
-	public EventPropertiesWindow() {
+	public EventPropertiesWindow(TimelineMaker model) {
 		initComponents();
+		initLayout();
 	}
 
 	/**
@@ -107,7 +113,9 @@ public class EventPropertiesWindow extends JFrame {
 				dispose();
 			}
 		});
-
+	}
+	
+	private void initLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(
