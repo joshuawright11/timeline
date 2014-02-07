@@ -14,6 +14,7 @@ import entities.Timeline;
  */
 public class TLOptionsDispatch implements TLOptionsDispatchAPI {
 	private Timeline timeline;
+	
 	TLOptionsDispatch(Timeline timeline){
 		this.timeline = timeline; 
 	}

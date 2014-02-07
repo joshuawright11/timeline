@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import entities.Atomic;
 import entities.Duration;
@@ -133,18 +134,22 @@ public class DBHelper implements DBHelperAPI{
 		try {
 			resultSet = statement.executeQuery("select name from sqlite_master where type = \"table\" "
 					+ "and name != \"sqlite_sequence\";");
-			int numTimelines = resultSet.getFetchSize();
-			String[] timelineNames = new String[numTimelines];
-			for(int i = 0; i<numTimelines;i++){ // Get all timeline names
-				resultSet.next();
-				timelineNames[i] = resultSet.getString(i);
+			ArrayList<String> timelineNames = new ArrayList<String>();
+			int numTimelines = 0;
+			while(resultSet.next()){ // Get all timeline names
+				numTimelines ++;
+				timelineNames.add(resultSet.getString(numTimelines));
 			}
 			Timeline[] timelines = new Timeline[numTimelines];
+			System.out.println("About to get timelines. There are "+numTimelines);
 			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays
-				resultSet = statement.executeQuery("select * from "+timelineNames[j]+";");
-				int numEvents = resultSet.getFetchSize();
-				TLEvent[] events = new TLEvent[numEvents];
-				for(int k = 0;k < numEvents;k++){ // Get all events for the event
+				System.out.println("Getting timeline.");
+				resultSet = statement.executeQuery("select * from "+timelineNames.get(j)+";");
+				//int numEvents = resultSet.getFetchSize(); //doesn't work
+				ArrayList<TLEvent> events = new ArrayList<TLEvent>();
+				int numEvents = 0;
+				while(resultSet.next()){ // Get all events for the event
+					numEvents++;
 					String name = resultSet.getString("eventName");
 					String type = resultSet.getString("type");
 					TLEvent event = null;
@@ -158,9 +163,9 @@ public class DBHelper implements DBHelperAPI{
 					}else{
 						System.out.println("YOU DONE MESSED UP.");
 					}
-					events[k] = event;
+					events.add(event);
 				}
-				Timeline timeline = new Timeline(timelineNames[j], events);
+				Timeline timeline = new Timeline(timelineNames.get(j), events.toArray(new TLEvent[numEvents]));
 				timelines[j] = timeline;
 			}
 			return timelines;

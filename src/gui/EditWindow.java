@@ -1,10 +1,13 @@
 package gui;
 
+import model.*;
+
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.logging.*;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -17,343 +20,321 @@ public class EditWindow extends JFrame {
 	 * Default serial version ID.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 * TimelineMaker model for this window.
+	 */
+	private TimelineMaker model;
+
 	/**
 	 * Window components.
 	 */
 	private JButton addEventButton;
-    private JButton addTimelineButton;
-    private JButton deleteEventButton;
-    private JMenuItem deleteMenuItem;
-    private JButton deleteTimelineButton;
-    private JButton editEventButton;
-    private JMenu editMenu;
-    private JPopupMenu.Separator editMenuSeparator1;
-    private JButton editTimelineButton;
-    private JMenuItem editViewMenuItem;
-    private JLabel eventsEditLabel;
-    private JMenuItem exitMenuItem;
-    private JMenu fileMenu;
-    private JPopupMenu.Separator fileMenuSeparator1;
-    private JPopupMenu.Separator fileMenuSeparator2;
-    private JMenu insertMenu;
-    private DisplayPane displayPane;
-    private JSplitPane mainSplitPane;
-    private JMenuBar menuBar;
-    private JMenuItem multiViewMenuItem;
-    private JMenuItem newEventMenuItem;
-    private JMenuItem newTimelineMenuItem;
-    private JMenuItem redoMenuItem;
-    private JMenuItem saveTimelineMenuItem;
-    private JList<String> timelines;
-    private JLabel timelinesEditLabel;
-    private JScrollPane timelinesPane;
-    private JPanel toolbar;
-    private JLabel toolbarLabel;
-    private JSeparator toolbarSeparator1;
-    private JSeparator toolbarSeparator2;
-    private JMenuItem undoMenuItem;
-    private JMenu viewMenu;
-	
-	/**
-     * Creates new edit window.
-     */
-    public EditWindow() {
-        initComponents();
-        loadTimelines();
-    }
+	private JButton addTimelineButton;
+	private JButton deleteEventButton;
+	private JMenuItem deleteMenuItem;
+	private JButton deleteTimelineButton;
+	private JButton editEventButton;
+	private JMenu editMenu;
+	private JPopupMenu.Separator editMenuSeparator1;
+	private JButton editTimelineButton;
+	private JMenuItem editViewMenuItem;
+	private JLabel eventsEditLabel;
+	private JMenuItem exitMenuItem;
+	private JMenu fileMenu;
+	private JPopupMenu.Separator fileMenuSeparator1;
+	private JPopupMenu.Separator fileMenuSeparator2;
+	private JMenu insertMenu;
+	private DisplayPane displayPane;
+	private JSplitPane mainSplitPane;
+	private JMenuBar menuBar;
+	private JMenuItem multiViewMenuItem;
+	private JMenuItem newEventMenuItem;
+	private JMenuItem newTimelineMenuItem;
+	private JMenuItem redoMenuItem;
+	private JMenuItem saveTimelineMenuItem;
+	private JList<String> timelines;
+	private JLabel timelinesEditLabel;
+	private JScrollPane timelinesPane;
+	private JPanel toolbar;
+	private JLabel toolbarLabel;
+	private JSeparator toolbarSeparator1;
+	private JSeparator toolbarSeparator2;
+	private JMenuItem undoMenuItem;
+	private JMenu viewMenu;
 
 	/**
-     * Initialize all window components.
-     */
-    private void initComponents() {
-    	// Instantiate all components.
-        mainSplitPane = new JSplitPane();
-        toolbar = new JPanel();
-        toolbarLabel = new JLabel();
-        toolbarSeparator1 = new JSeparator();
-        eventsEditLabel = new JLabel();
-        addEventButton = new JButton();
-        deleteEventButton = new JButton();
-        editEventButton = new JButton();
-        toolbarSeparator2 = new JSeparator();
-        timelinesEditLabel = new JLabel();
-        timelinesPane = new JScrollPane();
-        timelines = new JList<String>();
-        addTimelineButton = new JButton();
-        deleteTimelineButton = new JButton();
-        editTimelineButton = new JButton();
-        displayPane = new DisplayPane();
-        menuBar = new JMenuBar();
-        fileMenu = new JMenu();
-        newTimelineMenuItem = new JMenuItem();
-        fileMenuSeparator1 = new JPopupMenu.Separator();
-        saveTimelineMenuItem = new JMenuItem();
-        fileMenuSeparator2 = new JPopupMenu.Separator();
-        exitMenuItem = new JMenuItem();
-        editMenu = new JMenu();
-        undoMenuItem = new JMenuItem();
-        redoMenuItem = new JMenuItem();
-        editMenuSeparator1 = new JPopupMenu.Separator();
-        deleteMenuItem = new JMenuItem();
-        viewMenu = new JMenu();
-        editViewMenuItem = new JMenuItem();
-        multiViewMenuItem = new JMenuItem();
-        insertMenu = new JMenu();
-        newEventMenuItem = new JMenuItem();
+	 * Creates new edit window.
+	 */
+	public EditWindow(TimelineMaker model) {
+		this.model = model;
+		initComponents();
+		loadTimelines();
+	}
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Timelord - Create, edit, and view timelines!");
+	/**
+	 * Initialize all window components.
+	 */
+	private void initComponents() {
+		// Instantiate all components.
+		mainSplitPane = new JSplitPane();
+		toolbar = new JPanel();
+		toolbarLabel = new JLabel();
+		toolbarSeparator1 = new JSeparator();
+		eventsEditLabel = new JLabel();
+		addEventButton = new JButton();
+		deleteEventButton = new JButton();
+		editEventButton = new JButton();
+		toolbarSeparator2 = new JSeparator();
+		timelinesEditLabel = new JLabel();
+		timelinesPane = new JScrollPane();
+		timelines = new JList<String>();
+		addTimelineButton = new JButton();
+		deleteTimelineButton = new JButton();
+		editTimelineButton = new JButton();
+		displayPane = new DisplayPane();
+		menuBar = new JMenuBar();
+		fileMenu = new JMenu();
+		newTimelineMenuItem = new JMenuItem();
+		fileMenuSeparator1 = new JPopupMenu.Separator();
+		saveTimelineMenuItem = new JMenuItem();
+		fileMenuSeparator2 = new JPopupMenu.Separator();
+		exitMenuItem = new JMenuItem();
+		editMenu = new JMenu();
+		undoMenuItem = new JMenuItem();
+		redoMenuItem = new JMenuItem();
+		editMenuSeparator1 = new JPopupMenu.Separator();
+		deleteMenuItem = new JMenuItem();
+		viewMenu = new JMenu();
+		editViewMenuItem = new JMenuItem();
+		multiViewMenuItem = new JMenuItem();
+		insertMenu = new JMenu();
+		newEventMenuItem = new JMenuItem();
 
-        mainSplitPane.setDividerLocation(140);
+		ActionListener addEditEventListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new EventPropertiesWindow().setVisible(true);
+			}
+		};
 
-        toolbarLabel.setFont(new Font("Tahoma", 0, 12));
-        toolbarLabel.setText("Toolbar");
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setTitle("Timelord - Create, edit, and view timelines!");
 
-        eventsEditLabel.setText("Events");
+		mainSplitPane.setDividerLocation(140);
 
-        addEventButton.setText("Add Event");
-        addEventButton.addActionListener(AddEditEventButtonListener.instance);
-        	
-        deleteEventButton.setText("Delete Event");
-        deleteEventButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	// TODO Determine selected event.
-            	new DeleteEventDialog(new JFrame(), true).setVisible(true);
-            }
-        });
+		toolbarLabel.setFont(new Font("Tahoma", 0, 12));
+		toolbarLabel.setText("Toolbar");
 
-        editEventButton.setText("Edit Event");
-        editEventButton.addActionListener(AddEditEventButtonListener.instance);
+		eventsEditLabel.setText("Events");
 
-        timelinesEditLabel.setText("Timelines");
+		addEventButton.setText("Add Event");
+		addEventButton.addActionListener(addEditEventListener);
 
-        timelinesPane.setViewportView(timelines);
+		deleteEventButton.setText("Delete Event");
+		deleteEventButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Determine selected event.
+				new DeleteEventDialog(new JFrame(), true).setVisible(true);
+			}
+		});
 
-        addTimelineButton.setText("Add Timeline");
-        addTimelineButton.addActionListener(AddEditTimelineButtonListener.instance);
+		editEventButton.setText("Edit Event");
+		editEventButton.addActionListener(addEditEventListener);
 
-        deleteTimelineButton.setText("Delete Timeline");
+		timelinesEditLabel.setText("Timelines");
 
-        editTimelineButton.setText("Edit Timeline");
-        editTimelineButton.addActionListener(AddEditTimelineButtonListener.instance);
+		timelinesPane.setViewportView(timelines);
 
-        GroupLayout toolbarLayout = new GroupLayout(toolbar);
-        toolbar.setLayout(toolbarLayout);
-        toolbarLayout.setHorizontalGroup(
-            toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(toolbarLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(toolbarSeparator1)
-            .addComponent(eventsEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(addEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(deleteEventButton, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-            .addComponent(editEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(toolbarSeparator2)
-            .addComponent(timelinesEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(toolbarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(timelinesPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(editTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(addTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(deleteTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        toolbarLayout.setVerticalGroup(
-            toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(toolbarLayout.createSequentialGroup()
-                .addComponent(toolbarLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolbarSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(eventsEditLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addEventButton)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteEventButton)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editEventButton)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(toolbarSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timelinesEditLabel)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timelinesPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(addTimelineButton)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteTimelineButton)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editTimelineButton))
-        );
+		addTimelineButton.setText("Add Timeline");
+		addTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
 
-        mainSplitPane.setLeftComponent(toolbar);
+		deleteTimelineButton.setText("Delete Timeline");
+		deleteTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final List<String> toRemove = timelines.getSelectedValuesList();
+				new Thread(new Runnable() {
+					public void run() {
+						for (String s : toRemove)
+							model.removeTimeline(model.getTimeline(s));
+					}
+				});
+				EditWindow.this.loadTimelines();					
+			}
+		});
 
-        mainSplitPane.setRightComponent(displayPane);
+		editTimelineButton.setText("Edit Timeline");
+		editTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, model.getTimeline(timelines.getSelectedValue())).setVisible(true);
+			}
+		});
 
-        fileMenu.setText("File");
-        
-        newTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-        newTimelineMenuItem.setText("New");
-        newTimelineMenuItem.addActionListener(AddEditTimelineButtonListener.instance);
-        fileMenu.add(newTimelineMenuItem);
-        fileMenu.add(fileMenuSeparator1);
+		GroupLayout toolbarLayout = new GroupLayout(toolbar);
+		toolbar.setLayout(toolbarLayout);
+		toolbarLayout.setHorizontalGroup(
+				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(toolbarLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(toolbarSeparator1)
+				.addComponent(eventsEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(addEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(deleteEventButton, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+				.addComponent(editEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(toolbarSeparator2)
+				.addComponent(timelinesEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGroup(toolbarLayout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(timelinesPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+						.addContainerGap())
+						.addComponent(editTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(addTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(deleteTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				);
+		toolbarLayout.setVerticalGroup(
+				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(toolbarLayout.createSequentialGroup()
+						.addComponent(toolbarLabel)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(toolbarSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(eventsEditLabel)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(addEventButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(deleteEventButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(editEventButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(toolbarSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(timelinesEditLabel)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(timelinesPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(addTimelineButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(deleteTimelineButton)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(editTimelineButton))
+				);
 
-        saveTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-        saveTimelineMenuItem.setText("Save");
-        saveTimelineMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                saveTimelineMenuItemActionPerformed(e);
-            }
-        });
-        fileMenu.add(saveTimelineMenuItem);
-        fileMenu.add(fileMenuSeparator2);
+		mainSplitPane.setLeftComponent(toolbar);
 
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
-        exitMenuItem.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		System.exit(0);
-        	}
-        });
-        exitMenuItem.setText("Exit");
-        fileMenu.add(exitMenuItem);
+		mainSplitPane.setRightComponent(displayPane);
 
-        menuBar.add(fileMenu);
+		fileMenu.setText("File");
 
-        editMenu.setText("Edit");
+		newTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		newTimelineMenuItem.setText("New");
+		newTimelineMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
+		fileMenu.add(newTimelineMenuItem);
+		fileMenu.add(fileMenuSeparator1);
 
-        undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
-        undoMenuItem.setText("Undo");
-        undoMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                undoMenuItemActionPerformed(e);
-            }
-        });
-        editMenu.add(undoMenuItem);
+		saveTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		saveTimelineMenuItem.setText("Save");
+		saveTimelineMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the save button.
+			}
+		});
+		fileMenu.add(saveTimelineMenuItem);
+		fileMenu.add(fileMenuSeparator2);
 
-        redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
-        redoMenuItem.setText("Redo");
-        redoMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                redoMenuItemActionPerformed(e);
-            }
-        });
-        editMenu.add(redoMenuItem);
-        editMenu.add(editMenuSeparator1);
+		exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
+		exitMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		exitMenuItem.setText("Exit");
+		fileMenu.add(exitMenuItem);
 
-        deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-        deleteMenuItem.setText("Delete");
-        editMenu.add(deleteMenuItem);
+		menuBar.add(fileMenu);
 
-        menuBar.add(editMenu);
+		editMenu.setText("Edit");
 
-        viewMenu.setText("View");
+		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+		undoMenuItem.setText("Undo");
+		undoMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the undo button.
+			}
+		});
+		editMenu.add(undoMenuItem);
 
-        editViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_MASK));
-        editViewMenuItem.setText("Edit View");
-        viewMenu.add(editViewMenuItem);
+		redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
+		redoMenuItem.setText("Redo");
+		redoMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the redo button.
+			}
+		});
+		editMenu.add(redoMenuItem);
+		editMenu.add(editMenuSeparator1);
 
-        multiViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK));
-        multiViewMenuItem.setText("Multi View");
-        viewMenu.add(multiViewMenuItem);
+		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		deleteMenuItem.setText("Delete");
+		editMenu.add(deleteMenuItem);
 
-        menuBar.add(viewMenu);
+		menuBar.add(editMenu);
 
-        insertMenu.setText("Insert");
+		viewMenu.setText("View");
 
-        newEventMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
-        newEventMenuItem.setText("New Event");
-        newEventMenuItem.addActionListener(AddEditEventButtonListener.instance);
-        insertMenu.add(newEventMenuItem);
+		editViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_MASK));
+		editViewMenuItem.setText("Edit View");
+		viewMenu.add(editViewMenuItem);
 
-        menuBar.add(insertMenu);
+		multiViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK));
+		multiViewMenuItem.setText("Multi View");
+		viewMenu.add(multiViewMenuItem);
 
-        setJMenuBar(menuBar);
+		menuBar.add(viewMenu);
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane)
-        );
+		insertMenu.setText("Insert");
 
-        pack();
-    }
-    
-    private void loadTimelines() {
-    	// TODO Load timelines.
-    }
-    
-    private static class AddEditTimelineButtonListener implements ActionListener {
-		static AddEditTimelineButtonListener instance = new AddEditTimelineButtonListener();
-    	
-    	private AddEditTimelineButtonListener() { }
-    	
-    	public void actionPerformed(ActionEvent e) {
-			new TimelinePropertiesWindow().setVisible(true);
-		}
-    }
-    private static class AddEditEventButtonListener implements ActionListener {
-		static AddEditEventButtonListener instance = new AddEditEventButtonListener();
-    	
-    	private AddEditEventButtonListener() { }
-    	
-    	public void actionPerformed(ActionEvent e) {
-			new EventPropertiesWindow().setVisible(true);
-		}
-    }
+		newEventMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
+		newEventMenuItem.setText("New Event");
+		newEventMenuItem.addActionListener(addEditEventListener);
+		insertMenu.add(newEventMenuItem);
 
-    private void saveTimelineMenuItemActionPerformed(ActionEvent e) {
-        // TODO Save the selected timeline(s).
-    	System.out.println("Saved!");
-    }
+		menuBar.add(insertMenu);
 
-    private void undoMenuItemActionPerformed(ActionEvent e) {//GEN-FIRST:event_undoMenuItemActionPerformed
-        // TODO add your handling code here:
-    	System.out.println("Undo.");
-    }
+		setJMenuBar(menuBar);
 
-    private void redoMenuItemActionPerformed(ActionEvent e) {//GEN-FIRST:event_redoMenuItemActionPerformed
-        // TODO add your handling code here:
-    	System.out.println("Redo.");
-    }
+		GroupLayout layout = new GroupLayout(getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(mainSplitPane, GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+				);
+		layout.setVerticalGroup(
+				layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(mainSplitPane)
+				);
 
-    /**
-     * Start the window.
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+		pack();
+	}
 
-        /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EditWindow().setVisible(true);
-            }
-        });
-    }
+	/**
+	 * Load timelines from TimelineMaker model into GUI window.
+	 * Get a list of timeline titles from model. Then populate a default list model for the JList of timelines with those titles.
+	 */
+	public void loadTimelines() {
+		final DefaultListModel<String> listModel = new DefaultListModel<String>();
+		new Thread(new Runnable() {
+			public void run() {
+				ArrayList<String> temp = model.getTimelineTitles();
+				for (String t : temp)
+					listModel.addElement(t);
+			}
+		}).start();
+		timelines.setModel(listModel);
+	}
 }
