@@ -5,6 +5,7 @@ import entities.*;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.Date;
 
 /**
  * EventPropertiesWindow.java
@@ -18,6 +19,9 @@ public class EventPropertiesWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private TimelineMaker model;
+	private Timeline timeline;
+	private TLEvent event;
+	
 	
 	/**
 	 * Window components.
@@ -39,7 +43,10 @@ public class EventPropertiesWindow extends JFrame {
 	/**
 	 * Creates new event properties window.
 	 */
-	public EventPropertiesWindow(TimelineMaker model) {
+	public EventPropertiesWindow(TimelineMaker model, Timeline timeline, TLEvent event) {
+		this.model = model;
+		this.timeline = timeline;
+		this.event = event;
 		initComponents();
 		initLayout();
 	}
@@ -54,9 +61,9 @@ public class EventPropertiesWindow extends JFrame {
 		typeLabel = new JLabel();
 		type = new JComboBox<String>();
 		periodLabel = new JLabel();
-		startDate = new JTextField();
+		startDate = new JTextField(10);
 		toLabel = new JLabel();
-		endDate = new JTextField();
+		endDate = new JTextField(10);
 		commentLabel = new JLabel();
 		comments = new JScrollPane();
 		commentsArea = new JTextArea();
@@ -87,11 +94,11 @@ public class EventPropertiesWindow extends JFrame {
 
 		periodLabel.setText("Time Period");
 
-		startDate.setText("");
+		startDate.setText("yyyy-mm-dd");
 
 		toLabel.setText("to");
 
-		endDate.setText("");
+		endDate.setText("yyyy-mm-dd");
 
 		commentLabel.setText("Comments");
 
@@ -100,13 +107,61 @@ public class EventPropertiesWindow extends JFrame {
 		comments.setViewportView(commentsArea);
 
 		okButton.setText("Ok");
-		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Determine whether to create a new event or modify an existing one. Load its data from the window.
-				dispose();
+		if (event == null)
+			okButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					final String title = EventPropertiesWindow.this.title.getText();
+					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
+					final String startDate = EventPropertiesWindow.this.startDate.getText();
+					final String endDate = EventPropertiesWindow.this.endDate.getText();
+					new Thread(new Runnable() {
+						public void run() {
+							if (type.equals("Atomic")) {
+								timeline.addEvent(new Atomic(title, Date.valueOf(startDate)));
+							}
+							else {
+								timeline.addEvent(new Duration(title, Date.valueOf(startDate), Date.valueOf(endDate)));
+							}
+							// TODO Update display.
+						}
+					}).start();
+					dispose();
+				}
+			});
+		else {
+			title.setText(event.getName());
+			if (event instanceof Atomic) {
+				type.setSelectedItem("Atomic");
+				startDate.setText(((Atomic)event).getDate().toString());
+			} else if (event instanceof Duration) {
+				type.setSelectedItem("Duration");
+				startDate.setText(((Duration)event).getStartDate().toString());
+				endDate.setText(((Duration)event).getEndDate().toString());
 			}
-		});
-
+			
+			okButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					final String title = EventPropertiesWindow.this.title.getText();
+					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
+					final String startDate = EventPropertiesWindow.this.startDate.getText();
+					final String endDate = EventPropertiesWindow.this.endDate.getText();
+					new Thread(new Runnable() {
+						public void run() {
+							timeline.removeEvent(event);
+							if (type.equals("Atomic")) {
+								timeline.addEvent(new Atomic(title, Date.valueOf(startDate)));
+							}
+							else {
+								timeline.addEvent(new Duration(title, Date.valueOf(startDate), Date.valueOf(endDate)));
+							}
+							// TODO Update display.
+						}
+					}).start();
+					dispose();
+				}
+			});
+		}
+			
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
