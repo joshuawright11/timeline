@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.util.List;
-
 
 /**
  * EditWindow.java
@@ -254,17 +252,19 @@ public class EditWindow extends JFrame {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new EventPropertiesWindow(EditWindow.this.model).setVisible(true);
+				if (EditWindow.this.getSelectedTimeline() != null)
+					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new EventPropertiesWindow(EditWindow.this.model).setVisible(true);
+				if (EditWindow.this.getSelectedTimeline() != null)
+					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Determine selected event.
+				// TODO Implement deletion.
 			}
 		});
 		
@@ -282,13 +282,7 @@ public class EditWindow extends JFrame {
 		});
 		deleteTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				final List<String> toRemove = timelines.getSelectedValuesList();
-				new Thread(new Runnable() {
-					public void run() {
-						for (String s : toRemove)
-							model.removeTimeline(model.getTimeline(s));
-					}
-				});
+				model.removeTimeline(model.getTimeline(timelines.getSelectedValue()));
 				EditWindow.this.loadTimelines();					
 			}
 		});

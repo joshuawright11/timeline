@@ -122,13 +122,18 @@ public class TimelinePropertiesWindow extends JFrame {
         			new Thread(new Runnable() {
         				public void run() {
         					model.addTimeline(new Timeline(titleString));
+        					SwingUtilities.invokeLater(new Runnable() {
+        						public void run() {
+        							window.loadTimelines();
+        						}
+        					});
         				}
         			}).start();
-        			window.loadTimelines();
         			dispose();
         		}
         	});
-        else
+        else {
+        	title.setText(timeline.getName());        	
         	okButton.addActionListener(new ActionListener() {
         		public void actionPerformed(ActionEvent e) {
         			final String titleString = title.getText();
@@ -137,12 +142,17 @@ public class TimelinePropertiesWindow extends JFrame {
         				public void run() {
         					model.removeTimeline(timeline);
         					model.addTimeline(new Timeline(titleString));
+        					SwingUtilities.invokeLater(new Runnable() {
+        						public void run() {
+        							window.loadTimelines();
+        						}
+        					});
         				}
         			}).start();
-        			window.loadTimelines();
         			dispose();
         		}
         	});
+        }
         	
 
         cancelButton.setText("Cancel");
