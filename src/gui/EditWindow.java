@@ -1,9 +1,9 @@
 package gui;
 
 import model.*;
+import entities.*;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -69,6 +69,7 @@ public class EditWindow extends JFrame {
 	public EditWindow(TimelineMaker model) {
 		this.model = model;
 		initComponents();
+		initActionListeners();
 		loadTimelines();
 	}
 
@@ -111,68 +112,30 @@ public class EditWindow extends JFrame {
 		insertMenu = new JMenu();
 		newEventMenuItem = new JMenuItem();
 
-		ActionListener addEditEventListener = new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new EventPropertiesWindow().setVisible(true);
-			}
-		};
-
+		// Set default close operation and title of this window.
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Timelord - Create, edit, and view timelines!");
-
+		
+		// Set location of the main divider.
 		mainSplitPane.setDividerLocation(140);
 
+		
+		// Set up the toolbar:
 		toolbarLabel.setFont(new Font("Tahoma", 0, 12));
 		toolbarLabel.setText("Toolbar");
 
 		eventsEditLabel.setText("Events");
-
 		addEventButton.setText("Add Event");
-		addEventButton.addActionListener(addEditEventListener);
-
 		deleteEventButton.setText("Delete Event");
-		deleteEventButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Determine selected event.
-				new DeleteEventDialog(new JFrame(), true).setVisible(true);
-			}
-		});
-
 		editEventButton.setText("Edit Event");
-		editEventButton.addActionListener(addEditEventListener);
 
 		timelinesEditLabel.setText("Timelines");
-
 		timelinesPane.setViewportView(timelines);
-
+		timelines.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		addTimelineButton.setText("Add Timeline");
-		addTimelineButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
-			}
-		});
-
 		deleteTimelineButton.setText("Delete Timeline");
-		deleteTimelineButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				final List<String> toRemove = timelines.getSelectedValuesList();
-				new Thread(new Runnable() {
-					public void run() {
-						for (String s : toRemove)
-							model.removeTimeline(model.getTimeline(s));
-					}
-				});
-				EditWindow.this.loadTimelines();					
-			}
-		});
-
 		editTimelineButton.setText("Edit Timeline");
-		editTimelineButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, model.getTimeline(timelines.getSelectedValue())).setVisible(true);
-			}
-		});
-
+		
 		GroupLayout toolbarLayout = new GroupLayout(toolbar);
 		toolbar.setLayout(toolbarLayout);
 		toolbarLayout.setHorizontalGroup(
@@ -222,88 +185,50 @@ public class EditWindow extends JFrame {
 				);
 
 		mainSplitPane.setLeftComponent(toolbar);
-
 		mainSplitPane.setRightComponent(displayPane);
 
+		// Set up the menu bar:
 		fileMenu.setText("File");
-
 		newTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newTimelineMenuItem.setText("New");
-		newTimelineMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
-			}
-		});
 		fileMenu.add(newTimelineMenuItem);
 		fileMenu.add(fileMenuSeparator1);
-
 		saveTimelineMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		saveTimelineMenuItem.setText("Save");
-		saveTimelineMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the save button.
-			}
-		});
 		fileMenu.add(saveTimelineMenuItem);
 		fileMenu.add(fileMenuSeparator2);
-
 		exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
-		exitMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
 		exitMenuItem.setText("Exit");
 		fileMenu.add(exitMenuItem);
-
 		menuBar.add(fileMenu);
 
 		editMenu.setText("Edit");
-
 		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
 		undoMenuItem.setText("Undo");
-		undoMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the undo button.
-			}
-		});
 		editMenu.add(undoMenuItem);
-
 		redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
 		redoMenuItem.setText("Redo");
-		redoMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the redo button.
-			}
-		});
 		editMenu.add(redoMenuItem);
 		editMenu.add(editMenuSeparator1);
-
 		deleteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteMenuItem.setText("Delete");
 		editMenu.add(deleteMenuItem);
-
 		menuBar.add(editMenu);
 
 		viewMenu.setText("View");
-
 		editViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_MASK));
 		editViewMenuItem.setText("Edit View");
 		viewMenu.add(editViewMenuItem);
-
 		multiViewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK));
 		multiViewMenuItem.setText("Multi View");
 		viewMenu.add(multiViewMenuItem);
-
 		menuBar.add(viewMenu);
 
 		insertMenu.setText("Insert");
-
 		newEventMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
 		newEventMenuItem.setText("New Event");
-		newEventMenuItem.addActionListener(addEditEventListener);
+		newEventMenuItem.addActionListener(null); // TODO
 		insertMenu.add(newEventMenuItem);
-
 		menuBar.add(insertMenu);
 
 		setJMenuBar(menuBar);
@@ -321,6 +246,80 @@ public class EditWindow extends JFrame {
 
 		pack();
 	}
+	
+	/**
+	 * Initialize action listeners for all interactive buttons and shortcuts.private void initActionListeners() {
+	 */
+	private void initActionListeners() {
+		// Set up event toolbar listeners.
+		addEventButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new EventPropertiesWindow(EditWindow.this.model).setVisible(true);
+			}
+		});
+		editEventButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new EventPropertiesWindow(EditWindow.this.model).setVisible(true);
+			}
+		});
+		deleteEventButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Determine selected event.
+			}
+		});
+		
+		// Set up timeline toolbar listeners.
+		addTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
+		editTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO threading
+				new TimelinePropertiesWindow(model, EditWindow.this, model.getTimeline(timelines.getSelectedValue())).setVisible(true);
+			}
+		});
+		deleteTimelineButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final List<String> toRemove = timelines.getSelectedValuesList();
+				new Thread(new Runnable() {
+					public void run() {
+						for (String s : toRemove)
+							model.removeTimeline(model.getTimeline(s));
+					}
+				});
+				EditWindow.this.loadTimelines();					
+			}
+		});
+
+		// Set up menu item listeners.
+		newTimelineMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+			}
+		});
+		saveTimelineMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the save button.
+			}
+		});
+		exitMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		undoMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the undo button.
+			}
+		});
+		redoMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add action for the redo button.
+			}
+		});
+	}
 
 	/**
 	 * Load timelines from TimelineMaker model into GUI window.
@@ -336,5 +335,13 @@ public class EditWindow extends JFrame {
 			}
 		}).start();
 		timelines.setModel(listModel);
+	}
+	
+	/**
+	 * Retrieve the timeline object that is currently selected.
+	 * @return
+	 */
+	public Timeline getSelectedTimeline() {
+		return model.getTimeline(timelines.getSelectedValue());
 	}
 }
