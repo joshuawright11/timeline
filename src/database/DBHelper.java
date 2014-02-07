@@ -106,6 +106,7 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setString(1, event.getName());
 		pstmt.setString(2, event.typeName());
 		pstmt.setDate(3, event.getDate());
+		pstmt.executeUpdate();
 //		statement.executeUpdate("INSERT INTO "+tlName
 //				+" (eventName,type,startDate,endDate)" + " VALUES "
 //				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
@@ -121,6 +122,7 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setString(2, event.typeName());
 		pstmt.setDate(3, event.getStartDate());
 		pstmt.setDate(4, event.getEndDate());
+		pstmt.executeUpdate();
 //		statement.executeUpdate("INSERT INTO "+tlName
 //				+" (eventName,type,startDate,endDate)" + " VALUES "
 //				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
@@ -170,7 +172,6 @@ public class DBHelper implements DBHelperAPI{
 					String type = resultSet.getString("type");
 					TLEvent event = null;
 					if(type.equals("atomic")){
-						System.out.println(resultSet.getString("startDate"));
 						Date startDate = resultSet.getDate("startDate");
 						event = new Atomic(name, startDate);
 					}else if(type.equals("duration")){
