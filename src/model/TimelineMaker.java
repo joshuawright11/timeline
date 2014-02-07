@@ -19,28 +19,18 @@ import java.util.logging.*;
  */
 public class TimelineMaker implements Runnable {
 	private ArrayList<Timeline> timelines;
-	private Timeline currentTimeline;
-	
-	private TLOptionsDispatch timelineOptions;
-	private TimelineGraphics timelineGraphics;
-	private OptionsDispatch options;
 	private DBHelper database;
-	
 	private EditWindow gui;
-	
-	
-	
 
 	public TimelineMaker() {
 		database = new DBHelper("timeline.db");
 		
 		timelines = new ArrayList<Timeline>();
-		currentTimeline = new Timeline("Test1");
-		timelines.add(currentTimeline);
 		
-		// TODO Load timelines from database. Store in ArrayList<Timeline> timelines.
+		// Adding test timelines. TODO Remove.
 		for (Timeline t : database.getTimelines())
 			timelines.add(t);
+		timelines.add(new Timeline("Test2"));
 		
 		initGUI();
 	}
@@ -73,15 +63,9 @@ public class TimelineMaker implements Runnable {
 	}
 
 	public void run() {
-		
+		// TODO Determine run behavior.
 	}
 
-	/**
-	 * Retrieve the currently in-focus timeline.
-	 * @return currentTimeline
-	 */
-	public Timeline currentTimeline() { return currentTimeline; }
-	
 	/**
 	 * Retrieve a list of the names of all the timelines.
 	 * @return
@@ -107,12 +91,12 @@ public class TimelineMaker implements Runnable {
 	
 	public void addTimeline(Timeline t) {
 		timelines.add(t);
-		// TODO Add database pushing code here.
+		// TODO Add database saving code here.
 	}
 	
 	public void removeTimeline(Timeline t) {
 		timelines.remove(t);
-		// TODO Add database pushing code here.
+		// TODO Add database saving code here.
 	}
 	
 }
