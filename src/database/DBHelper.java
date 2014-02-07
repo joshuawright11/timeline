@@ -20,6 +20,8 @@ import entities.Timeline;
  * Created: Jan 29, 2014
  * Package: backend
  *
+ * Using ideas and very minimal code from http://www.tutorialspoint.com/jdbc/jdbc-sample-code.htm
+ *
  */
 public class DBHelper implements DBHelperAPI{
 	private Connection connection = null;
