@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -16,6 +17,10 @@ public class Driver {
 	static LwjglAWTCanvas canvas1;
 	public static void main(String[] args) {
 
+		JScrollPane scroll = new JScrollPane();
+		
+	
+		
 		JFrame frame = new JFrame("FrameDemo");
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,6 +34,10 @@ public class Driver {
 		
 		frame.setSize(810, 480);;
 
+		scroll.setViewportView(frame);
+		
+		scroll.setVisible(true);
+		
 		frame.setVisible(true);
 	}
 }
