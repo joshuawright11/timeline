@@ -2,11 +2,8 @@ package gui;
 
 import model.*;
 import entities.*;
-import graphics.TimelineRender;
 
 import javax.swing.*;
-
-import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 
 import java.awt.*;
 import java.awt.event.*;
