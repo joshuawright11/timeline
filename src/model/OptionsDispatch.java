@@ -2,7 +2,6 @@
  * 
  */
 package model;
-import java.sql.*;
 
 import database.DBHelper;
 

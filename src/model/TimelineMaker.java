@@ -9,7 +9,6 @@ import entities.*;
 
 import javax.swing.*;
 
-import java.sql.Date;
 import java.util.*;
 import java.util.logging.*;
 
