@@ -173,11 +173,11 @@ public class DBHelper implements DBHelperAPI{
 					TLEvent event = null;
 					if(type.equals("atomic")){
 						Date startDate = resultSet.getDate("startDate");
-						event = new Atomic(name, startDate);
+						event = new Atomic(name, "", startDate); // TODO Get category from database.
 					}else if(type.equals("duration")){
 						Date startDate = resultSet.getDate("startDate");
 						Date endDate = resultSet.getDate("endDate");
-						event = new Duration(name,startDate,endDate);
+						event = new Duration(name, "", startDate,endDate); // TODO Get category from database.
 					}else{
 						System.out.println("YOU DONE MESSED UP.");
 					}

@@ -12,14 +12,21 @@ package entities;
 
 public abstract class TLEvent {
 	private String name;
-	TLEvent(String name){
+	private String category;
+	
+	TLEvent(String name, String category){
 		this.setName(name);
+		this.category = category;
 	}
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	public String getCategory() {
+		return category;
 	}
 	/**
 	 * @param name the name to set

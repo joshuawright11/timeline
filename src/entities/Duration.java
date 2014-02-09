@@ -12,8 +12,8 @@ import java.sql.Date;
 public class Duration extends TLEvent {
 	private Date startDate;
 	private Date endDate;
-	public Duration(String name, Date startDate, Date endDate){
-		super(name);
+	public Duration(String name, String category, Date startDate, Date endDate){
+		super(name, category);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 	}

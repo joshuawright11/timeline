@@ -11,8 +11,8 @@ import java.sql.Date;
  */
 public class Atomic extends TLEvent {
 	private Date date;
-	public Atomic(String name, Date date){
-		super(name);
+	public Atomic(String name, String category, Date date){
+		super(name, category);
 		this.setDate(date);
 	}
 	/**
