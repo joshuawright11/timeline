@@ -16,7 +16,7 @@ import java.util.logging.*;
  * @author Josh Wright and Andrew Thompson
  *
  */
-public class TimelineMaker implements Runnable {
+public class TimelineMaker {
 	private ArrayList<Timeline> timelines;
 	private DBHelper database;
 	private EditWindow gui;
@@ -59,10 +59,6 @@ public class TimelineMaker implements Runnable {
 				gui.setVisible(true);
 			}
 		});
-	}
-
-	public void run() {
-		// TODO Determine run behavior.
 	}
 
 	/**
