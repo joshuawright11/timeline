@@ -18,7 +18,6 @@ public class EventPropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private TimelineMaker model;
 	private Timeline timeline;
 	private TLEvent event;
 	
@@ -44,7 +43,6 @@ public class EventPropertiesWindow extends JFrame {
 	 * Creates new event properties window.
 	 */
 	public EventPropertiesWindow(TimelineMaker model, Timeline timeline, TLEvent event) {
-		this.model = model;
 		this.timeline = timeline;
 		this.event = event;
 		initComponents();
