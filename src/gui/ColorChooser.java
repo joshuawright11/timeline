@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 /**
  *
- * @author Andrew
+ * @author Andrew Thompson
  */
 public class ColorChooser extends javax.swing.JFrame {
 

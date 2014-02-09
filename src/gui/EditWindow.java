@@ -314,6 +314,12 @@ public class EditWindow extends JFrame {
 				// TODO Add action for the redo button.
 			}
 		});
+		newEventMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (EditWindow.this.getSelectedTimeline() != null)
+					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
+			}
+		});
 	}
 
 	/**
