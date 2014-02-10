@@ -55,9 +55,8 @@ public class EditWindow extends JFrame {
 	private JMenuItem newTimelineMenuItem;
 	private JMenuItem redoMenuItem;
 	private JMenuItem saveTimelineMenuItem;
-	private JList<String> timelines;
+	private JComboBox<String> timelines;
 	private JLabel timelinesEditLabel;
-	private JScrollPane timelinesPane;
 	private JPanel toolbar;
 	private JLabel toolbarLabel;
 	private JSeparator toolbarSeparator1;
@@ -92,8 +91,7 @@ public class EditWindow extends JFrame {
 		editEventButton = new JButton();
 		toolbarSeparator2 = new JSeparator();
 		timelinesEditLabel = new JLabel();
-		timelinesPane = new JScrollPane();
-		timelines = new JList<String>();
+		timelines = new JComboBox<String>();
 		addTimelineButton = new JButton();
 		deleteTimelineButton = new JButton();
 		editTimelineButton = new JButton();
@@ -134,59 +132,99 @@ public class EditWindow extends JFrame {
 		editEventButton.setText("Edit Event");
 
 		timelinesEditLabel.setText("Timelines");
-		timelinesPane.setViewportView(timelines);
-		timelines.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		addTimelineButton.setText("Add Timeline");
 		deleteTimelineButton.setText("Delete Timeline");
 		editTimelineButton.setText("Edit Timeline");
 		
 		GroupLayout toolbarLayout = new GroupLayout(toolbar);
 		toolbar.setLayout(toolbarLayout);
+//		toolbarLayout.setHorizontalGroup(
+//				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//				.addComponent(toolbarLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				.addComponent(toolbarSeparator1)
+//				.addComponent(eventsEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				.addComponent(addEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				.addComponent(deleteEventButton, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+//				.addComponent(editEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				.addComponent(toolbarSeparator2)
+//				.addComponent(timelinesEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				.addGroup(toolbarLayout.createSequentialGroup()
+//						.addContainerGap()
+//						.addComponent(timelinesPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+//						.addContainerGap())
+//						.addComponent(editTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//						.addComponent(addTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//						.addComponent(deleteTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+//				);
+//		toolbarLayout.setVerticalGroup(
+//				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//				.addGroup(toolbarLayout.createSequentialGroup()
+//						.addComponent(toolbarLabel)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(toolbarSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(eventsEditLabel)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(addEventButton)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(deleteEventButton)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(editEventButton)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(toolbarSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(timelinesEditLabel)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(timelinesPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(addTimelineButton)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(deleteTimelineButton)
+//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+//						.addComponent(editTimelineButton))
+//				);
 		toolbarLayout.setHorizontalGroup(
-				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(toolbarLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(toolbarSeparator1)
-				.addComponent(eventsEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(addEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(deleteEventButton, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-				.addComponent(editEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(toolbarSeparator2)
-				.addComponent(timelinesEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(toolbarLayout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(timelinesPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-						.addContainerGap())
-						.addComponent(editTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(addTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(deleteTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				);
-		toolbarLayout.setVerticalGroup(
-				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(toolbarLayout.createSequentialGroup()
-						.addComponent(toolbarLabel)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(toolbarSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(eventsEditLabel)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(addEventButton)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(deleteEventButton)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(editEventButton)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(toolbarSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(timelinesEditLabel)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(timelinesPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(addTimelineButton)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(deleteTimelineButton)
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(editTimelineButton))
-				);
+	            toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addComponent(toolbarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(toolbarSeparator1)
+	            .addComponent(eventsEditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(addEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(deleteEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+	            .addComponent(editEventButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(toolbarSeparator2)
+	            .addComponent(timelinesEditLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(editTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(addTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(deleteTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	            .addComponent(timelines, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	        );
+	        toolbarLayout.setVerticalGroup(
+	            toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(toolbarLayout.createSequentialGroup()
+	                .addComponent(toolbarLabel)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(toolbarSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(eventsEditLabel)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(addEventButton)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(deleteEventButton)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(editEventButton)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(toolbarSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(timelinesEditLabel)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(timelines, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 202, Short.MAX_VALUE)
+	                .addComponent(addTimelineButton)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(deleteTimelineButton)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(editTimelineButton))
+	        );
 
 		mainSplitPane.setLeftComponent(toolbar);
 		mainSplitPane.setRightComponent(displayPane);
@@ -258,14 +296,16 @@ public class EditWindow extends JFrame {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (EditWindow.this.getSelectedTimeline() != null)
-					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				if (selectedTimeline != null)
+					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (EditWindow.this.getSelectedTimeline() != null)
-					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				if (selectedTimeline != null)
+					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
@@ -283,15 +323,30 @@ public class EditWindow extends JFrame {
 		editTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO threading
-				new TimelinePropertiesWindow(model, EditWindow.this, model.getTimeline(timelines.getSelectedValue())).setVisible(true);
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				new TimelinePropertiesWindow(model, EditWindow.this, selectedTimeline).setVisible(true);
 			}
 		});
 		deleteTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				model.removeTimeline(model.getTimeline(timelines.getSelectedValue()));
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				model.removeTimeline(selectedTimeline);
 				EditWindow.this.loadTimelines();					
 			}
 		});
+		
+		timelines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String selectedTimeline = (String)timelines.getSelectedItem();
+				new Thread(new Runnable() {
+					public void run(){
+						model.setSelectedTimeline(selectedTimeline);
+					}
+				}).start();
+			}
+		});
+		
+		
 
 		// Set up menu item listeners.
 		newTimelineMenuItem.addActionListener(new ActionListener() {
@@ -321,8 +376,9 @@ public class EditWindow extends JFrame {
 		});
 		newEventMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (EditWindow.this.getSelectedTimeline() != null)
-					new EventPropertiesWindow(EditWindow.this.model, EditWindow.this.getSelectedTimeline(), null).setVisible(true);
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				if (selectedTimeline != null)
+					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 	}
@@ -332,22 +388,9 @@ public class EditWindow extends JFrame {
 	 * Get a list of timeline titles from model. Then populate a default list model for the JList of timelines with those titles.
 	 */
 	public void loadTimelines() {
-		final DefaultListModel<String> listModel = new DefaultListModel<String>();
-		new Thread(new Runnable() {
-			public void run() {
-				ArrayList<String> temp = model.getTimelineTitles();
-				for (String t : temp)
-					listModel.addElement(t);
-			}
-		}).start();
-		timelines.setModel(listModel);
-	}
-	
-	/**
-	 * Retrieve the timeline object that is currently selected.
-	 * @return
-	 */
-	public Timeline getSelectedTimeline() {
-		return model.getTimeline(timelines.getSelectedValue());
+		timelines.removeAllItems();
+		ArrayList<String> temp = model.getTimelineTitles();
+		for (String s : temp)
+			timelines.addItem(s);
 	}
 }
