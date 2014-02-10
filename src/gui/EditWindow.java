@@ -2,6 +2,7 @@ package gui;
 
 import model.*;
 import entities.*;
+import graphics.TimelineGraphics;
 
 import javax.swing.*;
 
@@ -24,7 +25,9 @@ public class EditWindow extends JFrame {
 	 * TimelineMaker model for this window.
 	 */
 	private TimelineMaker model;
-
+	
+	private TimelineGraphics graphics;
+	
 	/**
 	 * Window components.
 	 */
@@ -64,9 +67,11 @@ public class EditWindow extends JFrame {
 
 	/**
 	 * Creates new edit window.
+	 * @param graphics 
 	 */
-	public EditWindow(TimelineMaker model) {
+	public EditWindow(TimelineMaker model, TimelineGraphics graphics) {
 		this.model = model;
+		this.graphics = graphics;
 		initComponents();
 		initActionListeners();
 		loadTimelines();
@@ -92,7 +97,7 @@ public class EditWindow extends JFrame {
 		addTimelineButton = new JButton();
 		deleteTimelineButton = new JButton();
 		editTimelineButton = new JButton();
-		displayPane = new DisplayPane();
+		displayPane = new DisplayPane(graphics);
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu();
 		newTimelineMenuItem = new JMenuItem();
