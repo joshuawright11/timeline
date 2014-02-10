@@ -82,24 +82,26 @@ public class TimelineMaker {
 	 * @param name The name of the timeline to be found
 	 * @return The timeline with the correct name; null otherwise.
 	 */
-	public Timeline getTimeline(String name) { 
+	private Timeline getTimeline(String name) { 
 		for (Timeline t : timelines)
 			if (t.getName().equals(name))
 				return t;
 		return null;
 	}
 	
-	public void addTimeline(Timeline t) {
-		timelines.add(t);
-		// TODO Add database saving code here.
+	public Timeline getSelectedTimeline() {
+		return selectedTimeline;
 	}
 	
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
+		// TODO Add rendering code here!
+		graphics.renderTimeline(selectedTimeline);
 	}
 	
-	public Timeline getSelectedTimeline() {
-		return selectedTimeline;
+	public void addTimeline(Timeline t) {
+		timelines.add(t);
+		// TODO Add database saving code here.
 	}
 	
 	public void removeTimeline(Timeline t) {
@@ -116,7 +118,7 @@ public class TimelineMaker {
 		 * !!!!
 		 * !!!!
 		 */
-		graphics.renderTimeline(t);
+//		graphics.renderTimeline(t);
 		
 		
 		
