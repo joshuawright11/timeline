@@ -19,6 +19,7 @@ import java.util.logging.*;
  */
 public class TimelineMaker {
 	private ArrayList<Timeline> timelines;
+	private Timeline selectedTimeline;
 	private DBHelper database;
 	private EditWindow gui;
 	private TimelineGraphics graphics;
@@ -28,9 +29,12 @@ public class TimelineMaker {
 		graphics = new TimelineGraphics();
 		timelines = new ArrayList<Timeline>();
 		
+		
 		// Adding test timelines. TODO Remove.
 		for (Timeline t : database.getTimelines())
 			timelines.add(t);
+		
+		selectedTimeline = timelines.get(0);
 		
 		initGUI();
 	}
@@ -88,6 +92,14 @@ public class TimelineMaker {
 	public void addTimeline(Timeline t) {
 		timelines.add(t);
 		// TODO Add database saving code here.
+	}
+	
+	public void setSelectedTimeline(String title) {
+		selectedTimeline = getTimeline(title);
+	}
+	
+	public Timeline getSelectedTimeline() {
+		return selectedTimeline;
 	}
 	
 	public void removeTimeline(Timeline t) {
