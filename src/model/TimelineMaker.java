@@ -3,6 +3,7 @@
  */
 package model;
 
+import graphics.TimelineGraphics;
 import gui.*;
 import database.*;
 import entities.*;
@@ -20,16 +21,16 @@ public class TimelineMaker {
 	private ArrayList<Timeline> timelines;
 	private DBHelper database;
 	private EditWindow gui;
+	private TimelineGraphics graphics;
 
 	public TimelineMaker() {
 		database = new DBHelper("timeline.db");
-		
+		graphics = new TimelineGraphics();
 		timelines = new ArrayList<Timeline>();
 		
 		// Adding test timelines. TODO Remove.
 		for (Timeline t : database.getTimelines())
 			timelines.add(t);
-		timelines.add(new Timeline("Test2"));
 		
 		initGUI();
 	}
@@ -55,7 +56,7 @@ public class TimelineMaker {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gui = new EditWindow(TimelineMaker.this);
+				gui = new EditWindow(TimelineMaker.this, graphics);
 				gui.setVisible(true);
 			}
 		});
@@ -91,6 +92,25 @@ public class TimelineMaker {
 	
 	public void removeTimeline(Timeline t) {
 		timelines.remove(t);
+		
+		
+		
+		
+		/*
+		 * REMOVE THIS 
+		 * LATER THIS IS
+		 * JUST FOR
+		 * TESTING
+		 * !!!!
+		 * !!!!
+		 */
+		graphics.renderTimeline(t);
+		
+		
+		
+		
+		
+		
 		// TODO Add database saving code here.
 	}
 	
