@@ -19,7 +19,7 @@ public class TimelineMaker {
 	private ArrayList<Timeline> timelines;
 	private Timeline selectedTimeline;
 	private DBHelper database;
-	private EditWindow gui;
+	private MainWindow gui;
 	private TimelineGraphics graphics;
 
 	/**
@@ -53,18 +53,18 @@ public class TimelineMaker {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(EditWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				gui = new EditWindow(TimelineMaker.this, graphics);
+				gui = new MainWindow(TimelineMaker.this, graphics);
 				gui.setVisible(true);
 			}
 		});
