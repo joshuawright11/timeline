@@ -1,5 +1,6 @@
 package graphics;
 
+import model.TimelineMaker;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -14,7 +15,10 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 	private Group empty;
 	private Scene emptyScene;
 	
-	public TimelineGraphics(){
+	private TimelineMaker model;
+	
+	public TimelineGraphics(TimelineMaker model){
+		this.model = model;
 	}
 	
 	@Override
@@ -29,7 +33,7 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 
 	@Override
 	public void renderTimeline(Timeline timeline) {
-		Platform.runLater(new TimelineRender(timeline, root));
+		Platform.runLater(new TimelineRender(model, timeline, root));
 	}
 
 	@Override

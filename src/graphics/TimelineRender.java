@@ -5,8 +5,11 @@ package graphics;
 
 import java.util.ArrayList;
 
+import model.TimelineMaker;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import entities.Atomic;
 import entities.Duration;
 import entities.TLEvent;
@@ -20,6 +23,7 @@ import entities.Timeline;
  */
 public class TimelineRender implements Runnable {
 
+	private TimelineMaker model;
 	private Timeline timeline;
 	private Group group;
 	private ArrayList<Duration> durations;
@@ -31,7 +35,8 @@ public class TimelineRender implements Runnable {
 	 * @param timeline
 	 * @param root
 	 */
-	public TimelineRender(Timeline timeline, Group group) {
+	public TimelineRender(TimelineMaker model, Timeline timeline, Group group) {
+		this.model = model;
 		this.timeline = timeline;
 		this.group = group;
 		atomics = new ArrayList<Atomic>();
@@ -70,11 +75,18 @@ public class TimelineRender implements Runnable {
 	
 	private void renderAtomics() {
 		int counter = 0;
-		for(Atomic event : atomics){
-			Label label = new Label(event.getName());
+		for(Atomic e : atomics){
+			final Label label = new Label(e.getName());
 			label.setLayoutX(counter);
 			label.setLayoutY(10);
-			label.setOnMouseClicked(new TLEventClickEventHandler(label, event));
+			final Atomic event = e;
+			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {
+					System.out.println("You clicked "+ event.getName());
+					label.setStyle("-fx-border-color: black;");
+					model.setSelectedEvent(event);
+				}
+			});
 			group.getChildren().add(label);
 			counter += 30;
 		}
@@ -85,11 +97,18 @@ public class TimelineRender implements Runnable {
 	 */
 	private void renderDurations() {
 		int counter = 0;
-		for(Duration event : durations){
-			Label label = new Label(event.getName());
+		for(Duration e : durations){
+			final Label label = new Label(e.getName());
 			label.setLayoutX(counter);
 			label.setLayoutY(50);
-			label.setOnMouseClicked(new TLEventClickEventHandler(label, event));
+			final Duration event = e;
+			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {
+					System.out.println("You clicked "+ event.getName());
+					label.setStyle("-fx-border-color: black;");
+					model.setSelectedEvent(event);
+				}
+			});
 			group.getChildren().add(label);
 			counter += 30;
 		}

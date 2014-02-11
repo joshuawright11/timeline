@@ -16,10 +16,29 @@ import java.util.logging.*;
  *
  */
 public class TimelineMaker {
+	/**
+	 * A list of all the timelines in this application.
+	 */
 	private ArrayList<Timeline> timelines;
+	/**
+	 * The timeline selected in this application.
+	 */
 	private Timeline selectedTimeline;
+	/**
+	 * The event selected in this application.
+	 */
+	private TLEvent selectedEvent;
+	/**
+	 * The database for storing timelines of this application.
+	 */
 	private DBHelper database;
+	/**
+	 * The main GUI window for this application.
+	 */
 	private MainWindow gui;
+	/**
+	 * The graphics object for displaying timelines in this application.
+	 */
 	private TimelineGraphics graphics;
 
 	/**
@@ -28,40 +47,44 @@ public class TimelineMaker {
 	 */
 	public TimelineMaker() {
 		database = new DBHelper("timeline.db");
-		graphics = new TimelineGraphics();
+		graphics = new TimelineGraphics(this);
 		timelines = new ArrayList<Timeline>();
-		
-		
-		// Adding test timelines. TODO Remove.
+
 		for (Timeline t : database.getTimelines())
 			timelines.add(t);
-		
+
 		selectedTimeline = timelines.get(0);
-		
+		try {
+			selectedEvent = selectedTimeline.getEvents()[0];
+			System.out.println(selectedEvent.toString());
+		} catch (NullPointerException e) {
+			System.out.println("Unable to determine selected event.");
+		}
+
 		initGUI();
 	}
-	
+
 	/**
 	 * Initialize the GUI components of this application.
 	 */
 	private void initGUI() {
 		try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
-		
+			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				if ("Nimbus".equals(info.getName())) {
+					UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (InstantiationException ex) {
+			Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IllegalAccessException ex) {
+			Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (UnsupportedLookAndFeelException ex) {
+			Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				gui = new MainWindow(TimelineMaker.this, graphics);
@@ -80,19 +103,19 @@ public class TimelineMaker {
 			toReturn.add(t.getName());
 		return toReturn;
 	}
-	
+
 	/**
 	 * Retrieve the timeline with the parameterized name.
-	 * @param name The name of the timeline to be found
+	 * @param title The name of the timeline to be found
 	 * @return The timeline with the correct name; null otherwise.
 	 */
-	private Timeline getTimeline(String name) { 
+	private Timeline getTimeline(String title) { 
 		for (Timeline t : timelines)
-			if (t.getName().equals(name))
+			if (t.getName().equals(title))
 				return t;
 		return null;
 	}
-	
+
 	/**
 	 * Retrieve the currently selected timeline.
 	 * @return selectedTimeline
@@ -100,7 +123,7 @@ public class TimelineMaker {
 	public Timeline getSelectedTimeline() {
 		return selectedTimeline;
 	}
-	
+
 	/**
 	 * Set the selected timeline.
 	 * Find the timeline of the parameterized title and set selectedTimeline to it.
@@ -109,9 +132,11 @@ public class TimelineMaker {
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
 		// TODO Add rendering code here!
-		graphics.renderTimeline(selectedTimeline);
+//		graphics.clearScreen();
+		if (selectedTimeline != null)
+			graphics.renderTimeline(selectedTimeline);
 	}
-	
+
 	/**
 	 * Add a timeline to this model.
 	 * @param t the timeline to be added
@@ -120,7 +145,7 @@ public class TimelineMaker {
 		timelines.add(t);
 		// TODO Add database saving code here.
 	}
-	
+
 	/**
 	 * Remove a timeline from this model.
 	 * @param t the timeline to be removed
@@ -129,5 +154,25 @@ public class TimelineMaker {
 		timelines.remove(t);
 		// TODO Add database saving code here.
 	}
-	
+
+	/**
+	 * Retrieve the currently selected event.
+	 * @return selectedEvent
+	 */
+	public TLEvent getSelectedEvent() { 
+		return selectedEvent; 
+	}
+
+	/**
+	 * Set the selected event.
+	 * @param e The event to be selected
+	 */
+	public void setSelectedEvent(TLEvent e) {
+		if (e != null) {
+			selectedEvent = e;
+			System.out.println("Model confirms event selection:\n" +
+			"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
+		}
+	}
+
 }
