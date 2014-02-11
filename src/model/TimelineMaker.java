@@ -1,19 +1,17 @@
-/**
- * 
- */
 package model;
 
-import graphics.TimelineGraphics;
+import graphics.*;
 import gui.*;
 import database.*;
 import entities.*;
 
 import javax.swing.*;
-
 import java.util.*;
 import java.util.logging.*;
 
 /**
+ * TimelineMaker.java
+ * The model of the timeline editor and viewer. Contains all necessary components to model the application.
  * @author Josh Wright and Andrew Thompson
  *
  */
@@ -24,6 +22,10 @@ public class TimelineMaker {
 	private EditWindow gui;
 	private TimelineGraphics graphics;
 
+	/**
+	 * Constructor.
+	 * Create a new TimelineMaker application model with database, graphics, and gui compnents.
+	 */
 	public TimelineMaker() {
 		database = new DBHelper("timeline.db");
 		graphics = new TimelineGraphics();
@@ -39,8 +41,10 @@ public class TimelineMaker {
 		initGUI();
 	}
 	
+	/**
+	 * Initialize the GUI components of this application.
+	 */
 	private void initGUI() {
-		// TODO Determine if this code should be on EDT.
 		try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -68,7 +72,7 @@ public class TimelineMaker {
 
 	/**
 	 * Retrieve a list of the names of all the timelines.
-	 * @return
+	 * @return timelines
 	 */
 	public ArrayList<String> getTimelineTitles() {
 		ArrayList<String> toReturn = new ArrayList<String>();
@@ -89,42 +93,40 @@ public class TimelineMaker {
 		return null;
 	}
 	
+	/**
+	 * Retrieve the currently selected timeline.
+	 * @return selectedTimeline
+	 */
 	public Timeline getSelectedTimeline() {
 		return selectedTimeline;
 	}
 	
+	/**
+	 * Set the selected timeline.
+	 * Find the timeline of the parameterized title and set selectedTimeline to it.
+	 * @param title of the timeline
+	 */
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
 		// TODO Add rendering code here!
 		graphics.renderTimeline(selectedTimeline);
 	}
 	
+	/**
+	 * Add a timeline to this model.
+	 * @param t the timeline to be added
+	 */
 	public void addTimeline(Timeline t) {
 		timelines.add(t);
 		// TODO Add database saving code here.
 	}
 	
+	/**
+	 * Remove a timeline from this model.
+	 * @param t the timeline to be removed
+	 */
 	public void removeTimeline(Timeline t) {
 		timelines.remove(t);
-		
-		
-		
-		
-		/*
-		 * REMOVE THIS 
-		 * LATER THIS IS
-		 * JUST FOR
-		 * TESTING
-		 * !!!!
-		 * !!!!
-		 */
-//		graphics.renderTimeline(t);
-		
-		
-		
-		
-		
-		
 		// TODO Add database saving code here.
 	}
 	
