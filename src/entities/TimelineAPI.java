@@ -11,6 +11,12 @@ package entities;
  */
 public interface TimelineAPI {
 	/**
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public boolean contains(TLEvent event);
+	/**
 	 * @param event
 	 */
 	public void addEvent(TLEvent event);

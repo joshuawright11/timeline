@@ -27,6 +27,14 @@ public class Timeline implements TimelineAPI{
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
 		setDirty(true);
 	}
+	
+	public boolean contains(TLEvent event) {
+		for (TLEvent e : events)
+			if (e.equals(event))
+				return true;
+		return false;
+	}
+	
 	/* (non-Javadoc)
 	 * @see backend.TimelineAPI#addEvent(backend.TLEvent)
 	 */
