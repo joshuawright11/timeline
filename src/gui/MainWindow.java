@@ -12,6 +12,7 @@ import java.util.*;
 
 /**
  * MainWindow.java
+ * The main GUI window for the TimelineMaker application.
  * @author Andrew Thompson
  */
 public class MainWindow extends JFrame {
@@ -26,6 +27,9 @@ public class MainWindow extends JFrame {
 	 */
 	private TimelineMaker model;
 	
+	/**
+	 * TimelineGraphics graphics renderer for this model.
+	 */
 	private TimelineGraphics graphics;
 	
 	/**
@@ -138,51 +142,6 @@ public class MainWindow extends JFrame {
 		
 		GroupLayout toolbarLayout = new GroupLayout(toolbar);
 		toolbar.setLayout(toolbarLayout);
-//		toolbarLayout.setHorizontalGroup(
-//				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//				.addComponent(toolbarLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				.addComponent(toolbarSeparator1)
-//				.addComponent(eventsEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				.addComponent(addEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				.addComponent(deleteEventButton, GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-//				.addComponent(editEventButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				.addComponent(toolbarSeparator2)
-//				.addComponent(timelinesEditLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				.addGroup(toolbarLayout.createSequentialGroup()
-//						.addContainerGap()
-//						.addComponent(timelinesPane, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-//						.addContainerGap())
-//						.addComponent(editTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//						.addComponent(addTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//						.addComponent(deleteTimelineButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-//				);
-//		toolbarLayout.setVerticalGroup(
-//				toolbarLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//				.addGroup(toolbarLayout.createSequentialGroup()
-//						.addComponent(toolbarLabel)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(toolbarSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(eventsEditLabel)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(addEventButton)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(deleteEventButton)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(editEventButton)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(toolbarSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(timelinesEditLabel)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(timelinesPane, GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(addTimelineButton)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(deleteTimelineButton)
-//						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-//						.addComponent(editTimelineButton))
-//				);
 		toolbarLayout.setHorizontalGroup(
 	            toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 	            .addComponent(toolbarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
