@@ -43,7 +43,7 @@ public class TimelineMaker {
 
 	/**
 	 * Constructor.
-	 * Create a new TimelineMaker application model with database, graphics, and gui compnents.
+	 * Create a new TimelineMaker application model with database, graphics, and GUI components.
 	 */
 	public TimelineMaker() {
 		database = new DBHelper("timeline.db");
@@ -132,9 +132,8 @@ public class TimelineMaker {
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
 		// TODO Add rendering code here!
-//		graphics.clearScreen();
 		if (selectedTimeline != null)
-			graphics.renderTimeline(selectedTimeline);
+			updateGraphics();
 	}
 
 	/**
@@ -173,6 +172,15 @@ public class TimelineMaker {
 			System.out.println("Model confirms event selection:\n" +
 			"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
 		}
+	}
+	
+	/**
+	 * Update the graphics for the display screen.
+	 */
+	public void updateGraphics() { 
+//		graphics.clearScreen();
+		// TODO clear current contents of screen.
+		graphics.renderTimeline(selectedTimeline);
 	}
 
 }

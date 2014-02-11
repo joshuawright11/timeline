@@ -10,7 +10,7 @@ package model;
  */
 public class Driver {
 	/**
-	 * Create a TimelineMaker object and start it on a new Thread.
+	 * Create a TimelineMaker object.
 	 * @param args
 	 */
 	public static void main(String[] args) {

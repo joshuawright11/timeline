@@ -140,6 +140,7 @@ public class MainWindow extends JFrame {
 		deleteTimelineButton.setText("Delete Timeline");
 		editTimelineButton.setText("Edit Timeline");
 		
+		// Define the format for the toolbar. Generated code:
 		GroupLayout toolbarLayout = new GroupLayout(toolbar);
 		toolbar.setLayout(toolbarLayout);
 		toolbarLayout.setHorizontalGroup(
@@ -263,13 +264,18 @@ public class MainWindow extends JFrame {
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Timeline selectedTimeline = model.getSelectedTimeline();
-				if (selectedTimeline != null)
-					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
+				TLEvent selectedEvent = model.getSelectedEvent();
+				if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
+					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, selectedEvent).setVisible(true);
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Implement deletion.
+				Timeline selectedTimeline = model.getSelectedTimeline();
+				TLEvent selectedEvent = model.getSelectedEvent();
+				if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
+					selectedTimeline.removeEvent(selectedEvent);
 			}
 		});
 		
