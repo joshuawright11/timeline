@@ -19,7 +19,7 @@ public class TimelinePropertiesWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private TimelineMaker model;
-	private EditWindow window;
+	private MainWindow window;
 	private Timeline timeline;
 
 	/**
@@ -57,7 +57,7 @@ public class TimelinePropertiesWindow extends JFrame {
 	/**
 	 * Creates new timeline properties window.
 	 */
-	public TimelinePropertiesWindow(TimelineMaker model, EditWindow window, Timeline timeline) {
+	public TimelinePropertiesWindow(TimelineMaker model, MainWindow window, Timeline timeline) {
 		this.model = model;
 		this.window = window;
 		this.timeline = timeline;

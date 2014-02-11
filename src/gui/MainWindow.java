@@ -11,10 +11,10 @@ import java.awt.event.*;
 import java.util.*;
 
 /**
- * EditWindow.java
+ * MainWindow.java
  * @author Andrew Thompson
  */
-public class EditWindow extends JFrame {
+public class MainWindow extends JFrame {
 
 	/**
 	 * Default serial version ID.
@@ -68,7 +68,7 @@ public class EditWindow extends JFrame {
 	 * Creates new edit window.
 	 * @param graphics 
 	 */
-	public EditWindow(TimelineMaker model, TimelineGraphics graphics) {
+	public MainWindow(TimelineMaker model, TimelineGraphics graphics) {
 		this.model = model;
 		this.graphics = graphics;
 		initComponents();
@@ -298,14 +298,14 @@ public class EditWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Timeline selectedTimeline = model.getSelectedTimeline();
 				if (selectedTimeline != null)
-					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
+					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Timeline selectedTimeline = model.getSelectedTimeline();
 				if (selectedTimeline != null)
-					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
+					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
@@ -317,21 +317,21 @@ public class EditWindow extends JFrame {
 		// Set up timeline toolbar listeners.
 		addTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+				new TimelinePropertiesWindow(model, MainWindow.this, null).setVisible(true);
 			}
 		});
 		editTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO threading
 				Timeline selectedTimeline = model.getSelectedTimeline();
-				new TimelinePropertiesWindow(model, EditWindow.this, selectedTimeline).setVisible(true);
+				new TimelinePropertiesWindow(model, MainWindow.this, selectedTimeline).setVisible(true);
 			}
 		});
 		deleteTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Timeline selectedTimeline = model.getSelectedTimeline();
 				model.removeTimeline(selectedTimeline);
-				EditWindow.this.loadTimelines();					
+				MainWindow.this.loadTimelines();					
 			}
 		});
 		
@@ -351,7 +351,7 @@ public class EditWindow extends JFrame {
 		// Set up menu item listeners.
 		newTimelineMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, EditWindow.this, null).setVisible(true);
+				new TimelinePropertiesWindow(model, MainWindow.this, null).setVisible(true);
 			}
 		});
 		saveTimelineMenuItem.addActionListener(new ActionListener() {
@@ -378,7 +378,7 @@ public class EditWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Timeline selectedTimeline = model.getSelectedTimeline();
 				if (selectedTimeline != null)
-					new EventPropertiesWindow(EditWindow.this.model, selectedTimeline, null).setVisible(true);
+					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
 			}
 		});
 	}
