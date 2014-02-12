@@ -24,9 +24,9 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 	@Override
 	public void run() {
 		empty = new Group();
-		emptyScene = new Scene(empty, 5000, 500, Color.WHITE);	
+		emptyScene = new Scene(empty, 2000, 500, Color.WHITE);	
 		root = new Group();
-        Scene scene = new Scene(root, 5000, 500, Color.WHITE);
+        Scene scene = new Scene(root, 2000, 500, Color.WHITE);
         fxPanel.setScene(scene);
         
 	}
