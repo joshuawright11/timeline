@@ -18,8 +18,17 @@ public class EventPropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * The model of this application.
+	 */
 	private TimelineMaker model;
+	/**
+	 * The timeline container for the generated or edited event.
+	 */
 	private Timeline timeline;
+	/**
+	 * The event to be edited; null if new event addition.
+	 */
 	private TLEvent event;
 
 
@@ -47,13 +56,7 @@ public class EventPropertiesWindow extends JFrame {
 	private JButton okButton;
 	private JButton cancelButton;
 
-
-
-
-
-
-
-
+	
 	/**
 	 * Creates new event properties window.
 	 */
@@ -190,6 +193,10 @@ public class EventPropertiesWindow extends JFrame {
 		});
 	}
 
+	/**
+	 * Initialize the layout of the window.
+	 * Note: Generated code.
+	 */
 	private void initLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
