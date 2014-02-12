@@ -33,6 +33,7 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 
 	@Override
 	public void renderTimeline(Timeline timeline) {
+		
 		Platform.runLater(new TimelineRender(model, timeline, root));
 	}
 
