@@ -150,7 +150,9 @@ public class TimelineMaker {
 	 * @param t the timeline to be removed
 	 */
 	public void removeTimeline(Timeline t) {
-		timelines.remove(t);
+		timelines.remove(selectedTimeline);
+		selectedTimeline = null;
+		graphics.clearScreen();
 		// TODO Add database saving code here.
 	}
 
@@ -180,6 +182,7 @@ public class TimelineMaker {
 	public void updateGraphics() { 
 //		graphics.clearScreen();
 		// TODO clear current contents of screen.
+		graphics.clearScreen();
 		graphics.renderTimeline(selectedTimeline);
 	}
 

@@ -33,13 +33,17 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 
 	@Override
 	public void renderTimeline(Timeline timeline) {
-		
 		Platform.runLater(new TimelineRender(model, timeline, root));
 	}
 
 	@Override
 	public void clearScreen() {
-		fxPanel.setScene(emptyScene);
+//		fxPanel.setScene(emptyScene);
+		Platform.runLater(new Runnable() {
+			public void run() {
+				root.getChildren().clear();
+			}
+		});
 	}
 
 	/**

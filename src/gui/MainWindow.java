@@ -229,7 +229,6 @@ public class MainWindow extends JFrame {
 		insertMenu.setText("Insert");
 		newEventMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
 		newEventMenuItem.setText("New Event");
-		newEventMenuItem.addActionListener(null); // TODO
 		insertMenu.add(newEventMenuItem);
 		menuBar.add(insertMenu);
 
@@ -248,6 +247,9 @@ public class MainWindow extends JFrame {
 
 		pack();
 	}
+	// TODO
+	// TODO MAKE THREADSAFE!!!
+	// TODO
 	
 	/**
 	 * Initialize action listeners for all interactive buttons and shortcuts.private void initActionListeners() {
@@ -256,26 +258,45 @@ public class MainWindow extends JFrame {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				if (selectedTimeline != null)
-					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						if (selectedTimeline != null)
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
+								}
+							});
+					}
+				}).start();
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				TLEvent selectedEvent = model.getSelectedEvent();
-				if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
-					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, selectedEvent).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						final TLEvent selectedEvent = model.getSelectedEvent();
+						if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, selectedEvent).setVisible(true);
+								}
+							});
+					}
+				}).start();
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Implement deletion.
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				TLEvent selectedEvent = model.getSelectedEvent();
-				if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
-					selectedTimeline.removeEvent(selectedEvent);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						final TLEvent selectedEvent = model.getSelectedEvent();
+						if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
+							selectedTimeline.removeEvent(selectedEvent);
+					}
+				}).start();
 			}
 		});
 		
@@ -287,19 +308,35 @@ public class MainWindow extends JFrame {
 		});
 		editTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO threading
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				new TimelinePropertiesWindow(model, MainWindow.this, selectedTimeline).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								new TimelinePropertiesWindow(model, MainWindow.this, selectedTimeline).setVisible(true);
+							}
+						});
+					}
+				}).start();
 			}
 		});
 		deleteTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				model.removeTimeline(selectedTimeline);
-				MainWindow.this.loadTimelines();					
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						model.removeTimeline(selectedTimeline);
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								MainWindow.this.loadTimelines();
+							}
+						});
+					}
+				}).start();
 			}
 		});
 		
+		// Set up timeline-selection dropdown listener.
 		timelines.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				final String selectedTimeline = (String)timelines.getSelectedItem();
@@ -321,29 +358,29 @@ public class MainWindow extends JFrame {
 		});
 		saveTimelineMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the save button.
+				// TODO Add database saving stuff
 			}
 		});
 		exitMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// TODO Add database saving stuff.
+				//saveTimelineMenuItem.getActionListeners()[0].actionPerformed(null);
 				System.exit(0);
-			}
-		});
-		undoMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the undo button.
-			}
-		});
-		redoMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add action for the redo button.
 			}
 		});
 		newEventMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Timeline selectedTimeline = model.getSelectedTimeline();
-				if (selectedTimeline != null)
-					new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						if (selectedTimeline != null)
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
+								}
+							});
+					}
+				}).start();
 			}
 		});
 	}
