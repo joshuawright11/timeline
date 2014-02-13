@@ -193,12 +193,11 @@ public class TimelineRender implements Runnable {
 	}
 
 	private void renderAtomics() {
-		int counter = 0;
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
 			int xPos = getXPos(e.getDate());
 			label.setLayoutX(xPos);
-			label.setLayoutY(230);
+			label.setLayoutY(235); // 15 for each?
 			final Atomic event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -208,7 +207,6 @@ public class TimelineRender implements Runnable {
 				}
 			});
 			group.getChildren().add(label);
-			counter += 30;
 		}
 	}
 
@@ -224,7 +222,8 @@ public class TimelineRender implements Runnable {
 			int labelWidth = xEnd - xStart;
 			label.setLayoutX(xStart);
 			label.setPrefWidth(labelWidth);
-			label.setLayoutY(300);
+			label.setAlignment(Pos.CENTER);
+			label.setLayoutY(290); //15 each?
 			final Duration event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -249,7 +248,7 @@ public class TimelineRender implements Runnable {
 		
 		double inUnits = (((double)distance )/ unit);
 		
-		System.out.println("Event " + date.toString() + " is " +inUnits+ " units after the start.");
+		System.out.println("Event " + date.toString() + " is " +inUnits+ " units after the start. It has an x offset of " +(int)(inUnits*unitWidth)+ " pixels.");
 		
 		int xPos = (int)(inUnits * (double)unitWidth);
 		
