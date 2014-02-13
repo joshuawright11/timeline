@@ -40,6 +40,8 @@ public class TimelineRender implements Runnable {
 	//these are probably something that could be set in the actual timeline itself, but we can do that if there is time
 	private long minTime;
 	private long maxTime;
+	private int firstUnit;
+	private long firstDateMillis;
 	
 	/**
 	 * @param timeline
@@ -119,16 +121,37 @@ public class TimelineRender implements Runnable {
 		unitWidth = 100; //TODO figure this out
 		
 		int xPos = 0;
+		
+		Date firstDate = getFirstDate(minTime+(1000*60*60*6)); //the first unit on the timeline
+		
+		firstDateMillis = firstDate.getTime();
+		
+		//TODO month, day, etc.
+		firstUnit = getYear(firstDate); // will round the year down, specific for years
+		
+		//just need to find the millis of the first year, ie the mintime of the whole timeline (lowest event rounded down by a unit)
+		
+		
 		for(long i = (minTime + 1000*60*60*6); i <  (maxTime + unit); i += unit){ 
-			//extra unit on the ends... also leap year issues :(
 			//time zone and leap year. Also extra unit at start
-			int unit = getUnit(i);
+			int unit = getYear(new Date(i));
 			Label label = timeLabel(xPos, unit);
 			group.getChildren().add(label);
 			xPos+=unitWidth;
 		}
 		//TODO create scene here for right size
 	}
+
+	/**
+	 * @param l
+	 * @return
+	 */
+	private int getYear(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.YEAR);
+	}
+
 
 	/**
 	 * @param xPos
@@ -150,21 +173,32 @@ public class TimelineRender implements Runnable {
 	 * @param i
 	 * @return
 	 */
-	private int getUnit(long i) {
+	private Date getFirstDate(long i) { // *first date joke*
 		//currently only works for years
 		Date date = new Date(i);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		int year = cal.get(Calendar.YEAR);
-		return year;
+		Date toReturn = null;
+		switch(unitName){
+		case "month":
+			//TODO do this
+			break;
+		case "years":
+			int year = cal.get(Calendar.YEAR);
+			cal.set(year, 0, 0);
+			toReturn = new Date(cal.getTime().getTime());
+			break;
+		}
+		return toReturn; //this is the first date on the timeline, rounded down to the unit
 	}
 
 	private void renderAtomics() {
 		int counter = 0;
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
-			label.setLayoutX(counter);
-			label.setLayoutY(10);
+			int xPos = getXPos(e.getDate());
+			label.setLayoutX(xPos);
+			label.setLayoutY(230);
 			final Atomic event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -182,11 +216,15 @@ public class TimelineRender implements Runnable {
 	 * 
 	 */
 	private void renderDurations() {
-		int counter = 0;
+		
 		for(Duration e : durations){
 			final Label label = new Label(e.getName());
-			label.setLayoutX(counter);
-			label.setLayoutY(50);
+			int xStart = getXPos(e.getStartDate());
+			int xEnd = getXPos(e.getEndDate());
+			int labelWidth = xEnd - xStart;
+			label.setLayoutX(xStart);
+			label.setPrefWidth(labelWidth);
+			label.setLayoutY(300);
 			final Duration event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -196,8 +234,27 @@ public class TimelineRender implements Runnable {
 				}
 			});
 			group.getChildren().add(label);
-			counter += 30;
 		}
+	}
+
+
+	/**
+	 * @param startDate
+	 * @return
+	 */
+	private int getXPos(Date date) {
+		long millis = date.getTime();
+		
+		long distance = millis - firstDateMillis; //distance across the timeline the event is
+		
+		double inUnits = (((double)distance )/ unit);
+		
+		System.out.println("Event " + date.toString() + " is " +inUnits+ " units after the start.");
+		
+		int xPos = (int)(inUnits * (double)unitWidth);
+		
+		
+		return xPos;
 	}
 
 }
