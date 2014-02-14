@@ -42,6 +42,7 @@ public class TimelineRender implements Runnable {
 	private long maxTime;
 	private int firstUnit;
 	private long firstDateMillis;
+	private int pushDown;
 	
 	/**
 	 * @param timeline
@@ -94,8 +95,8 @@ public class TimelineRender implements Runnable {
 
 	private void renderTimeline() {
 		group.getChildren().clear();
+		renderAtomics(); //render in order of height
 		renderTime();
-		renderAtomics();
 		renderDurations();
 	}
 	
@@ -161,7 +162,7 @@ public class TimelineRender implements Runnable {
 	private Label timeLabel(int xPos, int unit) {
 		final Label label = new Label(unit+"");
 		label.setLayoutX(xPos);
-		label.setLayoutY(250);
+		label.setLayoutY(pushDown);
 		label.setPrefWidth(unitWidth);
 		label.setPrefHeight(40);
 		label.setAlignment(Pos.CENTER);
@@ -193,11 +194,12 @@ public class TimelineRender implements Runnable {
 	}
 
 	private void renderAtomics() {
+		pushDown = 20; //where to put the event (Y)
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
 			int xPos = getXPos(e.getDate());
 			label.setLayoutX(xPos);
-			label.setLayoutY(235); // 15 for each?
+			label.setLayoutY(pushDown);
 			final Atomic event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -207,23 +209,26 @@ public class TimelineRender implements Runnable {
 				}
 			});
 			group.getChildren().add(label);
+			pushDown += 20;
 		}
+		
 	}
 
 	/**
 	 * 
 	 */
 	private void renderDurations() {
-		
+		int counter = 0;
 		for(Duration e : durations){
 			final Label label = new Label(e.getName());
 			int xStart = getXPos(e.getStartDate());
 			int xEnd = getXPos(e.getEndDate());
 			int labelWidth = xEnd - xStart;
+			label.setStyle("-fx-border-color: blue;");
 			label.setLayoutX(xStart);
 			label.setPrefWidth(labelWidth);
 			label.setAlignment(Pos.CENTER);
-			label.setLayoutY(290); //15 each?
+			label.setLayoutY(pushDown + 45 + counter);
 			final Duration event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
@@ -233,6 +238,7 @@ public class TimelineRender implements Runnable {
 				}
 			});
 			group.getChildren().add(label);
+			counter += 20;
 		}
 	}
 
