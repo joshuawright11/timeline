@@ -237,11 +237,16 @@ public class TimelineRender implements Runnable {
 			label.setLayoutX(xPosition);
 			label.setLayoutY(pushDown);
 			final Atomic event = e;
+			label.setStyle("-fx-border-color: blue");
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
 					System.out.println("You clicked "+ event.getName());
 					label.setStyle("-fx-border-color: black");
-					model.setSelectedEvent(event);
+					new Thread(new Runnable() {
+						public void run() {
+							model.setSelectedEvent(event);
+						}
+					}).start();
 				}
 			});
 			group.getChildren().add(label);
@@ -269,8 +274,12 @@ public class TimelineRender implements Runnable {
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
 					System.out.println("You clicked "+ event.getName());
-					label.setStyle("-fx-border-color: black;");
-					model.setSelectedEvent(event);
+					label.setStyle("-fx-border-color: black");
+					new Thread(new Runnable() {
+						public void run() {
+							model.setSelectedEvent(event);
+						}
+					}).start();
 				}
 			});
 			group.getChildren().add(label);
