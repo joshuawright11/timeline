@@ -113,7 +113,7 @@ public class TimelineRender implements Runnable {
 		group.getChildren().clear();
 		renderAtomics(); //render in order of height
 		renderTime();
-		//renderDurations();
+		renderDurations();
 	}
 	
 
@@ -294,10 +294,9 @@ public class TimelineRender implements Runnable {
 	 */
 	private int getXPos(Date date) {
 		double units = getUnitsSinceStart(date);
-		int xPosition = (int)units*unitWidth; 
+		int xPosition = (int)(units*unitWidth); 
 		System.out.println("Event " + date.toString() + " is " +units+ " units after the start. It has an x offset of " +(int)(units*unitWidth)+ " pixels.");
 		return xPosition;
-		
 	}
 	
 	private double getUnitsSinceStart(Date date){
