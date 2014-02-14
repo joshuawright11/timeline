@@ -6,8 +6,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import entities.Timeline.AxisLabel;
-
 /**
  * @author Josh Wright
  * Created: Jan 29, 2014

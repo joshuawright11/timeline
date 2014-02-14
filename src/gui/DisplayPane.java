@@ -21,7 +21,6 @@ public class DisplayPane extends JScrollPane {
 	public DisplayPane(TimelineGraphics graphics) {       
 		fxPanel = new JFXPanel();
 		setViewportView(fxPanel);
-		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER); //should auto show if necessary
         graphics.setPanel(fxPanel);
 		Platform.runLater(graphics);
