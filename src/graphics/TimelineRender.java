@@ -40,16 +40,13 @@ public class TimelineRender implements Runnable {
 	private ArrayList<Atomic> atomics;
 	
 	private AxisLabel axisLabel;
-	//private long unit;
 	private final String[] months = {"Jan", "Feb", "March", "April",
 			"May","June","July","Aug",
 			"Sept","Oct","Nov","Dec"};
 	private int unitWidth;
-	//these are probably something that could be set in the actual timeline itself, but we can do that if there is time
 	private long minTime;
 	private long maxTime;
 	private int pushDown;
-	int xPos;
 	
 	/**
 	 * @param fxPanel 
@@ -66,16 +63,15 @@ public class TimelineRender implements Runnable {
 		durations = new ArrayList<Duration>();
 	}
 
-
 	@Override
 	public void run() {
 		initRange();
 		init();
-		initUnit();
 		renderTimeline();
 	}
 
 	private void init(){
+		unitWidth = 150;
 		for(TLEvent event : timeline.getEvents()){
 			if(event instanceof Duration){
 				durations.add((Duration)event);
@@ -104,11 +100,6 @@ public class TimelineRender implements Runnable {
 		}
 	}
 	
-	private void initUnit() {
-		unitWidth = 150; //TODO figure this out
-	}
-
-
 	private void renderTimeline() {
 		group.getChildren().clear();
 		renderAtomics(); //render in order of height
@@ -116,11 +107,7 @@ public class TimelineRender implements Runnable {
 		renderDurations();
 	}
 	
-
-
-	
 	private void renderTime() {
-		//System.out.println(getFirstDate().toString());
 		int diffUnit = getUnitLength();
 		int xPos2 = 0;
 		for(int i = 0; i < diffUnit ; i++){
@@ -161,9 +148,6 @@ public class TimelineRender implements Runnable {
 		return label;
 	}
 
-
-
-
 	private int getUnitLength() {
 		Calendar startCalendar = new GregorianCalendar();
 		startCalendar.setTime(getFirstDate());
@@ -174,42 +158,25 @@ public class TimelineRender implements Runnable {
 		System.out.println("Your timeline is " + diffYear + " years long.");
 		int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
 		System.out.println("Your timeline is " + diffMonth + " month long.");
-		int diffWeek = diffYear * 52 + endCalendar.get(Calendar.WEEK_OF_YEAR) - startCalendar.get(Calendar.WEEK_OF_YEAR);
-		System.out.println("Your timeline is " + diffWeek + " weeks long.");
 		int diffDay = diffYear * 365 +endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR);
 		System.out.println("Your timeline is " + diffDay + " days long.");
 		
 		switch(axisLabel){ //+1 to account for first
 		case DAYS:
 			return diffDay+1;
-		case WEEKS:
-			return diffWeek+1;
 		case MONTHS:
 			return diffMonth+1;
 		case YEARS:
 			return diffYear+1;
-		case DECADES:
-			return 0;
-		case CENTURIES:
-			return 0;
-		case MILLENNIA:
-			return 0;
 		default:
 			return 0;
 		}
 	}
 
-
-	/**
-	 * @param unit
-	 * @return
-	 */
-
 	/**
 	 * @return
 	 */
-	private Date getFirstDate() { // works
-		//currently only works for years
+	private Date getFirstDate() {
 		Date date = new Date(minTime);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -239,7 +206,7 @@ public class TimelineRender implements Runnable {
 	}
 
 	private void renderAtomics() {
-		pushDown = 60; //where to put the event (Y)
+		pushDown = 60; //where to put the event ( y - axis )
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
 			int xPosition = getXPos(e.getDate());
@@ -316,19 +283,15 @@ public class TimelineRender implements Runnable {
 
 		double diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
 		double diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-		double diffWeek = diffYear * 52 + endCalendar.get(Calendar.WEEK_OF_YEAR) - startCalendar.get(Calendar.WEEK_OF_YEAR);
 		double diffDay = diffYear * 365 +endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR);
 	
 		double years = diffYear + (endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR))/365.0;
 		double months = diffMonth + (endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH))/30.5;
-		double weeks = diffWeek + (endCalendar.get(Calendar.DAY_OF_WEEK) - startCalendar.get(Calendar.DAY_OF_WEEK))/7.0;
-		double days = diffDay;
+		double days = diffDay + 0.5; //so that dates lineup nicely
 		
 		switch(axisLabel){
 		case DAYS:
 			return days;
-		case WEEKS:
-			return weeks;
 		case MONTHS:
 			return months;
 		case YEARS:
@@ -342,18 +305,10 @@ public class TimelineRender implements Runnable {
 		switch(axisLabel){
 		case DAYS:
 			return Calendar.DATE;
-		case WEEKS:
-			return Calendar.WEEK_OF_YEAR;
 		case MONTHS:
 			return Calendar.MONTH;
 		case YEARS:
 			return Calendar.YEAR;
-		case DECADES:
-			return Calendar.DATE;
-		case CENTURIES:
-			return Calendar.DATE;
-		case MILLENNIA:
-			return Calendar.DATE;
 		default:
 			return 0;
 		}

@@ -53,7 +53,9 @@ public class TimelineMaker {
 		for (Timeline t : database.getTimelines())
 			timelines.add(t);
 
+		//TODO crashes if there are no Timelines
 		selectedTimeline = timelines.get(0);
+		
 		try {
 			selectedEvent = selectedTimeline.getEvents()[0];
 			System.out.println(selectedEvent.toString());
@@ -131,7 +133,6 @@ public class TimelineMaker {
 	 */
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
-		// TODO Add rendering code here!
 		if (selectedTimeline != null)
 			updateGraphics();
 	}
@@ -142,7 +143,9 @@ public class TimelineMaker {
 	 */
 	public void addTimeline(Timeline t) {
 		timelines.add(t);
-		// TODO Add database saving code here.
+		
+		// TODO New Thread?
+		database.writeTimeline(t);
 	}
 
 	/**
@@ -150,10 +153,14 @@ public class TimelineMaker {
 	 * @param t the timeline to be removed
 	 */
 	public void removeSelectedTimeline() {
+		
+		// TODO New Thread?
+		database.removeTimeline(selectedTimeline);
+
 		timelines.remove(selectedTimeline);
 		selectedTimeline = null;
 		graphics.clearScreen();
-		// TODO Add database saving code here.
+		
 	}
 
 	/**
@@ -181,12 +188,20 @@ public class TimelineMaker {
 			selectedTimeline.removeEvent(selectedEvent);
 		selectedEvent = null;
 		updateGraphics();
+		
+		//TODO add remove events, instead of the whole timeline. New Thread?
+		database.removeTimeline(selectedTimeline);
+		database.writeTimeline(selectedTimeline);
+		
 	}
 	
 	/**
 	 * Update the graphics for the display screen.
 	 */
 	public void updateGraphics() { 
+		if(selectedTimeline.isDirty()){
+			//TODO sync to database. Easier to do it here, although this would mean the timeline would have to be swapped out every time
+		}
 		graphics.clearScreen();
 		graphics.renderTimeline(selectedTimeline);
 	}
