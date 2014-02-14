@@ -143,7 +143,6 @@ public class EventPropertiesWindow extends JFrame {
 							else {
 								timeline.addEvent(new Duration(title, "", Date.valueOf(startDate), Date.valueOf(endDate)));
 							}
-							// TODO Update display.
 							model.updateGraphics();
 						}
 					}).start();
@@ -176,7 +175,6 @@ public class EventPropertiesWindow extends JFrame {
 							else {
 								timeline.addEvent(new Duration(title, "", Date.valueOf(startDate), Date.valueOf(endDate)));
 							}
-							// TODO Update display.
 							model.updateGraphics();
 						}
 					}).start();
