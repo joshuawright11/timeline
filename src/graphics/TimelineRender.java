@@ -102,20 +102,13 @@ public class TimelineRender implements Runnable {
 
 	private void renderTimeline() {
 		group.getChildren().clear();
+		initUnit();
 		renderAtomics(); //render in order of height
 		renderTime();
 		renderDurations();
 	}
 	
-	private void info(){ //prints info, debugging
-		long length = maxTime - minTime;
-		int days = (int) (length / (1000*60*60*24)); //this is valid (I tested it once so it must work all the time, right?)
-		System.out.println("Your timeline is this many days long: " + days);
-		double years = days / 365.0;
-		System.out.println("And this many years long: " + years);
-	}
-	
-	private void renderTime() {
+	private void initUnit() {
 		switch(unitName){
 		case "months":
 			unit = ((long) 1000)*60*60*24*30;
@@ -125,21 +118,17 @@ public class TimelineRender implements Runnable {
 			unit = ((long) 1000)*60*60*24*365;
 			break;
 		}
-		
 		unitWidth = 100; //TODO figure this out
-		
-		xPos = 0;
-		
 		Date firstDate = getFirstDate(minTime+(1000*60*60*6)); //the first unit on the timeline
 		
 		firstDateMillis = firstDate.getTime();
-		
-		//TODO month, day, etc.
 		firstUnit = getYear(firstDate); // will round the year down, specific for years
-		
+	}
+
+	private void renderTime() {
+		xPos = 0;
+		//TODO month, day, etc.
 		//just need to find the millis of the first year, ie the mintime of the whole timeline (lowest event rounded down by a unit)
-		
-		
 		for(long i = (minTime + 1000*60*60*6); i <  (maxTime + unit); i += unit){ 
 			//time zone and leap year. Also extra unit at start
 			int unit = getYear(new Date(i));
@@ -167,9 +156,9 @@ public class TimelineRender implements Runnable {
 	 * @param unit
 	 * @return
 	 */
-	private Label timeLabel(int xPos, int unit) {
+	private Label timeLabel(int xPosition, int unit) {
 		final Label label = new Label(unit+"");
-		label.setLayoutX(xPos);
+		label.setLayoutX(xPosition);
 		label.setLayoutY(pushDown);
 		label.setPrefWidth(unitWidth);
 		label.setPrefHeight(40);
@@ -205,8 +194,8 @@ public class TimelineRender implements Runnable {
 		pushDown = 60; //where to put the event (Y)
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
-			int xPos = getXPos(e.getDate());
-			label.setLayoutX(xPos);
+			int xPosition = getXPos(e.getDate());
+			label.setLayoutX(xPosition);
 			label.setLayoutY(pushDown);
 			final Atomic event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -260,14 +249,16 @@ public class TimelineRender implements Runnable {
 		
 		long distance = millis - firstDateMillis; //distance across the timeline the event is
 		
+		
+		
 		double inUnits = (((double)distance )/ unit);
 		
 		System.out.println("Event " + date.toString() + " is " +inUnits+ " units after the start. It has an x offset of " +(int)(inUnits*unitWidth)+ " pixels.");
 		
-		int xPos = (int)(inUnits * (double)unitWidth);
+		int xPosition = (int)(inUnits * (double)unitWidth);
 		
 		
-		return xPos;
+		return xPosition;
 	}
 
 }
