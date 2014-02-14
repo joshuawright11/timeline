@@ -108,6 +108,7 @@ public class TimelinePropertiesWindow extends JFrame {
 		});
 
 		axisLabelLabel.setText("Axis Label");
+		axisLabel.setModel(new DefaultComboBoxModel<String>(new String[] { "Days", "Weeks", "Months", "Years", "Decades", "Centuries", "Millennia" }));
 
 		fontLabel.setText("Font");
 
@@ -115,13 +116,15 @@ public class TimelinePropertiesWindow extends JFrame {
 
 		okButton.setText("Ok");
 		if (timeline == null)
+			// Define action for adding a timeline.
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					final String titleString = title.getText();
+					final int axisLabelIndex = axisLabel.getSelectedIndex();
 					// TODO Parse other timeline properties here.
 					new Thread(new Runnable() {
 						public void run() {
-							model.addTimeline(new Timeline(titleString));
+							model.addTimeline(new Timeline(titleString, axisLabelIndex));
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									window.loadTimelines();
@@ -133,15 +136,31 @@ public class TimelinePropertiesWindow extends JFrame {
 				}
 			});
 		else {
-			title.setText(timeline.getName());        	
+			// Load information from timeline into the dialog.
+			new Thread(new Runnable() {
+				public void run() {
+					final String timelineTitle = timeline.getName();
+					final int timelineAxisLabelIndex = timeline.getAxisLabelIndex();
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							title.setText(timelineTitle);
+							axisLabel.setSelectedItem(axisLabel.getItemAt(timelineAxisLabelIndex));
+						}
+					});
+				}
+			}).start();
+			
+			// Define action for editing a timeline.
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					final String titleString = title.getText();
+					final int axisLabelIndex = axisLabel.getSelectedIndex();
 					// TODO Parse other timeline properties here.
 					new Thread(new Runnable() {
 						public void run() {
+							TLEvent[] events = timeline.getEvents();
 							model.removeSelectedTimeline();
-							model.addTimeline(new Timeline(titleString));
+							model.addTimeline(new Timeline(titleString, events, axisLabelIndex));
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
 									window.loadTimelines();
@@ -161,8 +180,6 @@ public class TimelinePropertiesWindow extends JFrame {
 				dispose();
 			}
 		});
-
-		axisLabel.setModel(new DefaultComboBoxModel<String>(new String[] { "Days", "Weeks", "Months", "Years", "Decades", "Centuries", "Millennia" }));
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
