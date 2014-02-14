@@ -58,18 +58,14 @@ public class DBHelper implements DBHelperAPI{
 			e.printStackTrace();
 		}
 	}
-	/* (non-Javadoc)
-	 * @see backend.DBHelperAPI#changeTimeline(backend.Timeline)
-	 */
+
 	@Override
 	public Timeline changeTimeline(Timeline oldTimeline, Timeline newTimeline) {
 		removeTimeline(oldTimeline);
 		writeTimeline(newTimeline);
 		return newTimeline;
 	}
-	/* (non-Javadoc)
-	 * @see backend.DBHelperAPI#writeTimeline(backend.Timeline)
-	 */
+
 	@Override
 	public boolean writeTimeline(Timeline timeline) {
 		String tlName = timeline.getName(); 
@@ -107,11 +103,6 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setString(2, event.typeName());
 		pstmt.setDate(3, event.getDate());
 		pstmt.executeUpdate();
-//		statement.executeUpdate("INSERT INTO "+tlName
-//				+" (eventName,type,startDate,endDate)" + " VALUES "
-//				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
-//				+event.getDate().toString()+"', NULL)"
-//				+";");
 	}
 	private void writeEvent(Duration event, String tlName) throws SQLException{
 		String INSERT_DURATION = "INSERT INTO "+tlName
@@ -123,15 +114,8 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setDate(3, event.getStartDate());
 		pstmt.setDate(4, event.getEndDate());
 		pstmt.executeUpdate();
-//		statement.executeUpdate("INSERT INTO "+tlName
-//				+" (eventName,type,startDate,endDate)" + " VALUES "
-//				+"('"+event.getName()+"',"+"'"+event.typeName()+"','"
-//				+event.getStartDate().toString()+"','"+event.getEndDate().toString()+"')"
-//				+";");
 	}
-	/* (non-Javadoc)
-	 * @see backend.DBHelperAPI#removeTimeline(backend.Timeline)
-	 */
+
 	@Override
 	public boolean removeTimeline(Timeline timeline) {
 		open();
@@ -143,9 +127,7 @@ public class DBHelper implements DBHelperAPI{
 		close();
 		return true;
 	}
-	/* (non-Javadoc)
-	 * @see backend.DBHelperAPI#getTimelines()
-	 */
+
 	@Override
 	public Timeline[] getTimelines() {
 		open();

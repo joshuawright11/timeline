@@ -6,6 +6,8 @@ package entities;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import entities.Timeline.AxisLabel;
+
 /**
  * @author Josh Wright
  * Created: Jan 29, 2014
@@ -15,7 +17,7 @@ import java.util.Arrays;
 public class Timeline implements TimelineAPI{
 	private ArrayList<TLEvent> events;
 	private String name;
-	private static enum AxisLabel {
+	public static enum AxisLabel {
 		DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA;
 	}
 	private static final AxisLabel[] AXIS_LABELS = { AxisLabel.DAYS, AxisLabel.WEEKS, AxisLabel.MONTHS, AxisLabel.YEARS, AxisLabel.DECADES, AxisLabel.CENTURIES, AxisLabel.MILLENNIA};
@@ -121,5 +123,8 @@ public class Timeline implements TimelineAPI{
 			if (AXIS_LABELS[i] == axisLabel)
 				return i;
 		return -1;
+	}
+	public AxisLabel getAxisLabel() {
+		return axisLabel;
 	}
 }
