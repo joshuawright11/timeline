@@ -18,46 +18,41 @@ public class Timeline implements TimelineAPI{
 	private static enum AxisLabel {
 		DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA;
 	}
+	private static final AxisLabel[] AXIS_LABELS = { AxisLabel.DAYS, AxisLabel.WEEKS, AxisLabel.MONTHS, AxisLabel.YEARS, AxisLabel.DECADES, AxisLabel.CENTURIES, AxisLabel.MILLENNIA};
 	private AxisLabel axisLabel;
 	private boolean dirty;
-	
+
 	public Timeline(String name){
 		this.name = name;
-		this.events = new ArrayList<TLEvent>();
+		events = new ArrayList<TLEvent>();
+		axisLabel = AxisLabel.YEARS;
 		setDirty(true);
 	}
 	public Timeline(String name, TLEvent[] events){
 		this.name = name;
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
+		axisLabel = AxisLabel.YEARS;
 		setDirty(true);
-	}	
-	public Timeline(String name, TLEvent[] events, String axisLabel) {
-		this(name, events);
-		if (axisLabel.equals("Days"))
-			this.axisLabel = AxisLabel.DAYS;
-		else if (axisLabel.equals("Weeks"))
-			this.axisLabel = AxisLabel.WEEKS;
-		else if (axisLabel.equals("Months"))
-			this.axisLabel = AxisLabel.MONTHS;
-		else if (axisLabel.equals("Years"))
-			this.axisLabel = AxisLabel.YEARS;
-		else if (axisLabel.equals("Decades"))
-			this.axisLabel = AxisLabel.DECADES;
-		else if (axisLabel.equals("Centuries"))
-			this.axisLabel = AxisLabel.CENTURIES;
-		else if (axisLabel.equals("Millenia"))
-			this.axisLabel = AxisLabel.MILLENNIA;
-		else
-			this.axisLabel = AxisLabel.YEARS;
 	}
-	
+	public Timeline(String name, int axisLabel) {
+		this.name = name;
+		this.axisLabel = AXIS_LABELS[axisLabel];
+		dirty = true;
+	}
+	public Timeline(String name, TLEvent[] events, int axisLabel) {
+		this.name = name;
+		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
+		this.axisLabel = AXIS_LABELS[axisLabel];
+		dirty = true;
+	}
+
 	public boolean contains(TLEvent event) {
 		for (TLEvent e : events)
 			if (e.equals(event))
 				return true;
 		return false;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see backend.TimelineAPI#addEvent(backend.TLEvent)
 	 */
@@ -119,5 +114,12 @@ public class Timeline implements TimelineAPI{
 	 */
 	public String getName() {
 		return name;
+	}
+
+	public int getAxisLabelIndex() { 
+		for (int i = 0; i < AXIS_LABELS.length; i++)
+			if (AXIS_LABELS[i] == axisLabel)
+				return i;
+		return -1;
 	}
 }
