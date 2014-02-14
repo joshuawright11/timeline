@@ -140,7 +140,7 @@ public class TimelinePropertiesWindow extends JFrame {
 					// TODO Parse other timeline properties here.
 					new Thread(new Runnable() {
 						public void run() {
-							model.removeTimeline(timeline);
+							model.removeSelectedTimeline();
 							model.addTimeline(new Timeline(titleString));
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {

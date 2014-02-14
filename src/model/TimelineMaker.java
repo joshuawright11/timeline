@@ -149,7 +149,7 @@ public class TimelineMaker {
 	 * Remove a timeline from this model.
 	 * @param t the timeline to be removed
 	 */
-	public void removeTimeline(Timeline t) {
+	public void removeSelectedTimeline() {
 		timelines.remove(selectedTimeline);
 		selectedTimeline = null;
 		graphics.clearScreen();
@@ -176,12 +176,17 @@ public class TimelineMaker {
 		}
 	}
 	
+	public void removeSelectedEvent() {
+		if (selectedTimeline.contains(selectedEvent))
+			selectedTimeline.removeEvent(selectedEvent);
+		selectedEvent = null;
+		updateGraphics();
+	}
+	
 	/**
 	 * Update the graphics for the display screen.
 	 */
 	public void updateGraphics() { 
-//		graphics.clearScreen();
-		// TODO clear current contents of screen.
 		graphics.clearScreen();
 		graphics.renderTimeline(selectedTimeline);
 	}

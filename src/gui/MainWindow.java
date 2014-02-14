@@ -291,10 +291,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						final Timeline selectedTimeline = model.getSelectedTimeline();
-						final TLEvent selectedEvent = model.getSelectedEvent();
-						if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
-							selectedTimeline.removeEvent(selectedEvent);
+						model.removeSelectedEvent();
 					}
 				}).start();
 			}
@@ -324,8 +321,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						final Timeline selectedTimeline = model.getSelectedTimeline();
-						model.removeTimeline(selectedTimeline);
+						model.removeSelectedTimeline();
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
 								MainWindow.this.loadTimelines();
