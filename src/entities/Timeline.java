@@ -15,6 +15,10 @@ import java.util.Arrays;
 public class Timeline implements TimelineAPI{
 	private ArrayList<TLEvent> events;
 	private String name;
+	private static enum AxisLabel {
+		DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA;
+	}
+	private AxisLabel axisLabel;
 	private boolean dirty;
 	
 	public Timeline(String name){
@@ -26,6 +30,25 @@ public class Timeline implements TimelineAPI{
 		this.name = name;
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
 		setDirty(true);
+	}	
+	public Timeline(String name, TLEvent[] events, String axisLabel) {
+		this(name, events);
+		if (axisLabel.equals("Days"))
+			this.axisLabel = AxisLabel.DAYS;
+		else if (axisLabel.equals("Weeks"))
+			this.axisLabel = AxisLabel.WEEKS;
+		else if (axisLabel.equals("Months"))
+			this.axisLabel = AxisLabel.MONTHS;
+		else if (axisLabel.equals("Years"))
+			this.axisLabel = AxisLabel.YEARS;
+		else if (axisLabel.equals("Decades"))
+			this.axisLabel = AxisLabel.DECADES;
+		else if (axisLabel.equals("Centuries"))
+			this.axisLabel = AxisLabel.CENTURIES;
+		else if (axisLabel.equals("Millenia"))
+			this.axisLabel = AxisLabel.MILLENNIA;
+		else
+			this.axisLabel = AxisLabel.YEARS;
 	}
 	
 	public boolean contains(TLEvent event) {
