@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import model.TimelineMaker;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import entities.Atomic;
 import entities.Duration;
 import entities.TLEvent;
@@ -33,6 +36,7 @@ public class TimelineRender implements Runnable {
 	private ArrayList<Atomic> atomics;
 	private String unitName = "years";
 	private long unit;
+	private JFXPanel fxPanel;
 	private final String[] months = {"January", "February", "March", "April",
 			"May","June","July","August",
 			"September","October","November","December"};
@@ -43,15 +47,18 @@ public class TimelineRender implements Runnable {
 	private int firstUnit;
 	private long firstDateMillis;
 	private int pushDown;
+	int xPos;
 	
 	/**
+	 * @param fxPanel 
 	 * @param timeline
 	 * @param root
 	 */
-	public TimelineRender(TimelineMaker model, Timeline timeline, Group group) {
+	public TimelineRender(JFXPanel fxPanel, TimelineMaker model, Timeline timeline, Group group) {
 		this.model = model;
 		this.timeline = timeline;
 		this.group = group;
+		this.fxPanel = fxPanel;
 		atomics = new ArrayList<Atomic>();
 		durations = new ArrayList<Duration>();
 		init();
@@ -121,7 +128,7 @@ public class TimelineRender implements Runnable {
 		
 		unitWidth = 100; //TODO figure this out
 		
-		int xPos = 0;
+		xPos = 0;
 		
 		Date firstDate = getFirstDate(minTime+(1000*60*60*6)); //the first unit on the timeline
 		
@@ -140,7 +147,8 @@ public class TimelineRender implements Runnable {
 			group.getChildren().add(label);
 			xPos+=unitWidth;
 		}
-		//TODO create scene here for right size
+		Scene toShow = new Scene(group, xPos+5, 500, Color.WHITE);
+		fxPanel.setScene(toShow);
 	}
 
 	/**
@@ -194,7 +202,7 @@ public class TimelineRender implements Runnable {
 	}
 
 	private void renderAtomics() {
-		pushDown = 20; //where to put the event (Y)
+		pushDown = 60; //where to put the event (Y)
 		for(Atomic e : atomics){
 			final Label label = new Label(e.getName());
 			int xPos = getXPos(e.getDate());
