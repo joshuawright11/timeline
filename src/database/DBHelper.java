@@ -58,7 +58,7 @@ public class DBHelper implements DBHelperAPI{
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
 	public Timeline changeTimeline(Timeline oldTimeline, Timeline newTimeline) {
 		removeTimeline(oldTimeline);

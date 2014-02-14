@@ -10,6 +10,9 @@ import entities.Timeline;
  * Created: Jan 29, 2014
  * Package: backend
  *
+ * Note: try and have _id as parameters, it will make editing and adding stuff alot easier (add _id to Timeline and TLEvent).
+ * Also, add/remove/updateEvent(TLEvent event, Timeline timeline) would be good
+ *
  */
 public interface DBHelperAPI {
 	/**
