@@ -135,13 +135,14 @@ public class EventPropertiesWindow extends JFrame {
 					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
 					final String startDate = EventPropertiesWindow.this.startDate.getText();
 					final String endDate = EventPropertiesWindow.this.endDate.getText();
+					final String category = EventPropertiesWindow.this.category.getText();
 					new Thread(new Runnable() {
 						public void run() {
 							if (type.equals("Atomic")) {
-								timeline.addEvent(new Atomic(title, "", Date.valueOf(startDate)));
+								timeline.addEvent(new Atomic(title, category, Date.valueOf(startDate)));
 							}
 							else {
-								timeline.addEvent(new Duration(title, "", Date.valueOf(startDate), Date.valueOf(endDate)));
+								timeline.addEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
 							}
 							model.updateGraphics();
 						}
@@ -150,15 +151,32 @@ public class EventPropertiesWindow extends JFrame {
 				}
 			});
 		else {
-			title.setText(event.getName());
-			if (event instanceof Atomic) {
-				type.setSelectedItem("Atomic");
-				startDate.setText(((Atomic)event).getDate().toString());
-			} else if (event instanceof Duration) {
-				type.setSelectedItem("Duration");
-				startDate.setText(((Duration)event).getStartDate().toString());
-				endDate.setText(((Duration)event).getEndDate().toString());
-			}
+			new Thread(new Runnable() {
+				public void run() {
+					final String eventName = event.getName();
+					if (event instanceof Atomic) {
+						final String date = ((Atomic)event).getDate().toString();
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								title.setText(eventName);
+								type.setSelectedItem("Atomic");
+								startDate.setText(date);
+							}
+						});
+					} else if (event instanceof Duration) {
+						final String startDateString = ((Duration)event).getStartDate().toString();
+						final String endDateString = ((Duration)event).getEndDate().toString();
+						SwingUtilities.invokeLater(new Runnable() {
+							public void run() {
+								title.setText(eventName);
+								type.setSelectedItem("Duration");
+								startDate.setText(startDateString);
+								endDate.setText(endDateString);
+							}
+						});
+					}
+				}
+			}).start();
 
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -166,14 +184,15 @@ public class EventPropertiesWindow extends JFrame {
 					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
 					final String startDate = EventPropertiesWindow.this.startDate.getText();
 					final String endDate = EventPropertiesWindow.this.endDate.getText();
+					final String category = EventPropertiesWindow.this.category.getText();
 					new Thread(new Runnable() {
 						public void run() {
 							timeline.removeEvent(event);
 							if (type.equals("Atomic")) {
-								timeline.addEvent(new Atomic(title, "", Date.valueOf(startDate)));
+								timeline.addEvent(new Atomic(title, category, Date.valueOf(startDate)));
 							}
 							else {
-								timeline.addEvent(new Duration(title, "", Date.valueOf(startDate), Date.valueOf(endDate)));
+								timeline.addEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
 							}
 							model.updateGraphics();
 						}
