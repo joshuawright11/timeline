@@ -12,28 +12,24 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 	
 	private JFXPanel fxPanel;
 	private Group root;
-	private Group empty;
-	private Scene emptyScene;
+	private Scene scene;
 	
 	private TimelineMaker model;
 	
 	public TimelineGraphics(TimelineMaker model){
 		this.model = model;
+		root = new Group();
 	}
 	
 	@Override
 	public void run() {
-		empty = new Group();
-		emptyScene = new Scene(empty, 2000, 500, Color.WHITE);	
-		root = new Group();
-        Scene scene = new Scene(root, 2000, 500, Color.WHITE);
-        fxPanel.setScene(scene);
-        
+		System.out.println("Well this was pointless...");
 	}
 
 	@Override
 	public void renderTimeline(Timeline timeline) {
-		Platform.runLater(new TimelineRender(model, timeline, root));
+		root = new Group();
+		Platform.runLater(new TimelineRender(fxPanel, model, timeline, root));
 	}
 
 	@Override
