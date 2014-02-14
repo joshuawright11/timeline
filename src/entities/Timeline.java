@@ -36,6 +36,7 @@ public class Timeline implements TimelineAPI{
 	}
 	public Timeline(String name, int axisLabel) {
 		this.name = name;
+		events = new ArrayList<TLEvent>();
 		this.axisLabel = AXIS_LABELS[axisLabel];
 		dirty = true;
 	}
