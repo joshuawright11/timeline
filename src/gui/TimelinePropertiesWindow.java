@@ -18,10 +18,6 @@ public class TimelinePropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private TimelineMaker model;
-	private MainWindow window;
-	private Timeline timeline;
-
 	/**
 	 * Window components.
 	 */
@@ -49,21 +45,70 @@ public class TimelinePropertiesWindow extends JFrame {
 	private JButton cancelButton;
 
 
+	public TimelinePropertiesWindow(final TimelineMaker model) {
+		initComponents();
+
+		// Define action for adding a timeline.
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String titleString = title.getText();
+				final int axisLabelIndex = axisLabel.getSelectedIndex();
+				new Thread(new Runnable() {
+					public void run() {
+						model.addTimeline(new Timeline(titleString, axisLabelIndex));
+					}
+				}).start();
+				dispose();
+			}
+		});
+
+		initLayout();
+	}
+
+
+
 	/**
 	 * Creates new timeline properties window.
 	 */
-	public TimelinePropertiesWindow(TimelineMaker model, MainWindow window, Timeline timeline) {
-		this.model = model;
-		this.window = window;
-		this.timeline = timeline;
+	public TimelinePropertiesWindow(final TimelineMaker model, final Timeline timeline) {
 		initComponents();
+		
+		// Load information from timeline into the dialog.
+		new Thread(new Runnable() {
+			public void run() {
+				final String timelineTitle = timeline.getName();
+				final int timelineAxisLabelIndex = timeline.getAxisLabelIndex();
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						title.setText(timelineTitle);
+						axisLabel.setSelectedItem(axisLabel.getItemAt(timelineAxisLabelIndex));
+					}
+				});
+			}
+		}).start();
+
+		// Define action for editing a timeline.
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String titleString = title.getText();
+				final int axisLabelIndex = axisLabel.getSelectedIndex();
+				new Thread(new Runnable() {
+					public void run() {
+						TLEvent[] events = timeline.getEvents();
+						model.editTimeline(new Timeline(titleString, events, axisLabelIndex));
+					}
+				}).start();
+				dispose();
+			}
+		});
+		
+		initLayout();
 	}
 
 	/**
 	 * Initialize window components.
 	 */
 	private void initComponents() {
-
 		dataSectionLabel = new JLabel();
 
 		titleLabel = new JLabel();
@@ -115,64 +160,6 @@ public class TimelinePropertiesWindow extends JFrame {
 		font.setText("Tahoma");
 
 		okButton.setText("Ok");
-		if (timeline == null)
-			// Define action for adding a timeline.
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					final String titleString = title.getText();
-					final int axisLabelIndex = axisLabel.getSelectedIndex();
-					// TODO Parse other timeline properties here.
-					new Thread(new Runnable() {
-						public void run() {
-							model.addTimeline(new Timeline(titleString, axisLabelIndex));
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									window.loadTimelines();
-								}
-							});
-						}
-					}).start();
-					dispose();
-				}
-			});
-		else {
-			// Load information from timeline into the dialog.
-			new Thread(new Runnable() {
-				public void run() {
-					final String timelineTitle = timeline.getName();
-					final int timelineAxisLabelIndex = timeline.getAxisLabelIndex();
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							title.setText(timelineTitle);
-							axisLabel.setSelectedItem(axisLabel.getItemAt(timelineAxisLabelIndex));
-						}
-					});
-				}
-			}).start();
-			
-			// Define action for editing a timeline.
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					final String titleString = title.getText();
-					final int axisLabelIndex = axisLabel.getSelectedIndex();
-					// TODO Parse other timeline properties here.
-					new Thread(new Runnable() {
-						public void run() {
-							TLEvent[] events = timeline.getEvents();
-							model.removeSelectedTimeline();
-							model.addTimeline(new Timeline(titleString, events, axisLabelIndex));
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									window.loadTimelines();
-								}
-							});
-						}
-					}).start();
-					dispose();
-				}
-			});
-		}
-
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
@@ -180,7 +167,12 @@ public class TimelinePropertiesWindow extends JFrame {
 				dispose();
 			}
 		});
-
+	}
+	
+	/**
+	 * Initialize the layout of this window.
+	 */
+	private void initLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(
