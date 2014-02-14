@@ -41,9 +41,9 @@ public class TimelineRender implements Runnable {
 	
 	private AxisLabel axisLabel;
 	//private long unit;
-	//private final String[] months = {"January", "February", "March", "April",
-	//		"May","June","July","August",
-	//		"September","October","November","December"};
+	private final String[] months = {"Jan", "Feb", "March", "April",
+			"May","June","July","Aug",
+			"Sept","Oct","Nov","Dec"};
 	private int unitWidth;
 	//these are probably something that could be set in the actual timeline itself, but we can do that if there is time
 	private long minTime;
@@ -59,7 +59,7 @@ public class TimelineRender implements Runnable {
 	public TimelineRender(JFXPanel fxPanel, TimelineMaker model, Timeline timeline, Group group) {
 		this.model = model;
 		this.timeline = timeline;
-		this.axisLabel = timeline.getAxisLabel();
+		this.axisLabel = AxisLabel.MONTHS;
 		this.group = group;
 		this.fxPanel = fxPanel;
 		atomics = new ArrayList<Atomic>();
@@ -143,7 +143,7 @@ public class TimelineRender implements Runnable {
 			label = new Label(cal.getTime().toString());
 			break;
 		case MONTHS:
-			label = new Label(cal.get(Calendar.MONTH)+" "+ cal.get(Calendar.YEAR));
+			label = new Label(months[cal.get(Calendar.MONTH)]+" "+ cal.get(Calendar.YEAR));
 			break;
 		case YEARS:
 			label = new Label(cal.get(Calendar.YEAR)+"");
@@ -214,12 +214,21 @@ public class TimelineRender implements Runnable {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		Date toReturn = null;
+		
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_YEAR);
+		
 		switch(axisLabel){
+		case DAYS:
+			cal.set(year, month, day);
+			toReturn = new Date(cal.getTime().getTime());
+			break;
 		case MONTHS:
-			//TODO do this
+			cal.set(year, month, 1);
+			toReturn = new Date(cal.getTime().getTime());
 			break;
 		case YEARS:
-			int year = cal.get(Calendar.YEAR);
 			cal.set(year, 0, 1);
 			toReturn = new Date(cal.getTime().getTime());
 			break;
