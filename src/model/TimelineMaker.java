@@ -192,7 +192,6 @@ public class TimelineMaker {
 		//TODO add remove events, instead of the whole timeline. New Thread?
 		database.removeTimeline(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
-		
 	}
 	
 	/**

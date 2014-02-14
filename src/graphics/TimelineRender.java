@@ -56,7 +56,10 @@ public class TimelineRender implements Runnable {
 	public TimelineRender(JFXPanel fxPanel, TimelineMaker model, Timeline timeline, Group group) {
 		this.model = model;
 		this.timeline = timeline;
-		this.axisLabel = AxisLabel.DAYS;
+		if (timeline.getAxisLabel() == AxisLabel.DAYS || timeline.getAxisLabel() == AxisLabel.MONTHS || timeline.getAxisLabel() == AxisLabel.YEARS)
+			this.axisLabel = timeline.getAxisLabel();
+		else
+			this.axisLabel = AxisLabel.YEARS;
 		this.group = group;
 		this.fxPanel = fxPanel;
 		atomics = new ArrayList<Atomic>();
