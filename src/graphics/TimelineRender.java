@@ -59,7 +59,7 @@ public class TimelineRender implements Runnable {
 	public TimelineRender(JFXPanel fxPanel, TimelineMaker model, Timeline timeline, Group group) {
 		this.model = model;
 		this.timeline = timeline;
-		this.axisLabel = AxisLabel.MONTHS;
+		this.axisLabel = AxisLabel.DAYS;
 		this.group = group;
 		this.fxPanel = fxPanel;
 		atomics = new ArrayList<Atomic>();
@@ -105,7 +105,7 @@ public class TimelineRender implements Runnable {
 	}
 	
 	private void initUnit() {
-		unitWidth = 100; //TODO figure this out
+		unitWidth = 150; //TODO figure this out
 	}
 
 
@@ -140,7 +140,7 @@ public class TimelineRender implements Runnable {
 		
 		switch(axisLabel){
 		case DAYS:
-			label = new Label(cal.getTime().toString());
+			label = new Label(new Date(cal.getTime().getTime()).toString());
 			break;
 		case MONTHS:
 			label = new Label(months[cal.get(Calendar.MONTH)]+" "+ cal.get(Calendar.YEAR));
