@@ -4,56 +4,50 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import entities.*;
+
 public class TimelineMakerTest {
 
 	@Test
-	public void testTimelineMaker() {
-		fail("Not yet implemented");
+	public void testTimelineSelectionInit() {
+		TimelineMaker app = new TimelineMaker();
+		assertNull("There should be no timeline selected: ", app.getSelectedTimeline());
 	}
-
+	
 	@Test
-	public void testGetTimelineTitles() {
-		fail("Not yet implemented");
+	public void testTimelineAddition() {
+		TimelineMaker app = new TimelineMaker();
+		Timeline tester = new Timeline("Tester");
+		
+		assertNull("Selected timeline is null: ", app.getSelectedTimeline());
+		assertFalse("Timeline does not contain tester: ", app.getTimelineTitles().contains(tester.getName()));
+		
+		app.addTimeline(tester);
+		
+		assertTrue("Timeline now contains tester: ", app.getTimelineTitles().contains(tester.getName()));
+		assertTrue("Selected timeline is tester: ", app.getSelectedTimeline().equals(tester));
+		
+		cleanup();
 	}
-
+	
 	@Test
-	public void testGetSelectedTimeline() {
-		fail("Not yet implemented");
+	public void testTimelineDeletion() {
+		TimelineMaker app = new TimelineMaker();
+		Timeline tester = new Timeline("tester");
+		
+		assertTrue("Selected timeline is tester: ", app.getSelectedTimeline().equals(tester));
+		assertTrue("Timeline contains tester: ", app.getTimelineTitles().contains(tester.getName()));
+		
+		app.deleteTimeline();
+		
+		assertFalse("Timeline no longer contains tester: ", app.getTimelineTitles().contains(tester.getName()));
+		assertFalse("Selected timeline is not tester: ", app.getSelectedTimeline().equals(tester));
 	}
-
-	@Test
-	public void testSetSelectedTimeline() {
-		fail("Not yet implemented");
+	
+	private void cleanup() {
+		TimelineMaker app = new TimelineMaker();
+		while (!app.getTimelineTitles().isEmpty())
+			app.deleteTimeline();
 	}
-
-	@Test
-	public void testAddTimeline() {
-		assertTrue("The timeline added should be in timelines array.", false);
-	}
-
-	@Test
-	public void testRemoveSelectedTimeline() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetSelectedEvent() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetSelectedEvent() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveSelectedEvent() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testUpdateGraphics() {
-		fail("Not yet implemented");
-	}
-
+	
 }
