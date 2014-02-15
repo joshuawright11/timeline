@@ -16,6 +16,7 @@ import entities.Atomic;
 import entities.Duration;
 import entities.TLEvent;
 import entities.Timeline;
+import entities.Timeline.AxisLabel;
 
 /**
  * @author Josh Wright
@@ -33,6 +34,16 @@ public class DBHelper implements DBHelperAPI{
 	public static final String ID = "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE";
 	public DBHelper(String dbName){
 		this.dbName = dbName;
+		open();
+		try {
+			statement.executeUpdate("CREATE TABLE timeline_info ("+ID+", timelineName TEXT, axisLabel TEXT);");
+		} catch (SQLException e) {
+			if(e.getMessage().contains("already exists")) {
+				//it has already been created, no issues
+			}else
+				e.printStackTrace();
+		}
+		close();
 	}
 	private void open(){
 		try {
@@ -72,7 +83,8 @@ public class DBHelper implements DBHelperAPI{
 		open();
 		try {
 			statement.executeUpdate("CREATE TABLE "+tlName
-					+" ("+ID+",eventName TEXT, type TEXT, startDate DATETIME, endDate DATETIME);");
+					+" ("+ID+",eventName TEXT, type TEXT, startDate DATETIME, endDate DATETIME, category TEXT);");
+			writeAxisLabel(tlName, timeline.getAxisLabel());
 		} catch (SQLException e) {
 			if(e.getMessage().contains("already exists")) {
 				System.out.println("A timeline with that name already exists!");
@@ -98,33 +110,69 @@ public class DBHelper implements DBHelperAPI{
 		close();
 		return true;
 	}
+	private void writeAxisLabel(String timelineName, AxisLabel axisLabel) throws SQLException{
+		
+		String INSERT_LABEL = "INSERT INTO timeline_info (timelineName, axisLabel) VALUES "
+				+"(?,?);";
+		PreparedStatement pstmt = connection.prepareStatement(INSERT_LABEL);
+		pstmt.setString(1, timelineName);
+		pstmt.setString(2, axisLabel.toString());
+		pstmt.executeUpdate();
+	}
+	private void removeAxisLabel(String timelineName) throws SQLException{
+		String REMOVE_LABEL = "DELETE FROM timeline_info WHERE timelineName = ?;";
+		PreparedStatement pstmt = connection.prepareStatement(REMOVE_LABEL);
+		pstmt.setString(1, timelineName);
+		pstmt.executeUpdate();
+	}
+	private int getAxisLabel(String timelineName) throws SQLException{
+		String SELECT_LABEL = "SELECT axisLabel FROM timeline_info WHERE timelineName = ?;";
+		PreparedStatement pstmt = connection.prepareStatement(SELECT_LABEL);
+		pstmt.setString(1, timelineName);
+		resultSet = pstmt.executeQuery();
+		String labelName = resultSet.getString(1);
+		switch(labelName){
+		case "DAYS":
+			return 0;
+		case "MONTHS":
+			return 2;
+		case "YEARS":
+			return 3;
+		default:
+			return 3;
+		}
+	}
 	private void writeEvent(Atomic event, String tlName) throws SQLException{
 		String INSERT_ATOMIC = "INSERT INTO "+tlName
-				+" (eventName,type,startDate,endDate) VALUES "
-				+"(?,?,?,NULL);";
+				+" (eventName,type,startDate,endDate,category) VALUES "
+				+"(?,?,?,NULL,?);";
 		PreparedStatement pstmt = connection.prepareStatement(INSERT_ATOMIC);
 		pstmt.setString(1, event.getName());
 		pstmt.setString(2, event.typeName());
 		pstmt.setDate(3, event.getDate());
+		pstmt.setString(4, event.getCategory());
 		pstmt.executeUpdate();
 	}
 	private void writeEvent(Duration event, String tlName) throws SQLException{
 		String INSERT_DURATION = "INSERT INTO "+tlName
-				+" (eventName,type,startDate,endDate) VALUES "
-				+"(?,?,?,?);";
+				+" (eventName,type,startDate,endDate,category) VALUES "
+				+"(?,?,?,?,?);";
 		PreparedStatement pstmt = connection.prepareStatement(INSERT_DURATION);
 		pstmt.setString(1, event.getName());
 		pstmt.setString(2, event.typeName());
 		pstmt.setDate(3, event.getStartDate());
 		pstmt.setDate(4, event.getEndDate());
+		pstmt.setString(5, event.getCategory());
 		pstmt.executeUpdate();
 	}
 
 	@Override
 	public boolean removeTimeline(Timeline timeline) {
 		open();
+		System.out.println("REMOVING");
 		try {
 			statement.executeUpdate("DROP TABLE IF EXISTS'"+timeline.getName()+"';");
+			removeAxisLabel(timeline.getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -133,46 +181,46 @@ public class DBHelper implements DBHelperAPI{
 	}
 
 	@Override
-	public Timeline[] getTimelines() {
+	public Timeline[] getTimelines() { //this could probably be split up into methods
 		open();
 		try {
 			resultSet = statement.executeQuery("select name from sqlite_master where type = \"table\" "
-					+ "and name != \"sqlite_sequence\";");
+					+ "and name != \"sqlite_sequence\" and name != \"timeline_info\";");
 			ArrayList<String> timelineNames = new ArrayList<String>();
-			int numTimelines =0;
+			int numTimelines = 0;
 			while(resultSet.next()){ // Get all timeline names
 				numTimelines ++;
-				System.out.println(resultSet.getString(1));
 				timelineNames.add(resultSet.getString(1));
 			}
 			Timeline[] timelines = new Timeline[numTimelines];
 			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays
-				System.out.println("Getting timeline.");
 				resultSet = statement.executeQuery("select * from "+timelineNames.get(j)+";");
-				//int numEvents = resultSet.getFetchSize(); //doesn't work
 				ArrayList<TLEvent> events = new ArrayList<TLEvent>();
 				int numEvents = 0;
 				while(resultSet.next()){ // Get all events for the event
-					System.out.println("In event loop.");
 					numEvents++;
 					String name = resultSet.getString("eventName");
 					String type = resultSet.getString("type");
 					TLEvent event = null;
 					if(type.equals("atomic")){
+						String category = resultSet.getString("Category");
 						Date startDate = resultSet.getDate("startDate");
-						event = new Atomic(name, "", startDate); // TODO Get category from database.
+						event = new Atomic(name, category, startDate); // TODO Get category from database.
 					}else if(type.equals("duration")){
+						String category = resultSet.getString("Category");
 						Date startDate = resultSet.getDate("startDate");
 						Date endDate = resultSet.getDate("endDate");
-						event = new Duration(name, "", startDate,endDate); // TODO Get category from database.
+						event = new Duration(name, category, startDate,endDate); // TODO Get category from database.
 					}else{
 						System.out.println("YOU DONE MESSED UP.");
 					}
 					events.add(event);
 				}
-				Timeline timeline = new Timeline(timelineNames.get(j), events.toArray(new TLEvent[numEvents]));
+				int label = getAxisLabel(timelineNames.get(j));
+				Timeline timeline = new Timeline(timelineNames.get(j), events.toArray(new TLEvent[numEvents]), label);
 				timelines[j] = timeline;
 			}
+			close();
 			return timelines;
 		} catch (SQLException e) {
 			e.printStackTrace();
