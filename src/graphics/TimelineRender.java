@@ -1,6 +1,3 @@
-/**
- * 
- */
 package graphics;
 
 import java.sql.Date;
@@ -24,34 +21,109 @@ import entities.Timeline;
 import entities.Timeline.AxisLabel;
 
 /**
+ * This is the class that renders the actual timeline onto a JFXPanel using javafx.
+ * The JFXPanel is then put into the GUI (JFXPanel is the link between swing and 
+ * javafx). Currently this class is a little confusing (I spent a large chunk of time
+ * refactoring and simplifying it, but it is still large) so I'll give an overview of 
+ * the process here.
+ * 
+ * Currently the only public method is run. This allows the class to be run on the 
+ * javafx thread, since java will actually throw an exception if any javafx stuff 
+ * happens off this thread. 
+ * 
+ * While rendering the class initializes some variables important to the rendering 
+ * process, and then renders the atomic events, axis, and duration events in that
+ * order. This is so the atomic events can push the axis and duration events down the
+ * screen. Detailed descriptions of this process are located in the method documentations.
+ * Note that if there are no events in the database a blank screen gets rendered until the
+ * user adds some events. 
+ * 
  * @author Josh Wright
  * Created: Feb 10, 2014
  * Package: graphics
+ * 
+ * Various examples of the Calendar class as well as making javafx graphics were used
+ * in the making this class.
+ */
+/**
+ * @author josh
  *
  */
 public class TimelineRender implements Runnable {
 
+	/**
+	 * Used as the connection between the Swing gui and the javafx graphics
+	 * (embeds in swing)
+	 */
 	private JFXPanel fxPanel;
+	
+	/**
+	 * The model of the entire program, this is so selected events can be set
+	 */
 	private TimelineMaker model;
+	
+	/**
+	 * The timeline associated with this TimelineRender object
+	 */
 	private Timeline timeline;
+	
+	/**
+	 * The group of javafx elements to display in the scene (similar to a canvas,
+	 * this gets put on the JFXPanel)
+	 */
 	private Group group;
 	
+	
+	/**
+	 * ArrayLists of all the events in the timeline. 
+	 * Separated into durations and atomics for rendering purposes
+	 */
 	private ArrayList<Duration> durations;
 	private ArrayList<Atomic> atomics;
 	
+	/**
+	 * The AxisLabel that this TimelineRenderer will use when rendering the timeline.
+	 * Essentially the unit by which the axis will be rendered.
+	 */
 	private AxisLabel axisLabel;
+	
+	/**
+	 * Use in rendering with an AxisLabel of months
+	 */
 	private final String[] months = {"Jan", "Feb", "March", "April",
 			"May","June","July","Aug",
 			"Sept","Oct","Nov","Dec"};
+	
+	/**
+	 * The number of pixels each unit (definied by axisLAbel) on the axis takes
+	 * up. Currently this is constant, but could be easily changed to account for
+	 * different timeline sizes.
+	 */
 	private int unitWidth;
-	private long minTime;
-	private long maxTime;
+	
+	/**
+	 * The y location of the next element to be rendered. Everything is rendered
+	 * from the top (0) down (positive y) to avoid overlaps of events.
+	 */
 	private int pushDown;
 	
 	/**
-	 * @param fxPanel 
+	 * The min and max time on the timeline, initialized in initRange() and used
+	 * for determining the range at which to render the axis
+	 */
+	private long minTime;
+	private long maxTime;
+	
+	/**
+	 * The sole constructor for TimelineRender. Takes an fxPanel for putting the 
+	 * scene (graphics), a TimelineMake object for updating the program state, a Timeline
+	 * object to render with, and a group for putting the elements to draw on before 
+	 * drawing to the fxPanel
+	 * 
+	 * @param fxPanel
+	 * @param model
 	 * @param timeline
-	 * @param root
+	 * @param group
 	 */
 	public TimelineRender(JFXPanel fxPanel, TimelineMaker model, Timeline timeline, Group group) {
 		this.model = model;
@@ -66,9 +138,15 @@ public class TimelineRender implements Runnable {
 		durations = new ArrayList<Duration>();
 	}
 
-	@Override
+	/*
+	 * Initializes the minTime maxTime values, if there are not events render a blank screen
+	 *  otherwise then calls init and renders the timeline.
+	 * 
+	 * (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	public void run() {
-		if (!initRange()){ //set a blank screen if there is nothing to render
+		if (!initRange()){
 			Scene toShow = new Scene(group, 0, 0, Color.WHITE);
 			fxPanel.setScene(toShow);
 			return;
@@ -77,6 +155,12 @@ public class TimelineRender implements Runnable {
 		renderTimeline();
 	}
 
+	/**
+	 * Sets the unitWidth to a constant (this can be changed to depend on how many units are in the
+	 * timeline) then populates the Atomic and Duration ArrayLists. While populating the lists, it
+	 * also updates the minTime and maxTime. Currently it uses milliseconds, but could be modified to use
+	 * the Date class's compareTo method (which I didn't know existed until after writing this).
+	 */
 	private void init(){
 		unitWidth = 150;
 		for(TLEvent event : timeline.getEvents()){
@@ -95,6 +179,13 @@ public class TimelineRender implements Runnable {
 		}
 	}
 	
+	/**
+	 * Initializes the minTime and maxTime to the first event. This is kind of a hack but
+	 * seems to be necessary. It would not be necesssary if we used the compareTo method 
+	 * for Dates, however.
+	 * 
+	 * @return if there are any events
+	 */
 	private boolean initRange() {
 		if(timeline.getEvents() == null) { // Initializes the variables, super kludgy but we can make it better later if there is time
 			return false; 
@@ -109,13 +200,25 @@ public class TimelineRender implements Runnable {
 		return true;
 	}
 	
+	/**
+	 * Renders the timeline in order of height on the screen; atomic events,
+	 * axis, duration events.
+	 * 
+	 * Also clears the old rendering and resets the group to remove the previous render.
+	 */
 	private void renderTimeline() {
 		group.getChildren().clear();
-		renderAtomics(); //render in order of height
+		group = new Group();
+		renderAtomics();
 		renderTime();
 		renderDurations();
 	}
 	
+	/**
+	 * Renders each 'Unit' on the axis as label with width unitWidth (uses unitLabel method). 
+	 * Adds the label to the group, and when finished puts the group in a scene and displays the 
+	 * scene in the fxPanel.
+	 */
 	private void renderTime() {
 		int diffUnit = getUnitLength();
 		int xPos2 = 0;
@@ -128,10 +231,19 @@ public class TimelineRender implements Runnable {
 		fxPanel.setScene(toShow);
 	}
 	
+	/**
+	 * Helper method for creating units on the axis. Uses a Calendar object to add i units to the object,
+	 * and then create a label with the correct position and text based on the unit and the current
+	 * AxisLabel. Some stylistic things at the end.
+	 * 
+	 * @param i the number of units after the first unit on the axis (the 'x' coordinate in AxisLabel units)
+	 * @param xPos2 the actual pixel starting x coordinate of the label on the scene
+	 * @return the created Label to add to the Group
+	 */
 	private Label unitLabel(int i, int xPos2) {
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(getFirstDate());
-		cal.add(getUnit(), i); //adds this many days to the unit
+		cal.add(getUnit(), i); //adds i units to the date
 		Label label;
 		
 		switch(axisLabel){
@@ -157,6 +269,12 @@ public class TimelineRender implements Runnable {
 		return label;
 	}
 
+	/**
+	 * Uses a calndar object to calculate how long the timeline will be (rounds down to the nearest unit
+	 * and then finds the number of units from there to the last event, rounded up).
+	 * 
+	 * @return the total units long the axis will be.
+	 */
 	private int getUnitLength() {
 		Calendar startCalendar = new GregorianCalendar();
 		startCalendar.setTime(getFirstDate());
@@ -167,7 +285,7 @@ public class TimelineRender implements Runnable {
 		int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
 		int diffDay = diffYear * 365 +endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR);
 		
-		switch(axisLabel){ //+1 to account for first
+		switch(axisLabel){ // +1 to round up
 		case DAYS:
 			return diffDay+1;
 		case MONTHS:
@@ -180,7 +298,10 @@ public class TimelineRender implements Runnable {
 	}
 
 	/**
-	 * @return
+	 * @return the Date of the first date in the timeline rounded down to the nearest unit. Used
+	 * for drawing the axis.
+	 * 
+	 * i.e. if the first date was November 3, 2012, this would return January 1, 2012.
 	 */
 	private Date getFirstDate() {
 		Date date = new Date(minTime);
@@ -208,9 +329,15 @@ public class TimelineRender implements Runnable {
 		default:
 			break;
 		}
-		return toReturn; //this is the first date on the timeline, rounded down to the unit
+		return toReturn;
 	}
 
+	/**
+	 * Creates labels out of each Atomic event to add to the Group. Calculates x position based on the date
+	 * and y position based on the pushDown global value. 
+	 * 
+	 * Sets each label with an EventHandler to set as the selected event if it is clicked.
+	 */
 	private void renderAtomics() {
 		pushDown = 60; //where to put the event ( y - axis )
 		for(Atomic e : atomics){
@@ -237,7 +364,10 @@ public class TimelineRender implements Runnable {
 	}
 
 	/**
+	 * Creates labels out of each Duration event to add to the Group. Calculates x position based on start and 
+	 * end date and y position based on the pushDown global value. 
 	 * 
+	 * Sets each label with an EventHandler to set as the selected event if it is clicked.
 	 */
 	private void renderDurations() {
 		int counter = 0;
@@ -269,8 +399,10 @@ public class TimelineRender implements Runnable {
 
 
 	/**
-	 * @param startDate
-	 * @return
+	 * Returns the pixel x position that a date should be, based on its value and the axis
+	 * 
+	 * @param date the date to get the x position for
+	 * @return the pixel x value that the date should be
 	 */
 	private int getXPos(Date date) {
 		double units = getUnitsSinceStart(date);
@@ -279,6 +411,16 @@ public class TimelineRender implements Runnable {
 		return xPosition;
 	}
 	
+	/**
+	 * Returns the number of units (based on axisLabel) since the first date on the timeline axis (see
+	 * getFirstDate) for a Date.
+	 * 
+	 * i.e. if first date was January 1, 2011, date was January 1, 2012 this and axisLabel was days, this would
+	 * return 366.
+	 * 
+	 * @param date the date to get the units for
+	 * @return the units since the start date, of the date
+	 */
 	private double getUnitsSinceStart(Date date){
 		Calendar startCalendar = new GregorianCalendar();
 		startCalendar.setTime(getFirstDate());
@@ -305,6 +447,12 @@ public class TimelineRender implements Runnable {
 		}
 	}
 	
+	/**
+	 * Returns the calendar unit based on axisLabel (used in rendering the different pieces based
+	 * on length and date)
+	 * 
+	 * @return the Calendar unit
+	 */
 	private int getUnit(){
 		switch(axisLabel){
 		case DAYS:
