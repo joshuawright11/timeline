@@ -11,6 +11,12 @@ import entities.TLEvent;
 import entities.Timeline;
 
 /**
+ * This is a driver to help set up a sample database. This can be used to reset or remake the database
+ * since the JUnit testing can't make any permanent changes to the database (or else the test results will not be
+ * consistent).
+ * 
+ * Not actually needed in the program.
+ * 
  * @author Josh Wright
  * Created: Jan 28, 2014
  * Package: backend
@@ -18,9 +24,6 @@ import entities.Timeline;
  */
 public class Driver {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		DBHelper helper = new DBHelper("databases/timeline.db");
 		TLEvent event1 = new Atomic("one", "", new Date(((long)1000)*60*60*24));
