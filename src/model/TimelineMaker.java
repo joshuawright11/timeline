@@ -50,17 +50,13 @@ public class TimelineMaker {
 		graphics = new TimelineGraphics(this);
 		timelines = new ArrayList<Timeline>();
 
-		for (Timeline t : database.getTimelines())
-			timelines.add(t);
-
-		//TODO crashes if there are no Timelines
-		selectedTimeline = timelines.get(0);
-		
 		try {
+			for (Timeline t : database.getTimelines())
+				timelines.add(t);
+			selectedTimeline = timelines.get(0);
 			selectedEvent = selectedTimeline.getEvents()[0];
-			System.out.println(selectedEvent.toString());
 		} catch (Exception e) {
-			System.out.println("Unable to determine selected event.");
+			System.out.println("Error loading from Database.");
 		}
 
 		initGUI();
@@ -166,7 +162,7 @@ public class TimelineMaker {
 		database.removeTimeline(selectedTimeline);
 		
 		selectedTimeline = null;
-		gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
+		gui.updateTimelines(getTimelineTitles(), null);
 		graphics.clearScreen();
 	}
 	
