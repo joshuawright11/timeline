@@ -154,6 +154,7 @@ public class TimelinePropertiesWindow extends JFrame {
 
 		axisLabelLabel.setText("Axis Label");
 		axisLabel.setModel(new DefaultComboBoxModel<String>(new String[] { "Days", "Weeks", "Months", "Years", "Decades", "Centuries", "Millennia" }));
+		axisLabel.setSelectedItem("Years");
 
 		fontLabel.setText("Font");
 

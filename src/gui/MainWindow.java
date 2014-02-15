@@ -293,11 +293,12 @@ public class MainWindow extends JFrame {
 				new Thread(new Runnable() {
 					public void run() {
 						final Timeline selectedTimeline = model.getSelectedTimeline();
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								new TimelinePropertiesWindow(model, selectedTimeline).setVisible(true);
-							}
-						});
+						if (selectedTimeline != null)
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new TimelinePropertiesWindow(model, selectedTimeline).setVisible(true);
+								}
+							});
 					}
 				}).start();
 			}
