@@ -22,6 +22,5 @@ public class DisplayPane extends JScrollPane {
 		fxPanel = new JFXPanel();
 		setViewportView(fxPanel);
         graphics.setPanel(fxPanel);
-		Platform.runLater(graphics);
 	}
 }

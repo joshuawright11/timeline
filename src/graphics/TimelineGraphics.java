@@ -6,7 +6,7 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import entities.Timeline;
 
-public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
+public class TimelineGraphics{
 	
 	private JFXPanel fxPanel;
 	private Group root;
@@ -18,21 +18,12 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 		root = new Group();
 	}
 	
-	@Override
-	public void run() {
-		//System.out.println("Well this was pointless...");
-		//TODO But actually, make this cleaner?
-	}
-
-	@Override
 	public void renderTimeline(Timeline timeline) {
 		root = new Group();
 		Platform.runLater(new TimelineRender(fxPanel, model, timeline, root));
 	}
 
-	@Override
 	public void clearScreen() {
-//		fxPanel.setScene(emptyScene);
 		Platform.runLater(new Runnable() {
 			public void run() {
 				root.getChildren().clear();
