@@ -254,7 +254,17 @@ public class MainWindow extends JFrame {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						if (selectedTimeline != null)
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
+								}
+							});
+					}
+				}).start();
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
@@ -344,7 +354,17 @@ public class MainWindow extends JFrame {
 		});
 		newEventMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						final Timeline selectedTimeline = model.getSelectedTimeline();
+						if (selectedTimeline != null)
+							SwingUtilities.invokeLater(new Runnable() {
+								public void run() {
+									new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
+								}
+							});
+					}
+				}).start();
 			}
 		});
 	}

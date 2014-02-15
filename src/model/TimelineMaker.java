@@ -63,7 +63,7 @@ public class TimelineMaker {
 
 		initGUI();
 	}
-	
+
 	/**
 	 * Constructor.
 	 * Only for testing purposes.
@@ -72,10 +72,22 @@ public class TimelineMaker {
 	public TimelineMaker(DBHelper db) {
 		database = db;
 		timelines = new ArrayList<Timeline>();
+		try {
+			for (Timeline t : database.getTimelines())
+				timelines.add(t);
+			selectedTimeline = timelines.get(0);
+			selectedEvent = selectedTimeline.getEvents()[0];
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Your database is empty.");
+		} catch (Exception e){
+			System.out.println("Error loading from Database.");
+		}		
 		graphics = new TimelineGraphics(this);
 		gui = new MainWindow(this, graphics);
+		while (!timelines.isEmpty())
+			deleteTimeline();
 	}
-	
+
 	/**
 	 * Initialize the GUI components of this application.
 	 */
@@ -219,35 +231,40 @@ public class TimelineMaker {
 	}
 
 	public void addEvent(TLEvent e) {
-		selectedTimeline.addEvent(e);
-		selectedEvent = e;
+		if (selectedTimeline != null) {
+			selectedTimeline.addEvent(e);
+			selectedEvent = e;
 
-		updateGraphics();
+			updateGraphics();
 
-		database.removeTimeline(selectedTimeline);
-		database.writeTimeline(selectedTimeline);
+			database.removeTimeline(selectedTimeline);
+			database.writeTimeline(selectedTimeline);
+		}
 	}
 
 	public void deleteEvent() {
-		if (selectedTimeline.contains(selectedEvent))
+		if (selectedEvent != null && selectedTimeline != null && selectedTimeline.contains(selectedEvent)) {
 			selectedTimeline.removeEvent(selectedEvent);
-		selectedEvent = null;
+			selectedEvent = null;
 
-		updateGraphics();
+			updateGraphics();
 
-		database.removeTimeline(selectedTimeline);
-		database.writeTimeline(selectedTimeline);
+			database.removeTimeline(selectedTimeline);
+			database.writeTimeline(selectedTimeline);
+		}
 	}
 
 	public void editEvent(TLEvent e) {
-		selectedTimeline.removeEvent(selectedEvent);
-		selectedEvent = e;
-		selectedTimeline.addEvent(selectedEvent);
+		if (selectedEvent != null && selectedTimeline != null && selectedTimeline.contains(selectedEvent)) {
+			selectedTimeline.removeEvent(selectedEvent);
+			selectedEvent = e;
+			selectedTimeline.addEvent(selectedEvent);
 
-		updateGraphics();
+			updateGraphics();
 
-		database.removeTimeline(selectedTimeline);
-		database.writeTimeline(selectedTimeline);
+			database.removeTimeline(selectedTimeline);
+			database.writeTimeline(selectedTimeline);
+		}
 	}
 
 	/**
