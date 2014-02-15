@@ -124,7 +124,7 @@ public class TimelineRender implements Runnable {
 			group.getChildren().add(label);
 			xPos2+=unitWidth;
 		}
-		Scene toShow = new Scene(group, xPos2+5, 500, Color.WHITE);
+		Scene toShow = new Scene(group, xPos2+5, pushDown, Color.WHITE);
 		fxPanel.setScene(toShow);
 	}
 	
