@@ -135,6 +135,7 @@ public class TimelineMaker {
 	 */
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
+		System.out.println("Your selected timeline is: " + selectedTimeline.getName());
 		if (selectedTimeline != null)
 			updateGraphics();
 	}
