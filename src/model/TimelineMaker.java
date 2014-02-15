@@ -63,7 +63,19 @@ public class TimelineMaker {
 
 		initGUI();
 	}
-
+	
+	/**
+	 * Constructor.
+	 * Only for testing purposes.
+	 * @param db
+	 */
+	public TimelineMaker(DBHelper db) {
+		database = db;
+		timelines = new ArrayList<Timeline>();
+		graphics = new TimelineGraphics(this);
+		gui = new MainWindow(this, graphics);
+	}
+	
 	/**
 	 * Initialize the GUI components of this application.
 	 */

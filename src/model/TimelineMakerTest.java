@@ -4,50 +4,43 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import database.DBHelper;
 import entities.*;
 
+/**
+ * TimelineMakerTest.java
+ * 
+ * This class tests the functionality of the TimelineMaker class.
+ * 
+ * @author Andrew Thompson
+ * Wheaton College, CS 335, Spring 2014
+ * Project Phase 1
+ * Feb 15, 2014
+ */
 public class TimelineMakerTest {
-
-	@Test
-	public void testTimelineSelectionInit() {
-		TimelineMaker app = new TimelineMaker();
-		assertNull("There should be no timeline selected: ", app.getSelectedTimeline());
+	
+	static TimelineMaker app;
+	
+	static {
+		System.out.println("Hi");
+		DBHelper db = new DBHelper("databases/timelinemakertest.db");
+		while (db.getTimelines().length != 0)
+			db.removeTimeline(db.getTimelines()[0]);
+		app = new TimelineMaker(db);
 	}
 	
 	@Test
-	public void testTimelineAddition() {
-		TimelineMaker app = new TimelineMaker();
-		Timeline tester = new Timeline("Tester");
-		
-		assertNull("Selected timeline is null: ", app.getSelectedTimeline());
-		assertFalse("Timeline does not contain tester: ", app.getTimelineTitles().contains(tester.getName()));
-		
-		app.addTimeline(tester);
-		
-		assertTrue("Timeline now contains tester: ", app.getTimelineTitles().contains(tester.getName()));
-		assertTrue("Selected timeline is tester: ", app.getSelectedTimeline().equals(tester));
-		
-		cleanup();
+	public void testTimelineMakerInit() {
+		assertNotNull(app);
 	}
 	
 	@Test
-	public void testTimelineDeletion() {
-		TimelineMaker app = new TimelineMaker();
-		Timeline tester = new Timeline("tester");
-		
-		assertTrue("Selected timeline is tester: ", app.getSelectedTimeline().equals(tester));
-		assertTrue("Timeline contains tester: ", app.getTimelineTitles().contains(tester.getName()));
-		
+	public void testTimelineAdditionDeletion() {
+		Timeline test = new Timeline("Test");
+		assertFalse(app.getTimelineTitles().contains("Test"));
+		app.addTimeline(test);
+		assertTrue(app.getTimelineTitles().contains("Test"));
 		app.deleteTimeline();
-		
-		assertFalse("Timeline no longer contains tester: ", app.getTimelineTitles().contains(tester.getName()));
-		assertFalse("Selected timeline is not tester: ", app.getSelectedTimeline().equals(tester));
+		assertFalse(app.getTimelineTitles().contains("Test"));
 	}
-	
-	private void cleanup() {
-		TimelineMaker app = new TimelineMaker();
-		while (!app.getTimelineTitles().isEmpty())
-			app.deleteTimeline();
-	}
-	
 }

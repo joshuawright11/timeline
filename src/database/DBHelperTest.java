@@ -14,6 +14,8 @@ import entities.Duration;
 import entities.Timeline;
 
 /**
+ * DBHelperTest.java
+ * 
  * @author Josh Wright
  * Created: Feb 14, 2014
  * Package: database
