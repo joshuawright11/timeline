@@ -2,7 +2,6 @@ package gui;
 
 
 import graphics.TimelineGraphics;
-import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
 import javax.swing.*;
