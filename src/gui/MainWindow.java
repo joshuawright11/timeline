@@ -77,7 +77,6 @@ public class MainWindow extends JFrame {
 		this.graphics = graphics;
 		initComponents();
 		initActionListeners();
-		loadTimelines();
 	}
 
 	/**
@@ -247,9 +246,6 @@ public class MainWindow extends JFrame {
 
 		pack();
 	}
-	// TODO
-	// TODO MAKE THREADSAFE!!!
-	// TODO
 	
 	/**
 	 * Initialize action listeners for all interactive buttons and shortcuts.private void initActionListeners() {
@@ -258,29 +254,18 @@ public class MainWindow extends JFrame {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Thread(new Runnable() {
-					public void run() {
-						final Timeline selectedTimeline = model.getSelectedTimeline();
-						if (selectedTimeline != null)
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
-								}
-							});
-					}
-				}).start();
+				new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						final Timeline selectedTimeline = model.getSelectedTimeline();
 						final TLEvent selectedEvent = model.getSelectedEvent();
-						if (selectedTimeline != null && selectedEvent != null && selectedTimeline.contains(selectedEvent))
+						if (selectedEvent != null)
 							SwingUtilities.invokeLater(new Runnable() {
 								public void run() {
-									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, selectedEvent).setVisible(true);
+									new EventPropertiesWindow(MainWindow.this.model, selectedEvent).setVisible(true);
 								}
 							});
 					}
@@ -291,7 +276,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						model.removeSelectedEvent();
+						model.deleteEvent();
 					}
 				}).start();
 			}
@@ -300,7 +285,7 @@ public class MainWindow extends JFrame {
 		// Set up timeline toolbar listeners.
 		addTimelineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, MainWindow.this, null).setVisible(true);
+				new TimelinePropertiesWindow(model).setVisible(true);
 			}
 		});
 		editTimelineButton.addActionListener(new ActionListener() {
@@ -310,7 +295,7 @@ public class MainWindow extends JFrame {
 						final Timeline selectedTimeline = model.getSelectedTimeline();
 						SwingUtilities.invokeLater(new Runnable() {
 							public void run() {
-								new TimelinePropertiesWindow(model, MainWindow.this, selectedTimeline).setVisible(true);
+								new TimelinePropertiesWindow(model, selectedTimeline).setVisible(true);
 							}
 						});
 					}
@@ -321,12 +306,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
-						model.removeSelectedTimeline();
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								MainWindow.this.loadTimelines();
-							}
-						});
+						model.deleteTimeline();
 					}
 				}).start();
 			}
@@ -343,13 +323,11 @@ public class MainWindow extends JFrame {
 				}).start();
 			}
 		});
-		
-		
 
 		// Set up menu item listeners.
 		newTimelineMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model, MainWindow.this, null).setVisible(true);
+				new TimelinePropertiesWindow(model).setVisible(true);
 			}
 		});
 		saveTimelineMenuItem.addActionListener(new ActionListener() {
@@ -360,35 +338,30 @@ public class MainWindow extends JFrame {
 		exitMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Add database saving stuff.
-				//saveTimelineMenuItem.getActionListeners()[0].actionPerformed(null);
 				System.exit(0);
 			}
 		});
 		newEventMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Thread(new Runnable() {
-					public void run() {
-						final Timeline selectedTimeline = model.getSelectedTimeline();
-						if (selectedTimeline != null)
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									new EventPropertiesWindow(MainWindow.this.model, selectedTimeline, null).setVisible(true);
-								}
-							});
-					}
-				}).start();
+				new EventPropertiesWindow(MainWindow.this.model).setVisible(true);
 			}
 		});
 	}
 
 	/**
-	 * Load timelines from TimelineMaker model into GUI window.
+	 * Update the timelines from TimelineMaker model into GUI window.
 	 * Get a list of timeline titles from model. Then populate a default list model for the JList of timelines with those titles.
 	 */
-	public void loadTimelines() {
-		timelines.removeAllItems();
-		ArrayList<String> temp = model.getTimelineTitles();
-		for (String s : temp)
-			timelines.addItem(s);
+	public void updateTimelines(final ArrayList<String> timelineTitles, final String selectedTimelineName) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				timelines.removeAllItems();
+				for (String s : timelineTitles)
+					timelines.addItem(s);
+				if (selectedTimelineName != null && !selectedTimelineName.isEmpty())
+					timelines.setSelectedItem(selectedTimelineName);
+			}
+		});
+		
 	}
 }

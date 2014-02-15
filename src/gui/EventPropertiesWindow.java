@@ -19,20 +19,6 @@ public class EventPropertiesWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * The model of this application.
-	 */
-	private TimelineMaker model;
-	/**
-	 * The timeline container for the generated or edited event.
-	 */
-	private Timeline timeline;
-	/**
-	 * The event to be edited; null if new event addition.
-	 */
-	private TLEvent event;
-
-
-	/**
 	 * Window components.
 	 */
 	private JLabel titleLabel;
@@ -56,20 +42,98 @@ public class EventPropertiesWindow extends JFrame {
 	private JButton okButton;
 	private JButton cancelButton;
 
+	/**
+	 * Constructor.
+	 * Constructor for adding a new event.
+	 * @param model
+	 */
+	public EventPropertiesWindow(final TimelineMaker model) {
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setTitle("Add Event");
+		
+		initComponents();
+		
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String title = EventPropertiesWindow.this.title.getText();
+				final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
+				final String startDate = EventPropertiesWindow.this.startDate.getText();
+				final String endDate = EventPropertiesWindow.this.endDate.getText();
+				final String category = EventPropertiesWindow.this.category.getText();
+				new Thread(new Runnable() {
+					public void run() {
+						if (type.equals("Atomic"))
+							model.addEvent(new Atomic(title, category, Date.valueOf(startDate)));
+						else if (type.equals("Duration"))
+							model.addEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
+					}
+				}).start();
+				dispose();
+			}
+		});
+		
+		initLayout();	
+	}
 	
 	/**
-	 * Creates new event properties window.
+	 * Constructor.
+	 * Constructor for editing an existing event.
+	 * @param model
+	 * @param event
 	 */
-	public EventPropertiesWindow(TimelineMaker model, Timeline timeline, TLEvent event) {
-		this.model = model;
-		this.timeline = timeline;
-		this.event = event;
-
-		initComponents();
-		initLayout();
-
+	public EventPropertiesWindow(final TimelineMaker model, final TLEvent event) {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("Event Properties");
+		setTitle("Edit Event Properties");
+		
+		initComponents();
+		
+		new Thread(new Runnable() {
+			public void run() {
+				final String eventName = event.getName();
+				if (event instanceof Atomic) {
+					final String date = ((Atomic)event).getDate().toString();
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							title.setText(eventName);
+							type.setSelectedItem("Atomic");
+							startDate.setText(date);
+						}
+					});
+				} else if (event instanceof Duration) {
+					final String startDateString = ((Duration)event).getStartDate().toString();
+					final String endDateString = ((Duration)event).getEndDate().toString();
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							title.setText(eventName);
+							type.setSelectedItem("Duration");
+							startDate.setText(startDateString);
+							endDate.setText(endDateString);
+						}
+					});
+				}
+			}
+		}).start();
+
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final String title = EventPropertiesWindow.this.title.getText();
+				final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
+				final String startDate = EventPropertiesWindow.this.startDate.getText();
+				final String endDate = EventPropertiesWindow.this.endDate.getText();
+				final String category = EventPropertiesWindow.this.category.getText();
+				new Thread(new Runnable() {
+					public void run() {
+						if (type.equals("Atomic"))
+							model.editEvent(new Atomic(title, category, Date.valueOf(startDate)));
+						else if (type.equals("Duration"))
+							model.editEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
+					}
+				}).start();
+				dispose();
+			}
+		});
+		
+		initLayout();
 	}
 
 	/**
@@ -128,79 +192,6 @@ public class EventPropertiesWindow extends JFrame {
 		comments.setViewportView(commentsArea);
 
 		okButton.setText("Ok");
-		if (event == null)
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					final String title = EventPropertiesWindow.this.title.getText();
-					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
-					final String startDate = EventPropertiesWindow.this.startDate.getText();
-					final String endDate = EventPropertiesWindow.this.endDate.getText();
-					final String category = EventPropertiesWindow.this.category.getText();
-					new Thread(new Runnable() {
-						public void run() {
-							if (type.equals("Atomic")) {
-								timeline.addEvent(new Atomic(title, category, Date.valueOf(startDate)));
-							}
-							else {
-								timeline.addEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
-							}
-							model.updateGraphics();
-						}
-					}).start();
-					dispose();
-				}
-			});
-		else {
-			new Thread(new Runnable() {
-				public void run() {
-					final String eventName = event.getName();
-					if (event instanceof Atomic) {
-						final String date = ((Atomic)event).getDate().toString();
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								title.setText(eventName);
-								type.setSelectedItem("Atomic");
-								startDate.setText(date);
-							}
-						});
-					} else if (event instanceof Duration) {
-						final String startDateString = ((Duration)event).getStartDate().toString();
-						final String endDateString = ((Duration)event).getEndDate().toString();
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								title.setText(eventName);
-								type.setSelectedItem("Duration");
-								startDate.setText(startDateString);
-								endDate.setText(endDateString);
-							}
-						});
-					}
-				}
-			}).start();
-
-			okButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					final String title = EventPropertiesWindow.this.title.getText();
-					final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
-					final String startDate = EventPropertiesWindow.this.startDate.getText();
-					final String endDate = EventPropertiesWindow.this.endDate.getText();
-					final String category = EventPropertiesWindow.this.category.getText();
-					new Thread(new Runnable() {
-						public void run() {
-							timeline.removeEvent(event);
-							if (type.equals("Atomic")) {
-								timeline.addEvent(new Atomic(title, category, Date.valueOf(startDate)));
-							}
-							else {
-								timeline.addEvent(new Duration(title, category, Date.valueOf(startDate), Date.valueOf(endDate)));
-							}
-							model.updateGraphics();
-						}
-					}).start();
-					dispose();
-				}
-			});
-		}
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new ActionListener() {

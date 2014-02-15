@@ -6,8 +6,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import entities.Timeline.AxisLabel;
-
 /**
  * @author Josh Wright
  * Created: Jan 29, 2014
@@ -38,6 +36,7 @@ public class Timeline implements TimelineAPI{
 	}
 	public Timeline(String name, int axisLabel) {
 		this.name = name;
+		events = new ArrayList<TLEvent>();
 		this.axisLabel = AXIS_LABELS[axisLabel];
 		this.events = new ArrayList<TLEvent>();
 		dirty = true;

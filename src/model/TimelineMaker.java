@@ -50,17 +50,13 @@ public class TimelineMaker {
 		graphics = new TimelineGraphics(this);
 		timelines = new ArrayList<Timeline>();
 
-		for (Timeline t : database.getTimelines())
-			timelines.add(t);
-
-		//TODO crashes if there are no Timelines
-		selectedTimeline = timelines.get(0);
-		
 		try {
+			for (Timeline t : database.getTimelines())
+				timelines.add(t);
+			selectedTimeline = timelines.get(0);
 			selectedEvent = selectedTimeline.getEvents()[0];
-			System.out.println(selectedEvent.toString());
-		} catch (NullPointerException e) {
-			System.out.println("Unable to determine selected event.");
+		} catch (Exception e) {
+			System.out.println("Error loading from Database.");
 		}
 
 		initGUI();
@@ -91,8 +87,14 @@ public class TimelineMaker {
 			public void run() {
 				gui = new MainWindow(TimelineMaker.this, graphics);
 				gui.setVisible(true);
+				new Thread(new Runnable() {
+					public void run() {
+						gui.updateTimelines(getTimelineTitles(), null);
+					}
+				}).start();
 			}
 		});
+
 	}
 
 	/**
@@ -142,25 +144,44 @@ public class TimelineMaker {
 	 * @param t the timeline to be added
 	 */
 	public void addTimeline(Timeline t) {
-		timelines.add(t);
+		selectedTimeline = t;
+		timelines.add(selectedTimeline);
 		
-		// TODO New Thread?
-		database.writeTimeline(t);
+		database.writeTimeline(selectedTimeline);
+		gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
+		updateGraphics();
 	}
 
 	/**
 	 * Remove a timeline from this model.
 	 * @param t the timeline to be removed
 	 */
-	public void removeSelectedTimeline() {
-		
-		// TODO New Thread?
-		database.removeTimeline(selectedTimeline);
-
+	public void deleteTimeline() {
 		timelines.remove(selectedTimeline);
-		selectedTimeline = null;
-		graphics.clearScreen();
+				
+		database.removeTimeline(selectedTimeline);
 		
+		selectedTimeline = null;
+		gui.updateTimelines(getTimelineTitles(), null);
+		graphics.clearScreen();
+	}
+	
+	/**
+	 * Edit the selected timeline.
+	 * Remove the selected timeline and replace it with the parameterized one.
+	 * @param t
+	 */
+	public void editTimeline(Timeline t) {
+		timelines.remove(selectedTimeline);
+		database.removeTimeline(selectedTimeline);
+		
+		boolean newName = !selectedTimeline.getName().equals(t.getName());
+		selectedTimeline = t;
+		timelines.add(selectedTimeline);
+		database.writeTimeline(selectedTimeline);
+		if (newName)
+			gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
+		updateGraphics();
 	}
 
 	/**
@@ -183,13 +204,34 @@ public class TimelineMaker {
 		}
 	}
 	
-	public void removeSelectedEvent() {
+	public void addEvent(TLEvent e) {
+		selectedTimeline.addEvent(e);
+		selectedEvent = e;
+		
+		updateGraphics();
+		
+		database.removeTimeline(selectedTimeline);
+		database.writeTimeline(selectedTimeline);
+	}
+	
+	public void deleteEvent() {
 		if (selectedTimeline.contains(selectedEvent))
 			selectedTimeline.removeEvent(selectedEvent);
 		selectedEvent = null;
+		
 		updateGraphics();
 		
-		//TODO add remove events, instead of the whole timeline. New Thread?
+		database.removeTimeline(selectedTimeline);
+		database.writeTimeline(selectedTimeline);
+	}
+	
+	public void editEvent(TLEvent e) {
+		selectedTimeline.removeEvent(selectedEvent);
+		selectedEvent = e;
+		selectedTimeline.addEvent(selectedEvent);
+		
+		updateGraphics();
+		
 		database.removeTimeline(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
 	}
