@@ -75,11 +75,11 @@ public class TimelineRender implements Runnable {
 	 */
 	private Group group;
 	
-	
 	/**
 	 * ArrayLists of all the events in the timeline. 
 	 * Separated into durations and atomics for rendering purposes
 	 */
+
 	private ArrayList<Duration> durations;
 	private ArrayList<Atomic> atomics;
 	
@@ -87,6 +87,7 @@ public class TimelineRender implements Runnable {
 	 * The AxisLabel that this TimelineRenderer will use when rendering the timeline.
 	 * Essentially the unit by which the axis will be rendered.
 	 */
+
 	private AxisLabel axisLabel;
 	
 	/**
@@ -108,7 +109,7 @@ public class TimelineRender implements Runnable {
 	 * from the top (0) down (positive y) to avoid overlaps of events.
 	 */
 	private int pushDown;
-	
+
 	/**
 	 * The min and max time on the timeline, initialized in initRange() and used
 	 * for determining the range at which to render the axis
@@ -149,7 +150,7 @@ public class TimelineRender implements Runnable {
 	 */
 	public void run() {
 		if (!initRange()){
-			Scene toShow = new Scene(group, 0, 0, Color.WHITE);
+			Scene toShow = new Scene(new Group(), 0, 0, Color.WHITE);
 			fxPanel.setScene(toShow);
 			return;
 		}
@@ -188,6 +189,7 @@ public class TimelineRender implements Runnable {
 	 * 
 	 * @return if there are any events
 	 */
+
 	private boolean initRange() {
 		if(timeline.getEvents() == null) { // Initializes the variables, super kludgy but we can make it better later if there is time
 			return false; 
@@ -208,10 +210,11 @@ public class TimelineRender implements Runnable {
 	 * 
 	 * Also clears the old rendering and resets the group to remove the previous render.
 	 */
+
 	private void renderTimeline() {
 		group.getChildren().clear();
 		group = new Group();
-		renderAtomics();
+		renderAtomics(); //render in order of height
 		renderTime();
 		renderDurations();
 	}
@@ -221,6 +224,7 @@ public class TimelineRender implements Runnable {
 	 * Adds the label to the group, and when finished puts the group in a scene and displays the 
 	 * scene in the fxPanel.
 	 */
+
 	private void renderTime() {
 		int diffUnit = getUnitLength();
 		int xPos2 = 0;
@@ -242,12 +246,13 @@ public class TimelineRender implements Runnable {
 	 * @param xPos2 the actual pixel starting x coordinate of the label on the scene
 	 * @return the created Label to add to the Group
 	 */
+
 	private Label unitLabel(int i, int xPos2) {
 		Calendar cal = new GregorianCalendar();
 		cal.setTime(getFirstDate());
 		cal.add(getUnit(), i); //adds i units to the date
 		Label label;
-		
+
 		switch(axisLabel){
 		case DAYS:
 			label = new Label(new Date(cal.getTime().getTime()).toString());
@@ -310,11 +315,11 @@ public class TimelineRender implements Runnable {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		Date toReturn = null;
-		
+
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH);
 		int day = cal.get(Calendar.DAY_OF_YEAR);
-		
+
 		switch(axisLabel){
 		case DAYS:
 			cal.set(year, month, day);
@@ -354,7 +359,7 @@ public class TimelineRender implements Runnable {
 					label.setStyle("-fx-border-color: black");
 					new Thread(new Runnable() {
 						public void run() {
-							model.setSelectedEvent(event);
+							model.selectEvent(event);
 						}
 					}).start();
 				}
@@ -362,7 +367,7 @@ public class TimelineRender implements Runnable {
 			group.getChildren().add(label);
 			pushDown += 20;
 		}
-		
+
 	}
 
 	/**
@@ -389,7 +394,7 @@ public class TimelineRender implements Runnable {
 					label.setStyle("-fx-border-color: black");
 					new Thread(new Runnable() {
 						public void run() {
-							model.setSelectedEvent(event);
+							model.selectEvent(event);
 						}
 					}).start();
 				}
@@ -423,6 +428,7 @@ public class TimelineRender implements Runnable {
 	 * @param date the date to get the units for
 	 * @return the units since the start date, of the date
 	 */
+	
 	private double getUnitsSinceStart(Date date){
 		Calendar startCalendar = new GregorianCalendar();
 		startCalendar.setTime(getFirstDate());
@@ -432,11 +438,11 @@ public class TimelineRender implements Runnable {
 		double diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
 		double diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
 		double diffDay = diffYear * 365 +endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR);
-	
+
 		double years = diffYear + (endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR))/365.0;
 		double months = diffMonth + (endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH))/30.5;
 		double days = diffDay + 0.5; //so that dates lineup nicely
-		
+
 		switch(axisLabel){
 		case DAYS:
 			return days;
@@ -455,6 +461,7 @@ public class TimelineRender implements Runnable {
 	 * 
 	 * @return the Calendar unit
 	 */
+
 	private int getUnit(){
 		switch(axisLabel){
 		case DAYS:
