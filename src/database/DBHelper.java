@@ -80,6 +80,8 @@ public class DBHelper implements DBHelperAPI{
 			}
 			e.printStackTrace();
 		}
+		if(timeline.getEvents() == null)
+			return false;
 		for(TLEvent event : timeline.getEvents()){
 			try {
 				if(event instanceof Atomic){
@@ -89,6 +91,8 @@ public class DBHelper implements DBHelperAPI{
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
+			}catch (NullPointerException e){
+				System.out.println("Nothing!");
 			}
 		}
 		close();
@@ -135,10 +139,11 @@ public class DBHelper implements DBHelperAPI{
 			resultSet = statement.executeQuery("select name from sqlite_master where type = \"table\" "
 					+ "and name != \"sqlite_sequence\";");
 			ArrayList<String> timelineNames = new ArrayList<String>();
-			int numTimelines = 0;
+			int numTimelines =0;
 			while(resultSet.next()){ // Get all timeline names
 				numTimelines ++;
-				timelineNames.add(resultSet.getString(numTimelines));
+				System.out.println(resultSet.getString(1));
+				timelineNames.add(resultSet.getString(1));
 			}
 			Timeline[] timelines = new Timeline[numTimelines];
 			for(int j = 0; j < numTimelines; j++){ // Get all timelines event arrays

@@ -39,11 +39,15 @@ public class Timeline implements TimelineAPI{
 	public Timeline(String name, int axisLabel) {
 		this.name = name;
 		this.axisLabel = AXIS_LABELS[axisLabel];
+		this.events = new ArrayList<TLEvent>();
 		dirty = true;
 	}
 	public Timeline(String name, TLEvent[] events, int axisLabel) {
 		this.name = name;
-		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
+		if(events != null)
+			this.events = new ArrayList<TLEvent>(Arrays.asList(events));
+		else
+			this.events = new ArrayList<TLEvent>();
 		this.axisLabel = AXIS_LABELS[axisLabel];
 		dirty = true;
 	}
@@ -97,6 +101,7 @@ public class Timeline implements TimelineAPI{
 	 */
 	@Override
 	public TLEvent[] getEvents() {
+		if(events.isEmpty()) return null;
 		return (TLEvent[])events.toArray(new TLEvent[events.size()]);
 	}
 	/* (non-Javadoc)

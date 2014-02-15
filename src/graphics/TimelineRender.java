@@ -68,7 +68,11 @@ public class TimelineRender implements Runnable {
 
 	@Override
 	public void run() {
-		initRange();
+		if (!initRange()){ //set a blank screen if there is nothing to render
+			Scene toShow = new Scene(group, 0, 0, Color.WHITE);
+			fxPanel.setScene(toShow);
+			return;
+		}
 		init();
 		renderTimeline();
 	}
@@ -91,9 +95,10 @@ public class TimelineRender implements Runnable {
 		}
 	}
 	
-	private void initRange() {
-		int size = timeline.getEvents().length;
-		if(size < 1) return; // Initializes the variables, super kludgy but we can make it better later if there is time
+	private boolean initRange() {
+		if(timeline.getEvents() == null) { // Initializes the variables, super kludgy but we can make it better later if there is time
+			return false; 
+		}
 		if (timeline.getEvents()[0] instanceof Duration){
 			minTime = ((Duration)timeline.getEvents()[0]).getStartDate().getTime();
 			maxTime = ((Duration)timeline.getEvents()[0]).getEndDate().getTime();
@@ -101,6 +106,7 @@ public class TimelineRender implements Runnable {
 			minTime = ((Atomic)timeline.getEvents()[0]).getDate().getTime();
 			maxTime = ((Atomic)timeline.getEvents()[0]).getDate().getTime();
 		}
+		return true;
 	}
 	
 	private void renderTimeline() {
