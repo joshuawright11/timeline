@@ -38,17 +38,19 @@ import entities.Timeline.AxisLabel;
  * Note that if there are no events in the database a blank screen gets rendered until the
  * user adds some events. 
  * 
+ * NOTE: rendering long timelines with small units (i.e. 1500-2014 with days) will cause
+ * an exception. It will also save to the database which means that you will have to change
+ * the axisLabel of the timeline before it renders properly, (EditTimeline -> AxisLabel). It won't
+ * crash the program, it just won't render.
+ * 
  * @author Josh Wright
  * Created: Feb 10, 2014
  * Package: graphics
  * 
- * Various examples of the Calendar class as well as making javafx graphics were used
+ * Various online examples of the Calendar class as well as making javafx graphics were used
  * in the making this class.
  */
-/**
- * @author josh
- *
- */
+
 public class TimelineRender implements Runnable {
 
 	/**
