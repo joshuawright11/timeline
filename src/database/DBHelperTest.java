@@ -57,7 +57,7 @@ public class DBHelperTest {
 	 */
 	@Test
 	public void testWriteTimeline() {
-		Timeline timeline = new Timeline("hello");
+		Timeline timeline = new Timeline("mightbe"); //is causes problems in the SQL
 		timeline.addEvent(new Duration("dead", "", new Date(0), new Date(0)));
 		db.writeTimeline(timeline);
 		assertEquals(timeline.getName(), db.getTimelines()[0].getName());
@@ -87,9 +87,9 @@ public class DBHelperTest {
 	 */
 	@Test
 	public void testGetTimelines() {
-		Timeline firstTimeline = new Timeline("ding");
-		Timeline secondTimeline = new Timeline("dong");
-		firstTimeline.addEvent(new Atomic("the", "", new Date(0)));
+		Timeline firstTimeline = new Timeline("which");
+		Timeline secondTimeline = new Timeline("the");
+		firstTimeline.addEvent(new Atomic("wicked", "", new Date(0)));
 		secondTimeline.addEvent(new Duration("witch", "", new Date(0), new Date(0)));
 		db.writeTimeline(firstTimeline);
 		db.writeTimeline(secondTimeline);
