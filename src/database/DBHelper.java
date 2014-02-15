@@ -19,21 +19,51 @@ import entities.Timeline;
 import entities.Timeline.AxisLabel;
 
 /**
+ * 
  * @author Josh Wright
  * Created: Jan 29, 2014
  * Package: backend
  *
- * Using ideas and very minimal code from http://www.tutorialspoint.com/jdbc/jdbc-sample-code.htm
+ * Using SQL ideas and very minimal code from http://www.tutorialspoint.com/jdbc/jdbc-sample-code.htm
  *
  */
 public class DBHelper implements DBHelperAPI{
+	/**
+	 * Used for connection to database
+	 * connection: the connection to the database
+	 * resultSet: for getting the results of queries
+	 * statement: for executing queries, although I try to use prepared statements if possible
+	 */
 	private Connection connection = null;
 	private ResultSet resultSet = null;  
     private Statement statement = null; 
-	private String dbName;
+	
+    /**
+     * The path of the database (should be databases/<name>.db)
+     */
+    private String dbName;
+    
+	/**
+	 * Used for making database Android compatible, useful to save as a variable
+	 */
 	private static final String ID = "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE"; // unique id for android
+	
+	/**
+	 * Constructor; sets the database name
+	 * 
+	 * @param dbName the path to the database
+	 */
 	public DBHelper(String dbName){
 		this.dbName = dbName;
+		init();
+	}
+	
+	/**
+	 * Initializes the timeline_info database. 
+	 * This can store various timeline attributes though currently only has 1, axisLabel
+	 * 
+	 */
+	private void init(){
 		open();
 		try {
 			statement.executeUpdate("CREATE TABLE timeline_info ("+ID+", timelineName TEXT, axisLabel TEXT);");
@@ -45,22 +75,31 @@ public class DBHelper implements DBHelperAPI{
 		}
 		close();
 	}
+	
+	/**
+	 * Opens the connection to the database. This gets called before and database queries are made
+	 * It sets up the connection and statement variables.
+	 * 
+	 */
 	private void open(){
 		try {
-			openHelper(this.dbName);
+			Class.forName("org.sqlite.JDBC");
+			connection = DriverManager.getConnection("jdbc:sqlite:"+this.dbName+"");
+			statement = connection.createStatement();
 		} catch (SQLException e) {
 			System.out.println("Couldn't connect to database.");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e){
-			System.out.println("Class not found. Check your classpath for JDBC.");
+			System.out.println("Class not found. Check your classpath for the JDBC library.");
 			e.printStackTrace();
 		}
 	}
-	private void openHelper(String dbName) throws SQLException, ClassNotFoundException{
-		Class.forName("org.sqlite.JDBC");
-		connection = DriverManager.getConnection("jdbc:sqlite:"+this.dbName+"");
-		statement = connection.createStatement();
-	}
+
+	/**
+	 * Closes the database. This must be called whenever the user is done using the database or else
+	 * the database will be locked. Ensure that this is called when finished accessing database.
+	 * 
+	 */
 	private void close(){
 		try {
 			statement.close();
@@ -110,6 +149,14 @@ public class DBHelper implements DBHelperAPI{
 		close();
 		return true;
 	}
+	
+	/**
+	 * Uses prepared statements to insert the timelineName and axisLabel into the timeline_info table
+	 * 
+	 * @param timelineName the timeline of the axisLabel to write
+	 * @param axisLabel the axisLabel enum value
+	 * @throws SQLException because there are databases
+	 */
 	private void writeAxisLabel(String timelineName, AxisLabel axisLabel) throws SQLException{
 		
 		String INSERT_LABEL = "INSERT INTO timeline_info (timelineName, axisLabel) VALUES "
@@ -119,12 +166,25 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setString(2, axisLabel.toString());
 		pstmt.executeUpdate();
 	}
+	
+	/**
+	 * Uses prepared statements to remove the axisLabel from the timeline_info table
+	 * 
+	 * @param timelineName the name of the timeline to remove the axisLabel of
+	 * @throws SQLException because there are databases
+	 */
 	private void removeAxisLabel(String timelineName) throws SQLException{
 		String REMOVE_LABEL = "DELETE FROM timeline_info WHERE timelineName = ?;";
 		PreparedStatement pstmt = connection.prepareStatement(REMOVE_LABEL);
 		pstmt.setString(1, timelineName);
 		pstmt.executeUpdate();
 	}
+	
+	/**
+	 * @param timelineName the name of the timeline to get the axisLabel of
+	 * @return the index of the AxisLabel (there is room for more)
+	 * @throws SQLException because there are databases
+	 */
 	private int getAxisLabel(String timelineName) throws SQLException{
 		String SELECT_LABEL = "SELECT axisLabel FROM timeline_info WHERE timelineName = ?;";
 		PreparedStatement pstmt = connection.prepareStatement(SELECT_LABEL);
@@ -142,6 +202,16 @@ public class DBHelper implements DBHelperAPI{
 			return 3;
 		}
 	}
+	
+	
+	/**
+	 * Helper method for writeTimeline. Puts the atomic event in the correct 
+	 * timeline's database using prepared statements; overloaded see below
+	 * 
+	 * @param event the atomic event to insert
+	 * @param tlName the name of the timeline whose table this event belongs in
+	 * @throws SQLException because there are databases
+	 */
 	private void writeEvent(Atomic event, String tlName) throws SQLException{
 		String INSERT_ATOMIC = "INSERT INTO "+tlName
 				+" (eventName,type,startDate,endDate,category) VALUES "
@@ -153,6 +223,15 @@ public class DBHelper implements DBHelperAPI{
 		pstmt.setString(4, event.getCategory());
 		pstmt.executeUpdate();
 	}
+	
+	/**
+	 * Helper method for writeTimeline. Puts the duration event in the correct 
+	 * timeline's database using prepared statements; overloaded see above
+	 * 
+	 * @param event the duration event to insert
+	 * @param tlName the name of the timeline whose table this event belongs in
+	 * @throws SQLException because there are databases
+	 */
 	private void writeEvent(Duration event, String tlName) throws SQLException{
 		String INSERT_DURATION = "INSERT INTO "+tlName
 				+" (eventName,type,startDate,endDate,category) VALUES "
