@@ -46,7 +46,7 @@ public class TimelineMaker {
 	 * Create a new TimelineMaker application model with database, graphics, and GUI components.
 	 */
 	public TimelineMaker() {
-		database = new DBHelper("timeline.db");
+		database = new DBHelper("databases/timeline.db");
 		graphics = new TimelineGraphics(this);
 		timelines = new ArrayList<Timeline>();
 

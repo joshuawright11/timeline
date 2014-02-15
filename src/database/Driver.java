@@ -22,7 +22,7 @@ public class Driver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		DBHelper helper = new DBHelper("timeline.db");
+		DBHelper helper = new DBHelper("databases/timeline.db");
 		TLEvent event1 = new Atomic("one", "", new Date(((long)1000)*60*60*24));
 		TLEvent event2 = new Duration("two", "", new Date(((long)1000)*60*60*24),new Date(((long)1000)*60*60*24*2));
 		Timeline test1 = new Timeline("Test1", 0);

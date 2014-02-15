@@ -31,7 +31,7 @@ public class DBHelper implements DBHelperAPI{
 	private ResultSet resultSet = null;  
     private Statement statement = null; 
 	private String dbName;
-	public static final String ID = "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE";
+	private static final String ID = "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE"; // unique id for android
 	public DBHelper(String dbName){
 		this.dbName = dbName;
 		open();
@@ -58,7 +58,7 @@ public class DBHelper implements DBHelperAPI{
 	}
 	private void openHelper(String dbName) throws SQLException, ClassNotFoundException{
 		Class.forName("org.sqlite.JDBC");
-		connection = DriverManager.getConnection("jdbc:sqlite:databases/"+this.dbName+"");
+		connection = DriverManager.getConnection("jdbc:sqlite:"+this.dbName+"");
 		statement = connection.createStatement();
 	}
 	private void close(){
