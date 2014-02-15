@@ -11,8 +11,13 @@ import java.util.logging.*;
 
 /**
  * TimelineMaker.java
- * The model of the timeline editor and viewer. Contains all necessary components to model the application.
+ * 
+ * The model of the timeline editor and viewer. Contains all necessary objects to model the application.
+ * 
  * @author Josh Wright and Andrew Thompson
+ * Wheaton College, CS 335, Spring 2014
+ * Project Phase 1
+ * Feb 15, 2014
  *
  */
 public class TimelineMaker {
@@ -157,20 +162,24 @@ public class TimelineMaker {
 	/**
 	 * Set the selected timeline.
 	 * Find the timeline of the parameterized title and set selectedTimeline to it.
+	 * Update selectedTimeline, selectedEvent, and graphics.
 	 * @param title of the timeline
 	 */
-	public void setSelectedTimeline(String title) {
+	public void selectTimeline(String title) {
 		selectedTimeline = getTimeline(title);
+		selectedEvent = null;
 		if (selectedTimeline != null)
 			updateGraphics();
 	}
 
 	/**
 	 * Add a timeline to this model.
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
 	 * @param t the timeline to be added
 	 */
 	public void addTimeline(Timeline t) {
 		selectedTimeline = t;
+		selectedEvent = null;
 		timelines.add(selectedTimeline);
 
 		database.writeTimeline(selectedTimeline);
@@ -180,6 +189,7 @@ public class TimelineMaker {
 
 	/**
 	 * Remove a timeline from this model.
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
 	 * @param t the timeline to be removed
 	 */
 	public void deleteTimeline() {
@@ -187,6 +197,7 @@ public class TimelineMaker {
 			timelines.remove(selectedTimeline);
 			database.removeTimeline(selectedTimeline);
 			selectedTimeline = null;
+			selectedEvent = null;
 			gui.updateTimelines(getTimelineTitles(), null);
 			graphics.clearScreen();
 		}
@@ -195,13 +206,19 @@ public class TimelineMaker {
 	/**
 	 * Edit the selected timeline.
 	 * Remove the selected timeline and replace it with the parameterized one.
-	 * @param t
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
+	 * @param t the new timeline
 	 */
 	public void editTimeline(Timeline t) {
 		timelines.remove(selectedTimeline);
 		database.removeTimeline(selectedTimeline);
 
-		boolean newName = !selectedTimeline.getName().equals(t.getName());
+		boolean newName;
+		try {
+			newName = !selectedTimeline.getName().equals(t.getName());
+		} catch (NullPointerException e) {
+			newName = true;
+		}
 		selectedTimeline = t;
 		timelines.add(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
@@ -222,14 +239,16 @@ public class TimelineMaker {
 	 * Set the selected event.
 	 * @param e The event to be selected
 	 */
-	public void setSelectedEvent(TLEvent e) {
-		if (e != null) {
+	public void selectEvent(TLEvent e) {
+		if (e != null)
 			selectedEvent = e;
-			//System.out.println("Model confirms event selection:\n" +
-			//		"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
-		}
 	}
 
+	/**
+	 * Add an event to the selected timeline.
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
+	 * @param e the new event
+	 */
 	public void addEvent(TLEvent e) {
 		if (selectedTimeline != null) {
 			selectedTimeline.addEvent(e);
@@ -242,6 +261,10 @@ public class TimelineMaker {
 		}
 	}
 
+	/**
+	 * Delete the selected event from the timeline.
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
+	 */
 	public void deleteEvent() {
 		if (selectedEvent != null && selectedTimeline != null && selectedTimeline.contains(selectedEvent)) {
 			selectedTimeline.removeEvent(selectedEvent);
@@ -254,6 +277,12 @@ public class TimelineMaker {
 		}
 	}
 
+	/**
+	 * Edit the selected event.
+	 * Remove the currently selected event from the timeline and replace it with the parameter.
+	 * Update selectedTimeline, selectedEvent, graphics, and database.
+	 * @param e the new event
+	 */
 	public void editEvent(TLEvent e) {
 		if (selectedEvent != null && selectedTimeline != null && selectedTimeline.contains(selectedEvent)) {
 			selectedTimeline.removeEvent(selectedEvent);
@@ -271,9 +300,6 @@ public class TimelineMaker {
 	 * Update the graphics for the display screen.
 	 */
 	public void updateGraphics() { 
-		if(selectedTimeline.isDirty()){
-			//TODO sync to database. Easier to do it here, although this would mean the timeline would have to be swapped out every time
-		}
 		graphics.clearScreen();
 		graphics.renderTimeline(selectedTimeline);
 	}

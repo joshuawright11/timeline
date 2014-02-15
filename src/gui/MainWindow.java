@@ -329,7 +329,7 @@ public class MainWindow extends JFrame {
 				final String selectedTimeline = (String)timelines.getSelectedItem();
 				new Thread(new Runnable() {
 					public void run(){
-						model.setSelectedTimeline(selectedTimeline);
+						model.selectTimeline(selectedTimeline);
 					}
 				}).start();
 			}
