@@ -18,34 +18,77 @@ public class EventPropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	// Window components.
 	/**
-	 * Window components.
+	 * The label for the event title field.
 	 */
 	private JLabel titleLabel;
+	/**
+	 * The event title field.
+	 */
 	private JTextField title;
 
+	/**
+	 * The event type dropdown label.
+	 */
 	private JLabel typeLabel;
+	/**
+	 * The event type dropdown.
+	 */
 	private JComboBox<String> type;
 
+	/**
+	 * The event date label.
+	 */
 	private JLabel dateLabel;
-	private JTextField startDate;
+	/**
+	 * The event start date field.
+	 */
+	private JTextField startDate; // TODO Replace with JCalendar date-picker.
+	/**
+	 * "To" label.
+	 */
 	private JLabel toLabel;
-	private JTextField endDate;
+	/**
+	 * The event end date field.
+	 */
+	private JTextField endDate; // TODO Replace with JCalendar date-picker.
 
+	/**
+	 * The event category field label.
+	 */
 	private JLabel categoryLabel;
+	/**
+	 * The event category field.
+	 */
 	private JTextField category;
 
+	/**
+	 * The comments field label.
+	 */
 	private JLabel commentLabel;
+	/**
+	 * The comments scrollable pane.
+	 */
 	private JScrollPane comments;
+	/**
+	 * The comments text area.
+	 */
 	private JTextArea commentsArea;
 
+	/**
+	 * The ok button.
+	 */
 	private JButton okButton;
+	/**
+	 * The cancel button.
+	 */
 	private JButton cancelButton;
 
 	/**
 	 * Constructor.
 	 * Constructor for adding a new event.
-	 * @param model
+	 * @param model the TimelineMaker application model
 	 */
 	public EventPropertiesWindow(final TimelineMaker model) {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -78,8 +121,8 @@ public class EventPropertiesWindow extends JFrame {
 	/**
 	 * Constructor.
 	 * Constructor for editing an existing event.
-	 * @param model
-	 * @param event
+	 * @param model the TimelineMaker application model
+	 * @param event the event to edit
 	 */
 	public EventPropertiesWindow(final TimelineMaker model, final TLEvent event) {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

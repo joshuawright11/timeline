@@ -1,17 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- *
+ * ColorChooser.java
+ * 
+ * This class is a color picking window. Generated using NETBeans' Swing visual editor.
+ * Unused in this phase of project.
+ * 
  * @author Andrew Thompson
+ * Wheaton College, CS 335, Spring 2014
+ * Project Phase 1
+ * Feb 15, 2014
  */
 public class ColorChooser extends javax.swing.JFrame {
 
@@ -20,12 +21,22 @@ public class ColorChooser extends javax.swing.JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private javax.swing.JButton cancelButton;
-    private javax.swing.JColorChooser colorChooser;
+	/**
+	 * The color-choosing tool.
+	 */
+	private javax.swing.JColorChooser colorChooser;
+	/**
+	 * The ok button.
+	 */
     private javax.swing.JButton okButton;
+    /**
+	 * The cancel button.
+	 */
+	private javax.swing.JButton cancelButton;
 	
 	/**
-     * Creates new form ColorChooser
+     * Constructor.
+     * Creates new form ColorChooser.
      */
     public ColorChooser() {
         initComponents();
