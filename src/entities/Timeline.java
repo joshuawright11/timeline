@@ -7,33 +7,81 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * Timeline object to keep track of the different timelines in the project. Contains a name, ArrayList of TLEvents, AxisLabel (for rendering), 
+ * and boolean, dirty, which is updated whenever the Timeline is changed. This can be used for deciding when to sync to the database, but is
+ * currently not in use (we sync whenever certain buttons in the GUI are pressed). 
+ * 
  * @author Josh Wright
  * Created: Jan 29, 2014
  * Package: backend
  *
  */
 public class Timeline implements TimelineAPI{
+	
+	/**
+	 * ArrayList to keep track of the events in the timeline
+	 */
 	private ArrayList<TLEvent> events;
+	
+	/**
+	 * Name of the timeline
+	 */
 	private String name;
+	
+	/**
+	 * enum for keeping track of the potential units to render the timeline in
+	 * currently only DAYS, MONTHS, and YEARS work, but implementing the others would be very simple
+	 */
 	public static enum AxisLabel {
 		DAYS, WEEKS, MONTHS, YEARS, DECADES, CENTURIES, MILLENNIA;
 	}
+	
+	/**
+	 * Array of the AxisLabels, for getting the value based on an index
+	 */
 	private static final AxisLabel[] AXIS_LABELS = { AxisLabel.DAYS, AxisLabel.WEEKS, AxisLabel.MONTHS, AxisLabel.YEARS, AxisLabel.DECADES, AxisLabel.CENTURIES, AxisLabel.MILLENNIA};
+	
+	/**
+	 * The units to render the timeline in
+	 */
 	private AxisLabel axisLabel;
+	
+	/**
+	 * whether the timeline has been changed since its last database sync
+	 */
 	private boolean dirty;
-
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Timeline name
+	 */
 	public Timeline(String name){
 		this.name = name;
 		events = new ArrayList<TLEvent>();
 		axisLabel = AxisLabel.YEARS;
 		setDirty(true);
 	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Timeline name
+	 * @param events Events in timeline
+	 */
 	public Timeline(String name, TLEvent[] events){
 		this.name = name;
 		this.events = new ArrayList<TLEvent>(Arrays.asList(events));
 		axisLabel = AxisLabel.YEARS;
 		setDirty(true);
 	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Timeline name
+	 * @param axisLabel Unit to render timeline in
+	 */
 	public Timeline(String name, int axisLabel) {
 		this.name = name;
 		events = new ArrayList<TLEvent>();
@@ -41,6 +89,14 @@ public class Timeline implements TimelineAPI{
 		this.events = new ArrayList<TLEvent>();
 		dirty = true;
 	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param name Timeline name
+	 * @param events Events in timeline
+	 * @param axisLabel Unit to render timeline in
+	 */
 	public Timeline(String name, TLEvent[] events, int axisLabel) {
 		this.name = name;
 		if(events != null)
@@ -50,7 +106,8 @@ public class Timeline implements TimelineAPI{
 		this.axisLabel = AXIS_LABELS[axisLabel];
 		dirty = true;
 	}
-
+	
+	@Override
 	public boolean contains(TLEvent event) {
 		for (TLEvent e : events)
 			if (e.equals(event))
@@ -58,18 +115,12 @@ public class Timeline implements TimelineAPI{
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#addEvent(backend.TLEvent)
-	 */
 	@Override
 	public void addEvent(TLEvent event) {
 		setDirty(true);
 		events.add(event);
 	}
 
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#removeEvent(backend.TLEvent)
-	 */
 	@Override
 	public boolean removeEvent(TLEvent event) {
 		if(events.contains(event)){
@@ -81,9 +132,6 @@ public class Timeline implements TimelineAPI{
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#changeEvent(backend.TLEvent, backend.TLEvent)
-	 */
 	@Override
 	public boolean changeEvent(TLEvent oldEvent, TLEvent newEvent) {
 		if(events.contains(oldEvent)){
@@ -95,39 +143,37 @@ public class Timeline implements TimelineAPI{
 			return false;
 		}
 	}
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#getEvents()
-	 */
+
 	@Override
 	public TLEvent[] getEvents() {
 		if(events.isEmpty()) return null;
 		return (TLEvent[])events.toArray(new TLEvent[events.size()]);
 	}
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#isDirty()
-	 */
+	
+	@Override
 	public boolean isDirty() {
 		return dirty;
 	}
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#setDirty(boolean)
-	 */
+
+	@Override
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
-	/* (non-Javadoc)
-	 * @see backend.TimelineAPI#getName()
-	 */
+
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public int getAxisLabelIndex() { 
 		for (int i = 0; i < AXIS_LABELS.length; i++)
 			if (AXIS_LABELS[i] == axisLabel)
 				return i;
 		return -1;
 	}
+	
+	@Override
 	public AxisLabel getAxisLabel() {
 		return axisLabel;
 	}
