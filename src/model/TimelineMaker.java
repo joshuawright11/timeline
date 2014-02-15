@@ -135,7 +135,6 @@ public class TimelineMaker {
 	 */
 	public void setSelectedTimeline(String title) {
 		selectedTimeline = getTimeline(title);
-		System.out.println("Your selected timeline is: " + selectedTimeline.getName());
 		if (selectedTimeline != null)
 			updateGraphics();
 	}
@@ -147,7 +146,7 @@ public class TimelineMaker {
 	public void addTimeline(Timeline t) {
 		selectedTimeline = t;
 		timelines.add(selectedTimeline);
-		
+
 		database.writeTimeline(selectedTimeline);
 		gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
 		updateGraphics();
@@ -158,15 +157,15 @@ public class TimelineMaker {
 	 * @param t the timeline to be removed
 	 */
 	public void deleteTimeline() {
-		timelines.remove(selectedTimeline);
-				
-		database.removeTimeline(selectedTimeline);
-		
-		selectedTimeline = null;
-		gui.updateTimelines(getTimelineTitles(), null);
-		graphics.clearScreen();
+		if (selectedTimeline != null) {
+			timelines.remove(selectedTimeline);
+			database.removeTimeline(selectedTimeline);
+			selectedTimeline = null;
+			gui.updateTimelines(getTimelineTitles(), null);
+			graphics.clearScreen();
+		}
 	}
-	
+
 	/**
 	 * Edit the selected timeline.
 	 * Remove the selected timeline and replace it with the parameterized one.
@@ -175,7 +174,7 @@ public class TimelineMaker {
 	public void editTimeline(Timeline t) {
 		timelines.remove(selectedTimeline);
 		database.removeTimeline(selectedTimeline);
-		
+
 		boolean newName = !selectedTimeline.getName().equals(t.getName());
 		selectedTimeline = t;
 		timelines.add(selectedTimeline);
@@ -201,42 +200,42 @@ public class TimelineMaker {
 		if (e != null) {
 			selectedEvent = e;
 			System.out.println("Model confirms event selection:\n" +
-			"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
+					"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
 		}
 	}
-	
+
 	public void addEvent(TLEvent e) {
 		selectedTimeline.addEvent(e);
 		selectedEvent = e;
-		
+
 		updateGraphics();
-		
+
 		database.removeTimeline(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
 	}
-	
+
 	public void deleteEvent() {
 		if (selectedTimeline.contains(selectedEvent))
 			selectedTimeline.removeEvent(selectedEvent);
 		selectedEvent = null;
-		
+
 		updateGraphics();
-		
+
 		database.removeTimeline(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
 	}
-	
+
 	public void editEvent(TLEvent e) {
 		selectedTimeline.removeEvent(selectedEvent);
 		selectedEvent = e;
 		selectedTimeline.addEvent(selectedEvent);
-		
+
 		updateGraphics();
-		
+
 		database.removeTimeline(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
 	}
-	
+
 	/**
 	 * Update the graphics for the display screen.
 	 */
