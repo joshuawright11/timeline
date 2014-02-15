@@ -93,7 +93,7 @@ public class TimelineMaker {
 				gui.setVisible(true);
 				new Thread(new Runnable() {
 					public void run() {
-						gui.updateTimelines(getTimelineTitles());
+						gui.updateTimelines(getTimelineTitles(), null);
 					}
 				}).start();
 			}
@@ -152,7 +152,7 @@ public class TimelineMaker {
 		timelines.add(selectedTimeline);
 		
 		database.writeTimeline(selectedTimeline);
-		gui.updateTimelines(getTimelineTitles());
+		gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
 		updateGraphics();
 	}
 
@@ -166,9 +166,8 @@ public class TimelineMaker {
 		database.removeTimeline(selectedTimeline);
 		
 		selectedTimeline = null;
-		gui.updateTimelines(getTimelineTitles());
+		gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
 		graphics.clearScreen();
-		
 	}
 	
 	/**
@@ -180,10 +179,12 @@ public class TimelineMaker {
 		timelines.remove(selectedTimeline);
 		database.removeTimeline(selectedTimeline);
 		
+		boolean newName = !selectedTimeline.getName().equals(t.getName());
 		selectedTimeline = t;
 		timelines.add(selectedTimeline);
 		database.writeTimeline(selectedTimeline);
-		gui.updateTimelines(getTimelineTitles());
+		if (newName)
+			gui.updateTimelines(getTimelineTitles(), selectedTimeline.getName());
 		updateGraphics();
 	}
 
