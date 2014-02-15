@@ -55,7 +55,9 @@ public class TimelineMaker {
 				timelines.add(t);
 			selectedTimeline = timelines.get(0);
 			selectedEvent = selectedTimeline.getEvents()[0];
-		} catch (Exception e) {
+		} catch (IndexOutOfBoundsException e) {
+			System.out.println("Your database is empty.");
+		} catch (Exception e){
 			System.out.println("Error loading from Database.");
 		}
 
