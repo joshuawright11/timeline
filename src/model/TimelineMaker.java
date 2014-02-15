@@ -201,8 +201,8 @@ public class TimelineMaker {
 	public void setSelectedEvent(TLEvent e) {
 		if (e != null) {
 			selectedEvent = e;
-			System.out.println("Model confirms event selection:\n" +
-					"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
+			//System.out.println("Model confirms event selection:\n" +
+			//		"\tYou selected event: " + selectedEvent.getName() + " in the timeline: " + selectedTimeline.getName());
 		}
 	}
 

@@ -169,7 +169,6 @@ public class DBHelper implements DBHelperAPI{
 	@Override
 	public boolean removeTimeline(Timeline timeline) {
 		open();
-		System.out.println("REMOVING");
 		try {
 			statement.executeUpdate("DROP TABLE IF EXISTS'"+timeline.getName()+"';");
 			removeAxisLabel(timeline.getName());

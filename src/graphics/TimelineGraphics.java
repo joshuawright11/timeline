@@ -35,7 +35,6 @@ public class TimelineGraphics implements Runnable, TimelineGraphicsAPI {
 //		fxPanel.setScene(emptyScene);
 		Platform.runLater(new Runnable() {
 			public void run() {
-				System.out.println("Screen about to clear.");
 				root.getChildren().clear();
 			}
 		});

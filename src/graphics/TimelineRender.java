@@ -164,11 +164,8 @@ public class TimelineRender implements Runnable {
 		endCalendar.setTime(new Date(maxTime));
 
 		int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-		System.out.println("Your timeline is " + diffYear + " years long.");
 		int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-		System.out.println("Your timeline is " + diffMonth + " month long.");
 		int diffDay = diffYear * 365 +endCalendar.get(Calendar.DAY_OF_YEAR) - startCalendar.get(Calendar.DAY_OF_YEAR);
-		System.out.println("Your timeline is " + diffDay + " days long.");
 		
 		switch(axisLabel){ //+1 to account for first
 		case DAYS:
@@ -225,7 +222,6 @@ public class TimelineRender implements Runnable {
 			label.setStyle("-fx-border-color: blue");
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
-					System.out.println("You clicked "+ event.getName());
 					label.setStyle("-fx-border-color: black");
 					new Thread(new Runnable() {
 						public void run() {
@@ -258,7 +254,6 @@ public class TimelineRender implements Runnable {
 			final Duration event = e;
 			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				public void handle(MouseEvent e) {
-					System.out.println("You clicked "+ event.getName());
 					label.setStyle("-fx-border-color: black");
 					new Thread(new Runnable() {
 						public void run() {
@@ -280,7 +275,7 @@ public class TimelineRender implements Runnable {
 	private int getXPos(Date date) {
 		double units = getUnitsSinceStart(date);
 		int xPosition = (int)(units*unitWidth); 
-		System.out.println("Event " + date.toString() + " is " +units+ " units after the start. It has an x offset of " +(int)(units*unitWidth)+ " pixels.");
+		//System.out.println("Event " + date.toString() + " is " +units+ " units after the start. It has an x offset of " +(int)(units*unitWidth)+ " pixels.");
 		return xPosition;
 	}
 	
