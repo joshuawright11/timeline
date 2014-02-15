@@ -198,8 +198,8 @@ public class TimelineMaker {
 			database.removeTimeline(selectedTimeline);
 			selectedTimeline = null;
 			selectedEvent = null;
-			gui.updateTimelines(getTimelineTitles(), null);
 			graphics.clearScreen();
+			gui.updateTimelines(getTimelineTitles(), null);
 		}
 	}
 
