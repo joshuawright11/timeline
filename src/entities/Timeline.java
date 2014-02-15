@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * Timeline.java
+ * 
  * Timeline object to keep track of the different timelines in the project. Contains a name, ArrayList of TLEvents, AxisLabel (for rendering), 
  * and boolean, dirty, which is updated whenever the Timeline is changed. This can be used for deciding when to sync to the database, but is
  * currently not in use (we sync whenever certain buttons in the GUI are pressed). 
  * 
- * @author Josh Wright
- * Created: Jan 29, 2014
- * Package: backend
- *
+ * @author Josh Wright and Andrew Thompson
+ * Wheaton College, CS 335, Spring 2014
+ * Project Phase 1
+ * Feb 15, 2014
  */
 public class Timeline implements TimelineAPI{
 	
