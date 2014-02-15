@@ -64,7 +64,8 @@ public class Timeline implements TimelineAPI{
 	}
 	
 	/**
-	 * Constructor
+	 * Constructor for name and events
+	 * Sets axisLabel to YEARS by default
 	 * 
 	 * @param name Timeline name
 	 * @param events Events in timeline
@@ -77,7 +78,7 @@ public class Timeline implements TimelineAPI{
 	}
 	
 	/**
-	 * Constructor
+	 * Constructor for name and axisLabel
 	 * 
 	 * @param name Timeline name
 	 * @param axisLabel Unit to render timeline in
@@ -91,7 +92,7 @@ public class Timeline implements TimelineAPI{
 	}
 	
 	/**
-	 * Constructor
+	 * Constructor for name, events, and axisLabel
 	 * 
 	 * @param name Timeline name
 	 * @param events Events in timeline
