@@ -9,7 +9,6 @@ import model.TimelineMaker;
 import entities.Duration;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -68,6 +67,7 @@ public class DurationLabel extends TLEventLabel {
 		this.eventLabels = eventLabels;
 		this.label = this;
 		this.width = width;
+		this.model = model;
 		init();
 	}
 	
