@@ -83,6 +83,8 @@ public class TimelineRender implements Runnable {
 	private ArrayList<Duration> durations;
 	private ArrayList<Atomic> atomics;
 	
+	private ArrayList<TLEventLabel> eventLabels;
+	
 	/**
 	 * The AxisLabel that this TimelineRenderer will use when rendering the timeline.
 	 * Essentially the unit by which the axis will be rendered.
@@ -139,6 +141,8 @@ public class TimelineRender implements Runnable {
 		this.fxPanel = fxPanel;
 		atomics = new ArrayList<Atomic>();
 		durations = new ArrayList<Duration>();
+		
+		eventLabels = new ArrayList<TLEventLabel>();
 	}
 
 	/*
@@ -166,6 +170,7 @@ public class TimelineRender implements Runnable {
 	 */
 	private void init(){
 		unitWidth = 150;
+		pushDown = 60;
 		for(TLEvent event : timeline.getEvents()){
 			if(event instanceof Duration){
 				durations.add((Duration)event);
@@ -214,7 +219,7 @@ public class TimelineRender implements Runnable {
 	private void renderTimeline() {
 		group.getChildren().clear();
 		group = new Group();
-		renderAtomics(); //render in order of height
+		renderAtomics();
 		renderTime();
 		renderDurations();
 	}
