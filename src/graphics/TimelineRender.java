@@ -353,8 +353,10 @@ public class TimelineRender implements Runnable {
 	private void renderAtomics() {
 		pushDown = 60; //where to put the event ( y - axis )
 		for(Atomic e : atomics){
-			final Label label = new Label(e.getName());
 			int xPosition = getXPos(e.getDate());
+			AtomicLabel label = new AtomicLabel(e, xPosition, pushDown, model, eventLabels);
+			/*
+			final Label label = new Label(e.getName());
 			label.setLayoutX(xPosition);
 			label.setLayoutY(pushDown);
 			final Atomic event = e;
@@ -369,6 +371,8 @@ public class TimelineRender implements Runnable {
 					}).start();
 				}
 			});
+			*/
+			eventLabels.add(label);
 			group.getChildren().add(label);
 			pushDown += 20;
 		}
@@ -384,10 +388,14 @@ public class TimelineRender implements Runnable {
 	private void renderDurations() {
 		int counter = 0;
 		for(Duration e : durations){
-			final Label label = new Label(e.getName());
+			
 			int xStart = getXPos(e.getStartDate());
 			int xEnd = getXPos(e.getEndDate());
 			int labelWidth = xEnd - xStart;
+			DurationLabel label = new DurationLabel(e, xStart, (pushDown + 45 + counter), labelWidth, model, eventLabels);
+			
+			/*
+			final Label label = new Label(e.getName());
 			label.setStyle("-fx-border-color: blue;");
 			label.setLayoutX(xStart);
 			label.setPrefWidth(labelWidth);
@@ -404,6 +412,8 @@ public class TimelineRender implements Runnable {
 					}).start();
 				}
 			});
+			*/
+			eventLabels.add(label);
 			group.getChildren().add(label);
 			counter += 20;
 		}

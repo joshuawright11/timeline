@@ -33,6 +33,7 @@ public class DurationLabel extends TLEventLabel {
 		this.eventLabels = eventLabels;
 		this.label = this;
 		this.width = width;
+		this.model = model;
 		init();
 	}
 	

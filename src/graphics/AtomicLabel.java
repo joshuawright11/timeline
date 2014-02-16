@@ -22,6 +22,7 @@ public class AtomicLabel extends TLEventLabel {
 		this.yPos = yPos;
 		this.eventLabels = eventLabels;
 		this.label = this;
+		this.model = model;
 		init();
 	}
 	
