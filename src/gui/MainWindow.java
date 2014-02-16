@@ -5,15 +5,19 @@ import entities.*;
 import graphics.TimelineGraphics;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
 /**
  * MainWindow.java
- * The main GUI window for the TimelineMaker application.
+ * 
+ * The main GUI window for the TimelineMaker application - responsible for all user interaction.
+ * 
  * @author Andrew Thompson
+ * Wheaton College, CS 335, Spring 2014
+ * Project Phase 1
+ * Feb 15, 2014
  */
 public class MainWindow extends JFrame {
 
@@ -27,43 +31,141 @@ public class MainWindow extends JFrame {
 	 */
 	private TimelineMaker model;
 	
-	// Window components.
+	// Window components:
+	/**
+	 * The add event button.
+	 */
 	private JButton addEventButton;
+	/**
+	 * The add timeline button.
+	 */
 	private JButton addTimelineButton;
+	/**
+	 * The add event button.
+	 */
 	private JButton deleteEventButton;
+	/**
+	 * The delete button in the edit menu. Unused.
+	 */
 	private JMenuItem deleteMenuItem;
+	/**
+	 * The delete timeline button.
+	 */
 	private JButton deleteTimelineButton;
+	/**
+	 * The edit event button.
+	 */
 	private JButton editEventButton;
+	/**
+	 * The edit menu.
+	 */
 	private JMenu editMenu;
+	/**
+	 * A separator in the edit menu.
+	 */
 	private JPopupMenu.Separator editMenuSeparator1;
+	/**
+	 * The edit timelineButton.
+	 */
 	private JButton editTimelineButton;
+	/**
+	 * The edit-view button in the view menu. Unused.
+	 */
 	private JMenuItem editViewMenuItem;
+	/**
+	 * The event edit toolbar label.
+	 */
 	private JLabel eventsEditLabel;
+	/**
+	 * The exit button in the file menu.
+	 */
 	private JMenuItem exitMenuItem;
+	/**
+	 * The file menu.
+	 */
 	private JMenu fileMenu;
+	/**
+	 * A separator in the file menu.
+	 */
 	private JPopupMenu.Separator fileMenuSeparator1;
+	/**
+	 * A separator in the file menu.
+	 */
 	private JPopupMenu.Separator fileMenuSeparator2;
+	/**
+	 * The insert menu.
+	 */
 	private JMenu insertMenu;
+	/**
+	 * The display pane for graphics.
+	 */
 	private DisplayPane displayPane;
+	/**
+	 * The main split pane for the window.
+	 */
 	private JSplitPane mainSplitPane;
+	/**
+	 * The menu bar of the window.
+	 */
 	private JMenuBar menuBar;
+	/**
+	 * The multi-view button in the view menu.
+	 */
 	private JMenuItem multiViewMenuItem;
+	/**
+	 * The new-event button in the insert menu.
+	 */
 	private JMenuItem newEventMenuItem;
+	/**
+	 * The new-timeline button in the file menu.
+	 */
 	private JMenuItem newTimelineMenuItem;
+	/**
+	 * The redo button in the edit menu. Unused.
+	 */
 	private JMenuItem redoMenuItem;
+	/**
+	 * The save button in the file menu. Unused.
+	 */
 	private JMenuItem saveTimelineMenuItem;
+	/**
+	 * The dropdown of timelines.
+	 */
 	private JComboBox<String> timelines;
+	/**
+	 * The timelines edit toolbar label.
+	 */
 	private JLabel timelinesEditLabel;
+	/**
+	 * The toolbar of the window.
+	 */
 	private JPanel toolbar;
+	/**
+	 * The toolbar label.
+	 */
 	private JLabel toolbarLabel;
+	/**
+	 * A separator in the toolbar.
+	 */
 	private JSeparator toolbarSeparator1;
+	/**
+	 * A separator in the toolbar.
+	 */
 	private JSeparator toolbarSeparator2;
+	/**
+	 * The undo button in the edit menu. Unused.
+	 */
 	private JMenuItem undoMenuItem;
+	/**
+	 * The view menu.
+	 */
 	private JMenu viewMenu;
 
 	/**
-	 * Creates new edit window.
-	 * @param graphics 
+	 * Constructor.
+	 * Creates a new main window for this application.
+	 * @param model the application model
+	 * @param graphics the graphics object for timeline display
 	 */
 	public MainWindow(TimelineMaker model, TimelineGraphics graphics) {
 		this.model = model;
@@ -73,6 +175,7 @@ public class MainWindow extends JFrame {
 
 	/**
 	 * Initialize all window components.
+	 * Most of this code was generated using NetBeans IDE.
 	 */
 	private void initComponents(TimelineGraphics graphics) {
 		// Instantiate all components.
@@ -224,7 +327,8 @@ public class MainWindow extends JFrame {
 		menuBar.add(insertMenu);
 
 		setJMenuBar(menuBar);
-
+		
+		// Define the layout for the main pane:
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(
@@ -236,6 +340,7 @@ public class MainWindow extends JFrame {
 				.addComponent(mainSplitPane)
 				);
 
+		// Pack the window.
 		pack();
 	}
 	
@@ -245,6 +350,9 @@ public class MainWindow extends JFrame {
 	private void initActionListeners() {
 		// Set up event toolbar listeners.
 		addEventButton.addActionListener(new ActionListener() {
+			/**
+			 * Create a new EventPropertiesWindow for event addition.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -259,6 +367,9 @@ public class MainWindow extends JFrame {
 			}
 		});
 		editEventButton.addActionListener(new ActionListener() {
+			/**
+			 * Create a new EventPropertiesWindow for event editing.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -274,6 +385,9 @@ public class MainWindow extends JFrame {
 			}
 		});
 		deleteEventButton.addActionListener(new ActionListener() {
+			/**
+			 * Delete the selected event in the model.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -285,11 +399,17 @@ public class MainWindow extends JFrame {
 		
 		// Set up timeline toolbar listeners.
 		addTimelineButton.addActionListener(new ActionListener() {
+			/**
+			 * Create a new TimelinePropertiesWindow for timeline addition.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new TimelinePropertiesWindow(model).setVisible(true);
 			}
 		});
 		editTimelineButton.addActionListener(new ActionListener() {
+			/**
+			 * Create a new TimelinePropertiesWindow for timeline editing.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -305,6 +425,9 @@ public class MainWindow extends JFrame {
 			}
 		});
 		deleteTimelineButton.addActionListener(new ActionListener() {
+			/**
+			 * Delete the selected timeline in the model.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -316,6 +439,9 @@ public class MainWindow extends JFrame {
 		
 		// Set up timeline-selection dropdown listener.
 		timelines.addActionListener(new ActionListener() {
+			/**
+			 * Update the selected event in the model.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				final String selectedTimeline = (String)timelines.getSelectedItem();
 				new Thread(new Runnable() {
@@ -327,23 +453,10 @@ public class MainWindow extends JFrame {
 		});
 
 		// Set up menu item listeners.
-		newTimelineMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new TimelinePropertiesWindow(model).setVisible(true);
-			}
-		});
-		saveTimelineMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add database saving stuff
-			}
-		});
-		exitMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO Add database saving stuff.
-				System.exit(0);
-			}
-		});
 		newEventMenuItem.addActionListener(new ActionListener() {
+			/**
+			 * Create a new EventPropertiesWindow for event addition.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				new Thread(new Runnable() {
 					public void run() {
@@ -355,6 +468,30 @@ public class MainWindow extends JFrame {
 							});
 					}
 				}).start();
+			}
+		});
+		newTimelineMenuItem.addActionListener(new ActionListener() {
+			/**
+			 * Create a new TimelinePropertiesWindow for timeline addition.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				new TimelinePropertiesWindow(model).setVisible(true);
+			}
+		});
+		saveTimelineMenuItem.addActionListener(new ActionListener() {
+			/**
+			 * Unimplemented.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				// TODO implement.
+			}
+		});
+		exitMenuItem.addActionListener(new ActionListener() {
+			/**
+			 * Exit the application.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0); // TODO Save!
 			}
 		});
 	}
