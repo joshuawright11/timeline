@@ -20,7 +20,7 @@ public class EventPropertiesWindow extends JFrame {
 
 	// Window components.
 	/**
-	 * The label for the event title field.
+	 * The event title field label.
 	 */
 	private JLabel titleLabel;
 	/**
@@ -38,7 +38,7 @@ public class EventPropertiesWindow extends JFrame {
 	private JComboBox<String> type;
 
 	/**
-	 * The event date label.
+	 * The event date field label.
 	 */
 	private JLabel dateLabel;
 	/**
@@ -46,7 +46,7 @@ public class EventPropertiesWindow extends JFrame {
 	 */
 	private JTextField startDate; // TODO Replace with JCalendar date-picker.
 	/**
-	 * "To" label.
+	 * The "to" label.
 	 */
 	private JLabel toLabel;
 	/**
@@ -96,7 +96,11 @@ public class EventPropertiesWindow extends JFrame {
 		
 		initComponents();
 		
+		// Define action for adding a new event.
 		okButton.addActionListener(new ActionListener() {
+			/**
+			 * Get information from data fields and create new event. Add event to model.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				final String title = EventPropertiesWindow.this.title.getText();
 				final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
@@ -131,6 +135,9 @@ public class EventPropertiesWindow extends JFrame {
 		initComponents();
 		
 		new Thread(new Runnable() {
+			/**
+			 * Load information from the event to be edited into the window.
+			 */
 			public void run() {
 				final String eventName = event.getName();
 				if (event instanceof Atomic) {
@@ -157,7 +164,12 @@ public class EventPropertiesWindow extends JFrame {
 			}
 		}).start();
 
+		// Define action for editing an existing event.
 		okButton.addActionListener(new ActionListener() {
+			/**
+			 * Get information from data fields and create a new event. Replace the existing event
+			 * with the new one.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				final String title = EventPropertiesWindow.this.title.getText();
 				final String type = EventPropertiesWindow.this.type.getSelectedItem().toString();
@@ -211,6 +223,9 @@ public class EventPropertiesWindow extends JFrame {
 		typeLabel.setText("Type");
 		type.setModel(new DefaultComboBoxModel<String>(new String[] { "Duration", "Atomic" }));
 		type.addActionListener(new ActionListener() {
+			/**
+			 * Toggle the event type.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				if (type.getSelectedItem().equals("Atomic")) {
 					endDate.setVisible(false);
@@ -238,6 +253,9 @@ public class EventPropertiesWindow extends JFrame {
 
 		cancelButton.setText("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
+			/**
+			 * Dispose this window.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
