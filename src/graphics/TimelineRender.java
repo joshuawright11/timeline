@@ -7,12 +7,10 @@ import java.util.GregorianCalendar;
 
 import model.TimelineMaker;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import entities.Atomic;
 import entities.Duration;
@@ -83,6 +81,9 @@ public class TimelineRender implements Runnable {
 	private ArrayList<Duration> durations;
 	private ArrayList<Atomic> atomics;
 	
+	/**
+	 * An ArrayList of all the TLEventLabels, used for selecting events
+	 */
 	private ArrayList<TLEventLabel> eventLabels;
 	
 	/**
@@ -348,30 +349,13 @@ public class TimelineRender implements Runnable {
 	 * Creates labels out of each Atomic event to add to the Group. Calculates x position based on the date
 	 * and y position based on the pushDown global value. 
 	 * 
-	 * Sets each label with an EventHandler to set as the selected event if it is clicked.
+	 * Uses custom Label class
 	 */
 	private void renderAtomics() {
 		pushDown = 60; //where to put the event ( y - axis )
 		for(Atomic e : atomics){
 			int xPosition = getXPos(e.getDate());
 			AtomicLabel label = new AtomicLabel(e, xPosition, pushDown, model, eventLabels);
-			/*
-			final Label label = new Label(e.getName());
-			label.setLayoutX(xPosition);
-			label.setLayoutY(pushDown);
-			final Atomic event = e;
-			label.setStyle("-fx-border-color: blue");
-			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				public void handle(MouseEvent e) {
-					label.setStyle("-fx-border-color: black");
-					new Thread(new Runnable() {
-						public void run() {
-							model.selectEvent(event);
-						}
-					}).start();
-				}
-			});
-			*/
 			eventLabels.add(label);
 			group.getChildren().add(label);
 			pushDown += 20;
@@ -383,7 +367,7 @@ public class TimelineRender implements Runnable {
 	 * Creates labels out of each Duration event to add to the Group. Calculates x position based on start and 
 	 * end date and y position based on the pushDown global value. 
 	 * 
-	 * Sets each label with an EventHandler to set as the selected event if it is clicked.
+	 * Uses custom Label class
 	 */
 	private void renderDurations() {
 		int counter = 0;
@@ -393,26 +377,6 @@ public class TimelineRender implements Runnable {
 			int xEnd = getXPos(e.getEndDate());
 			int labelWidth = xEnd - xStart;
 			DurationLabel label = new DurationLabel(e, xStart, (pushDown + 45 + counter), labelWidth, model, eventLabels);
-			
-			/*
-			final Label label = new Label(e.getName());
-			label.setStyle("-fx-border-color: blue;");
-			label.setLayoutX(xStart);
-			label.setPrefWidth(labelWidth);
-			label.setAlignment(Pos.CENTER);
-			label.setLayoutY(pushDown + 45 + counter);
-			final Duration event = e;
-			label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				public void handle(MouseEvent e) {
-					label.setStyle("-fx-border-color: black");
-					new Thread(new Runnable() {
-						public void run() {
-							model.selectEvent(event);
-						}
-					}).start();
-				}
-			});
-			*/
 			eventLabels.add(label);
 			group.getChildren().add(label);
 			counter += 20;
