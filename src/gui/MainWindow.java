@@ -32,9 +32,7 @@ public class MainWindow extends JFrame {
 	 */
 	private TimelineGraphics graphics;
 	
-	/**
-	 * Window components.
-	 */
+	// Window components.
 	private JButton addEventButton;
 	private JButton addTimelineButton;
 	private JButton deleteEventButton;

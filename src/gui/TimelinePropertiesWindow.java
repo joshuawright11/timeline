@@ -18,38 +18,86 @@ public class TimelinePropertiesWindow extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	// Window components.
 	/**
-	 * Window components.
+	 * Data section label of the window.
 	 */
 	private JLabel dataSectionLabel;
 
+	/**
+	 * The timeline title field label.
+	 */
 	private JLabel titleLabel;
+	/**
+	 * The timeline title field.
+	 */
 	private JTextField title;
-
+	
+	/**
+	 * A separator.
+	 */
 	private JSeparator separator1;
-
+	
+	/**
+	 * Appearance section label of the window.
+	 */
 	private JLabel appearanceSectionLabel;
-
+	
+	/**
+	 * The timeline color chooser label. Unused.
+	 */
 	private JLabel colorLabel;
+	/**
+	 * The timeline color chooser button. Unused.
+	 */
 	private JButton colorChooserButton;
 
+	/**
+	 * The timeline font field label. Unused.
+	 */
 	private JLabel fontLabel;
+	/**
+	 * The timeline font field. Unused.
+	 */
 	private JTextField font;
 
+	/**
+	 * The timeline axis label dropdown label.
+	 */
 	private JLabel axisLabelLabel;
+	/**
+	 * The timeline axis label dropdown.
+	 */
 	private JComboBox<String> axisLabel;
 
+	/**
+	 * Another separator for the window.
+	 */
 	private JSeparator separator2;
 
+	/**
+	 * The ok button.
+	 */
 	private JButton okButton;
+	/**
+	 * The cancel button.
+	 */
 	private JButton cancelButton;
 
 
+	/**
+	 * Constructor.
+	 * Constructor for adding a new timeline.
+	 * @param model the application model
+	 */
 	public TimelinePropertiesWindow(final TimelineMaker model) {
 		initComponents();
 
 		// Define action for adding a timeline.
 		okButton.addActionListener(new ActionListener() {
+			/**
+			 * Get information from the window and create a new timeline. Add it to the model.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				final String titleString = title.getText();
 				final int axisLabelIndex = axisLabel.getSelectedIndex();
@@ -66,15 +114,19 @@ public class TimelinePropertiesWindow extends JFrame {
 	}
 
 
-
 	/**
-	 * Creates new timeline properties window.
+	 * Constructor.
+	 * Constructor for editing an existing timeline.
+	 * @param model the application model
+	 * @param timeline the timeline to be edited
 	 */
 	public TimelinePropertiesWindow(final TimelineMaker model, final Timeline timeline) {
 		initComponents();
 		
-		// Load information from timeline into the dialog.
 		new Thread(new Runnable() {
+			/**
+			 * Load information from the timeline to be edited into the window.
+			 */
 			public void run() {
 				final String timelineTitle = timeline.getName();
 				final int timelineAxisLabelIndex = timeline.getAxisLabelIndex();
@@ -89,6 +141,10 @@ public class TimelinePropertiesWindow extends JFrame {
 
 		// Define action for editing a timeline.
 		okButton.addActionListener(new ActionListener() {
+			/**
+			 * Get information from the window and create a new timeline. 
+			 * Replace thes existing timeline with the new one.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				final String titleString = title.getText();
 				final int axisLabelIndex = axisLabel.getSelectedIndex();
@@ -172,6 +228,7 @@ public class TimelinePropertiesWindow extends JFrame {
 	
 	/**
 	 * Initialize the layout of this window.
+	 * Note: Generated code.
 	 */
 	private void initLayout() {
 		GroupLayout layout = new GroupLayout(getContentPane());
