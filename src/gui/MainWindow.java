@@ -27,14 +27,7 @@ public class MainWindow extends JFrame {
 	 */
 	private TimelineMaker model;
 	
-	/**
-	 * TimelineGraphics graphics renderer for this model.
-	 */
-	private TimelineGraphics graphics;
-	
-	/**
-	 * Window components.
-	 */
+	// Window components.
 	private JButton addEventButton;
 	private JButton addTimelineButton;
 	private JButton deleteEventButton;
@@ -74,15 +67,14 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow(TimelineMaker model, TimelineGraphics graphics) {
 		this.model = model;
-		this.graphics = graphics;
-		initComponents();
+		initComponents(graphics);
 		initActionListeners();
 	}
 
 	/**
 	 * Initialize all window components.
 	 */
-	private void initComponents() {
+	private void initComponents(TimelineGraphics graphics) {
 		// Instantiate all components.
 		mainSplitPane = new JSplitPane();
 		toolbar = new JPanel();
