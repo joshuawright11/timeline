@@ -1,0 +1,32 @@
+This submission showed a high level of professionalism and 
+organization, and a number of tools were explored, including 
+Netbeans, sqlite, and JDBC. On specifics:
+
+Data representation and other architecture: The classes for the timeline 
+itself, events, etc was appropriately simple, though there appeared to 
+be no attempt to group events into categories. Moreover, the timeline 
+and event classes were more complicated than was necessary (and exposed 
+too much): I doubt the myriad of getter and setter methods were 
+necessary, exposing too much of the representation.
+
+JUnit testing: There was reasonably thorough testing of the DB and
+events/timeline portions.
+
+Write-up: The reports were thorough and explained what the team had 
+learned. They didn't provide much guidance for trying out the code or 
+exploring it.
+
+GUI and user experience: The UI was usable, looked pretty good, and 
+would make a good prototype. The basic functionality was there, though 
+in some cases it seemed to tease with missing features (such as units 
+other than years). Moreover, the implementation was fragile, for example 
+crashing out of the box because there was not "databases" folder.
+
+Features implemented: DB, rendering, atomic vs duration
+Not (completely) implemented: Categories
+Experimented with: Colors, fonts, units
+
+Documenation and style: Most of the code was documented with attention to
+style.
+
+Concurrency: I could find no concurrency problems.
